@@ -1,50 +1,77 @@
 import { useLanguage } from '../../context/LanguageContext';
+import { RedStarIcon } from '../motifs/RedStarIcon';
 
 export const MilestoneTimeline = () => {
   const { t, language } = useLanguage();
+  const ml = language === 'ml';
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200/90 shadow-sm">
-      <h3
-        className={`text-2xl sm:text-3xl font-bold text-charcoal text-center mb-12 ${
-          language === 'ml' ? 'font-malayalam' : ''
-        }`}
-      >
-        {t.history.timelineTitle}
-      </h3>
+    <div className="bg-[#E9DDC9]/80 rounded-xl p-6 sm:p-12 border border-[#241914]/20 shadow-warm relative">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 pb-4 border-b border-[#241914]/15 gap-4">
+        <div>
+          <span className="text-xs font-mono uppercase tracking-widest text-[#C90000] font-bold">
+            CHRONOLOGICAL ARCHIVE // നാൾവഴികൾ
+          </span>
+          <h3
+            className={`text-2xl sm:text-3xl font-black text-[#171514] tracking-tight mt-1 ${
+              language === 'ml' ? 'font-malayalam' : ''
+            }`}
+          >
+            {t.history.timelineTitle}
+          </h3>
+        </div>
+        <span className="text-xs font-mono text-[#241914]/60 uppercase tracking-widest">
+          DOCUMENTARY TIMELINE // 1938 – 2026
+        </span>
+      </div>
 
-      <div className="relative border-l-2 border-brand-red/30 ml-4 sm:ml-32 space-y-10 sm:space-y-12">
+      {/* Archival Newspaper / Documentary Spread Layout */}
+      <div className="space-y-12 sm:space-y-16">
         {t.history.milestones.map((m, idx) => (
-          <div key={idx} className="relative pl-6 sm:pl-10">
-            {/* Year Badge on the left for sm screens */}
-            <div className="hidden sm:block absolute -left-32 top-0 w-24 text-right">
-              <span className="text-xl font-extrabold text-brand-red tracking-tight">{m.year}</span>
+          <article
+            key={idx}
+            className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start pt-6 border-t border-[#241914]/15 first:border-t-0 first:pt-0"
+          >
+            {/* Year Column */}
+            <div className="md:col-span-3">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#C90000] font-bold block mb-1">
+                YEAR // വർഷം
+              </span>
+              <div className="text-4xl sm:text-5xl font-black text-[#171514] tracking-tight font-mono">
+                {m.year}
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <RedStarIcon size={12} className="text-[#C90000]" />
+                <span className="text-[10px] font-mono uppercase text-[#241914]/60 tracking-wider">
+                  EPOCH {idx + 1}
+                </span>
+              </div>
             </div>
 
-            {/* Bullet Point */}
-            <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-brand-red border-4 border-white shadow-xs" />
+            {/* Content Column */}
+            <div className="md:col-span-9 bg-[#FFF9EF] p-5 sm:p-6 rounded-lg border border-[#241914]/15 shadow-2xs space-y-3">
+              <h4
+                className={`text-lg sm:text-xl font-black text-[#171514] tracking-tight ${
+                  language === 'ml' ? 'font-malayalam' : ''
+                }`}
+              >
+                {m.title}
+              </h4>
 
-            {/* Mobile Year Badge */}
-            <div className="sm:hidden text-sm font-extrabold text-brand-red mb-1">
-              {m.year}
+              <p
+                className={`text-sm text-[#241914]/80 leading-relaxed font-medium ${
+                  language === 'ml' ? 'font-malayalam-body leading-[1.75]' : ''
+                }`}
+              >
+                {m.description}
+              </p>
+
+              <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-[#241914]/50 border-t border-[#241914]/10">
+                <span>HISTORICAL RECORD // {m.year}</span>
+                <span>{ml ? 'ഔദ്യോഗിക രേഖ' : 'VERIFIED MILESTONE'}</span>
+              </div>
             </div>
-
-            <h4
-              className={`text-lg font-bold text-charcoal mb-2 ${
-                language === 'ml' ? 'font-malayalam' : ''
-              }`}
-            >
-              {m.title}
-            </h4>
-
-            <p
-              className={`text-sm text-slate-600 leading-relaxed ${
-                language === 'ml' ? 'font-malayalam-body' : ''
-              }`}
-            >
-              {m.description}
-            </p>
-          </div>
+          </article>
         ))}
       </div>
     </div>

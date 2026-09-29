@@ -9,46 +9,49 @@ export const StatsRibbon = () => {
       value: t.stats.membersCount,
       label: t.stats.membersLabel,
       icon: Users,
-      color: 'text-amber-gold',
     },
     {
       value: t.stats.unitsCount,
       label: t.stats.unitsLabel,
       icon: Landmark,
-      color: 'text-brand-red',
     },
     {
       value: t.stats.districtsCount,
       label: t.stats.districtsLabel,
       icon: MapPin,
-      color: 'text-sky-blue',
     },
     {
       value: t.stats.legacyCount,
       label: t.stats.legacyLabel,
       icon: Sparkles,
-      color: 'text-meadow-green',
     },
   ];
 
   return (
-    <div className="relative -mt-10 sm:-mt-14 z-20 max-w-6xl mx-auto px-4 sm:px-6">
-      <div className="bg-white rounded-2xl shadow-xl border border-amber-100 p-6 sm:p-8 backdrop-blur-md">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+    <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 mt-8 sm:mt-12">
+      <div className="bg-[#E9DDC9]/90 rounded-xl shadow-warm border border-[#241914]/15 p-6 sm:p-8 relative overflow-hidden">
+        {/* Subtle red accent line inspired by poster */}
+        <div className="absolute top-0 inset-x-0 h-1 bg-[#C90000]" />
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-y md:divide-y-0 md:divide-x divide-[#241914]/10">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             return (
               <div
                 key={idx}
-                className={`flex flex-col items-center text-center ${idx !== 0 ? 'pt-4 sm:pt-0 sm:pl-6' : ''}`}
+                className={`flex flex-col items-center text-center p-2 sm:p-3 ${idx > 0 ? 'pt-4 md:pt-2' : ''}`}
               >
-                <div className={`p-2.5 rounded-full bg-slate-50 mb-3 ${stat.color}`}>
-                  <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
+                <div className="p-2.5 rounded-lg bg-[#F4EBDD] text-[#C90000] mb-2 border border-[#241914]/10 shadow-2xs">
+                  <Icon className="w-5 h-5" />
                 </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-charcoal">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#171514]">
                   {stat.value}
                 </div>
-                <div className={`text-xs sm:text-sm font-semibold text-slate-600 mt-1 ${language === 'ml' ? 'font-malayalam' : ''}`}>
+                <div
+                  className={`text-xs sm:text-xs font-bold text-[#241914]/70 mt-1 uppercase tracking-wider ${
+                    language === 'ml' ? 'font-malayalam normal-case text-sm leading-[1.6]' : ''
+                  }`}
+                >
                   {stat.label}
                 </div>
               </div>

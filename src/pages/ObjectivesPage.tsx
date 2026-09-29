@@ -1,5 +1,8 @@
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
+import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
+import { RedStarIcon } from '../components/motifs/RedStarIcon';
+import { PeaceDove } from '../components/motifs/PeaceDove';
 import { Vote, HeartHandshake, Compass, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const pillars = [
@@ -108,17 +111,29 @@ export const ObjectivesPage = () => {
         ]}
       />
 
-      <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red mb-2 block">
-            {ml ? 'ലക്ഷ്യങ്ങൾ' : 'Our Objectives'}
-          </span>
-          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight mb-4 ${ml ? 'font-malayalam' : ''}`}>
+      {/* Festive Hero Banner */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#FBC02D] via-[#F57F17] to-[#D32F2F] text-white py-14 sm:py-18">
+        <BackdropSunburst className="opacity-45" />
+
+        <div className="absolute top-8 left-8 text-white/70 pointer-events-none hidden md:block">
+          <PeaceDove filled className="w-14 h-10" />
+        </div>
+        <div className="absolute top-8 right-8 text-white/70 pointer-events-none hidden md:block scale-x-[-1]">
+          <PeaceDove filled className="w-14 h-10" />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 shadow-sm">
+            <RedStarIcon className="w-3.5 h-3.5 text-white" />
+            <span className={ml ? 'font-malayalam' : ''}>{ml ? 'ദർശനവും ലക്ഷ്യങ്ങളും' : 'Mission & Core Vision'}</span>
+            <Sparkles className="w-3.5 h-3.5 text-sun-yellow" />
+          </div>
+          <h1 className={`text-3xl sm:text-5xl font-black text-white tracking-tight mb-4 drop-shadow-md ${ml ? 'font-malayalam' : ''}`}>
             {ml ? 'ലക്ഷ്യങ്ങളും ദർശനവും' : 'Mission & Core Objectives'}
           </h1>
-          <p className={`text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto ${ml ? 'font-malayalam-body' : ''}`}>
+          <p className={`text-base sm:text-xl text-amber-100 leading-relaxed max-w-3xl mx-auto drop-shadow-xs ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
             {ml
-              ? 'ബാലസംഘത്തിന്റെ പ്രവർത്തനങ്ങളെ നയിക്കുന്ന അഞ്ച് അടിസ്ഥാന സ്തംഭങ്ങൾ'
+              ? 'ബാലസംഘത്തിന്റെ പ്രവർത്തനങ്ങളെ നയിക്കുന്ന അഞ്ച് അടിസ്ഥാന സ്തംഭങ്ങൾ: ജനാധിപത്യം, മതേതരത്വം, ശാസ്ത്രബോധം, അവകാശ സംരക്ഷണം, സർഗ്ഗാത്മകത.'
               : 'The five foundational pillars that guide Balasangham\'s child-centered initiatives across every village, town, and district of Kerala.'}
           </p>
         </div>

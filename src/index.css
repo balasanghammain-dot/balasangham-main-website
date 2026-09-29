@@ -5,11 +5,50 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: #F4EBDD;
+    color: #171514;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #F4EBDD;
+    color: #171514;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   /* Critical Malayalam conjunct preservation */
   [lang="ml"], .font-malayalam, .font-malayalam-body {
     line-height: 1.7;
     font-feature-settings: "kern" 1;
+  }
+
+  /* Editorial display headings */
+  h1, h2, h3, .font-display {
+    letter-spacing: -0.025em;
+  }
+
+  /* Tactile feedback on interactive elements (Apple fluid interface response) */
+  button, a[role="button"], .interactive-press {
+    touch-action: manipulation;
+  }
+}
+
+/* Subtle paper texture */
+.bg-paper-grain {
+  background-color: #F4EBDD;
+  background-image: radial-gradient(#241914 0.4px, transparent 0.4px);
+  background-size: 24px 24px;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

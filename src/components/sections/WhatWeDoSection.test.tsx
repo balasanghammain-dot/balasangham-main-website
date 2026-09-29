@@ -12,7 +12,7 @@ describe('WhatWeDoSection Component (Pillar 2)', () => {
     );
 
     expect(screen.getByRole('heading', { level: 2, name: /What We Do|പ്രവർത്തനങ്ങൾ/i })).toBeInTheDocument();
-    expect(screen.getByText(/Venalthumbikal|വേനൽത്തുമ്പികൾ/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Venalthumbikal|വേനൽത്തുമ്പികൾ/i)[0]).toBeInTheDocument();
     expect(screen.getByText(/Venal Kalari|വേനൽ കളരി/i)).toBeInTheDocument();
     expect(screen.getByText(/Kilikkoodu|കിളിക്കൂട്/i)).toBeInTheDocument();
     expect(screen.getByText(/Shasthra Deepthi|ശാസ്ത്ര ദീപ്തി/i)).toBeInTheDocument();

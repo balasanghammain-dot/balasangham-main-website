@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { ArchiveImage } from '../../types/content';
 import { useLanguage } from '../../context/LanguageContext';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 
 interface LightboxModalProps {
   images: ArchiveImage[];
@@ -116,9 +116,19 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
     >
       {/* Top Toolbar */}
       <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
-        <span className="text-white/70 text-xs sm:text-sm font-medium">
+        <span className="text-white/70 text-xs sm:text-sm font-medium font-mono">
           {currentIndex + 1} / {images.length}
         </span>
+        <a
+          href={currentImage.src}
+          download={`balasangham-${currentImage.id}.jpg`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={language === 'ml' ? 'ഡൗൺലോഡ് ചെയ്യുക' : 'Download image'}
+          className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none focus:ring-2 focus:ring-white transition-colors"
+        >
+          <Download className="w-5 h-5" aria-hidden="true" />
+        </a>
         <button
           ref={closeButtonRef}
           type="button"

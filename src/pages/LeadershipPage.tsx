@@ -1,7 +1,10 @@
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { kannurLeadership, stateLeadership } from '../data/organizationData';
-import { ShieldCheck, UserCheck, Award } from 'lucide-react';
+import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
+import { RedStarIcon } from '../components/motifs/RedStarIcon';
+import { PeaceDove } from '../components/motifs/PeaceDove';
+import { ShieldCheck, UserCheck, Award, Sparkles } from 'lucide-react';
 
 export const LeadershipPage = () => {
   const { language } = useLanguage();
@@ -16,15 +19,27 @@ export const LeadershipPage = () => {
         ]}
       />
 
-      <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red mb-2 block">
-            {ml ? 'ജില്ലാ നേതൃത്വം' : 'Kannur District Leadership'}
-          </span>
-          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight mb-4 ${ml ? 'font-malayalam' : ''}`}>
+      {/* Festive Hero Banner */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#FBC02D] via-[#F57F17] to-[#D32F2F] text-white py-14 sm:py-18">
+        <BackdropSunburst className="opacity-45" />
+
+        <div className="absolute top-8 left-8 text-white/70 pointer-events-none hidden md:block">
+          <PeaceDove filled className="w-14 h-10" />
+        </div>
+        <div className="absolute top-8 right-8 text-white/70 pointer-events-none hidden md:block scale-x-[-1]">
+          <PeaceDove filled className="w-14 h-10" />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 shadow-sm">
+            <RedStarIcon className="w-3.5 h-3.5 text-white" />
+            <span className={ml ? 'font-malayalam' : ''}>{ml ? 'ജില്ലാ നേതൃത്വം' : 'Kannur District Leadership'}</span>
+            <Sparkles className="w-3.5 h-3.5 text-sun-yellow" />
+          </div>
+          <h1 className={`text-3xl sm:text-5xl font-black text-white tracking-tight mb-4 drop-shadow-md ${ml ? 'font-malayalam' : ''}`}>
             {ml ? 'ഭാരവാഹികൾ (2024–2026)' : 'District Committee Office Bearers'}
           </h1>
-          <p className={`text-sm sm:text-base text-slate-600 max-w-2xl mx-auto ${ml ? 'font-malayalam-body' : ''}`}>
+          <p className={`text-base sm:text-xl text-amber-100 max-w-2xl mx-auto leading-relaxed drop-shadow-xs ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
             {ml
               ? '2024 ഒക്ടോബറിൽ പിലാത്തറയിൽ ചേർന്ന ജില്ലാ സമ്മേളനം തിരഞ്ഞെടുത്ത ഭാരവാഹികൾ.'
               : 'Elected democratically at the Kannur District Conference held at Pilathara in October 2024 for the 2024–2026 tenure.'}
