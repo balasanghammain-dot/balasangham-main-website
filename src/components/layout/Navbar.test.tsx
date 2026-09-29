@@ -51,4 +51,21 @@ describe('Navbar Component', () => {
     fireEvent.click(menuBtn);
     expect(menuBtn).toHaveAttribute('aria-expanded', 'true');
   });
+
+  it('provides safe-area top styling and minimum 48px touch targets for mobile menu trigger', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <Navbar onOpenAnthem={vi.fn()} />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    const header = container.querySelector('header');
+    expect(header).toHaveClass('pt-safe');
+
+    const menuBtn = screen.getByRole('button', { name: /toggle navigation menu/i });
+    expect(menuBtn).toHaveClass('min-h-[48px]');
+    expect(menuBtn).toHaveClass('min-w-[48px]');
+  });
 });

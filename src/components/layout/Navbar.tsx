@@ -63,7 +63,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
   const isAboutActive = location.pathname.startsWith('/about');
 
   return (
-    <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-md border-t-2 border-berry border-b border-festival/20 transition-all duration-200">
+    <header className="sticky top-0 z-40 bg-[#FFFDF7]/95 backdrop-blur-md border-t-2 border-[#D32020] border-b border-[#2A1610]/15 pt-safe transition-all duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-200 ${isScrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
           {/* Logo & Brand Name */}
@@ -197,7 +197,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-full text-ink hover:bg-festival/20 hover:text-berry transition-colors border border-festival/30"
+              className="flex items-center justify-center min-h-[48px] min-w-[48px] p-2.5 rounded-full text-ink hover:bg-festival/20 hover:text-[#D32020] transition-colors border border-[#2A1610]/15"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
             >
