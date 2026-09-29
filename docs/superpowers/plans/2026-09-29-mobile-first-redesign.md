@@ -38,13 +38,13 @@
 - Consumes: Festival theme values from spec (`#D32020`, `#F5A623`, `#257A3E`, `#FDF7EB`, `#F5E9D3`, `#2A1610`, `#FFFDF7`)
 - Produces: Tailwind color utility classes (`bg-festival-red`, `text-festival-red`, `bg-parchment-bg`, `bg-paper-surface`, `text-earth-umber`) and safe-area utilities.
 
-- [ ] **Step 1: Write tests for palette class availability and safe-area styles**
+- [x] **Step 1: Write tests for palette class availability and safe-area styles**
 Add test in `src/App.test.tsx` verifying safe-area utility and festival theme tokens render.
 
-- [ ] **Step 2: Run test to observe baseline state**
+- [x] **Step 2: Run test to observe baseline state**
 Run: `npm test src/App.test.tsx`
 
-- [ ] **Step 3: Update `tailwind.config.js` and `src/index.css`**
+- [x] **Step 3: Update `tailwind.config.js` and `src/index.css`**
 Update `tailwind.config.js` with festival palette tokens:
 ```javascript
 festival: {
@@ -67,11 +67,11 @@ Add safe-area padding helpers in `src/index.css`:
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npm test src/App.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add tailwind.config.js src/index.css src/App.test.tsx
 git commit -m "feat(ui): add festival theme tokens and safe-area utilities"
@@ -90,7 +90,7 @@ git commit -m "feat(ui): add festival theme tokens and safe-area utilities"
 - Consumes: React Router `NavLink`, `useLocation`, `useLanguage`
 - Produces: `<BottomNav />` with 5 touch destinations (Home, Programs, Media/Photos, News, Join).
 
-- [ ] **Step 1: Write the failing test for `BottomNav`**
+- [x] **Step 1: Write the failing test for `BottomNav`**
 Create `src/components/layout/BottomNav.test.tsx`:
 ```tsx
 import { render, screen } from '@testing-library/react';
@@ -116,11 +116,11 @@ describe('BottomNav', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 Run: `npm test src/components/layout/BottomNav.test.tsx`
 Expected: FAIL with "Cannot find module './BottomNav'"
 
-- [ ] **Step 3: Implement `BottomNav.tsx`**
+- [x] **Step 3: Implement `BottomNav.tsx`**
 Create `src/components/layout/BottomNav.tsx`:
 ```tsx
 import { NavLink } from 'react-router-dom';
@@ -191,11 +191,11 @@ export const BottomNav = () => {
 ```
 Integrate into `src/App.tsx` and add `pb-20 md:pb-0` to `<main>`.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npm test src/components/layout/BottomNav.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/layout/BottomNav.tsx src/components/layout/BottomNav.test.tsx src/App.tsx
 git commit -m "feat(nav): add mobile bottom thumb navigation bar"
@@ -213,23 +213,23 @@ git commit -m "feat(nav): add mobile bottom thumb navigation bar"
 - Consumes: Safe-area top padding, 48px touch targets, Drawer sheet
 - Produces: Compact responsive header with Malayalam branding, quick language toggle, and audio anthem trigger.
 
-- [ ] **Step 1: Write test for 48px mobile touch targets and drawer behavior**
+- [x] **Step 1: Write test for 48px mobile touch targets and drawer behavior**
 Update `src/components/layout/Navbar.test.tsx` to verify touch button accessibility and safe-area compatibility.
 
-- [ ] **Step 2: Run test to observe current behavior**
+- [x] **Step 2: Run test to observe current behavior**
 Run: `npm test src/components/layout/Navbar.test.tsx`
 
-- [ ] **Step 3: Update `Navbar.tsx` for mobile ergonomics**
+- [x] **Step 3: Update `Navbar.tsx` for mobile ergonomics**
 - Add `pt-[env(safe-area-inset-top)]`.
 - Restyle with festival palette: border top `#D32020`, background `#FFFDF7/95`, borders `#2A1610/15`.
 - Ensure all interactive buttons (Menu, Language, Anthem) have minimum 48px × 48px touch target area.
 - Enhance drawer with festival styling and complete quick navigation links.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npm test src/components/layout/Navbar.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/layout/Navbar.tsx src/components/layout/Navbar.test.tsx
 git commit -m "feat(header): optimize sticky header and mobile drawer for safe areas"
@@ -248,23 +248,23 @@ git commit -m "feat(header): optimize sticky header and mobile drawer for safe a
 - Consumes: Language context, Anthem open callback
 - Produces: Mobile-first Hero with festival colors, fluid type (`clamp`), 2×2 stats touch grid, and stacked thumb CTAs.
 
-- [ ] **Step 1: Write test for Hero fluid headings and 2×2 stats grid**
+- [x] **Step 1: Write test for Hero fluid headings and 2×2 stats grid**
 Update `src/components/home/HeroSection.test.tsx` to verify mobile stats rendering and CTA links.
 
-- [ ] **Step 2: Run test to verify current state**
+- [x] **Step 2: Run test to verify current state**
 Run: `npm test src/components/home/HeroSection.test.tsx`
 
-- [ ] **Step 3: Update `HeroSection.tsx` and `StatsRibbon.tsx`**
+- [x] **Step 3: Update `HeroSection.tsx` and `StatsRibbon.tsx`**
 - Replace legacy colors with `#D32020` (Vermilion), `#F5A623` (Ochre), `#FDF7EB` (Parchment), and `#2A1610` (Umber).
 - Ensure mobile headline uses `clamp(2rem, 8.5vw, 3.25rem)` with `line-height: 1.35` in Malayalam.
 - Turn Stats Ribbon into a 2×2 grid on screens < 640px, each cell with rounded borders and warm shadow.
 - Stack CTAs on mobile (`w-full sm:w-auto`, min-h-[48px]).
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npm test src/components/home/HeroSection.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/home/HeroSection.tsx src/components/home/StatsRibbon.tsx src/components/home/HeroSection.test.tsx
 git commit -m "feat(hero): mobile-first editorial hero and 2x2 stats ribbon"
@@ -287,29 +287,29 @@ git commit -m "feat(hero): mobile-first editorial hero and 2x2 stats ribbon"
 - Consumes: verifiedNews data, organizationData, translations
 - Produces: Touch-friendly cards, horizontal swipeable filters, and zero horizontal page overflow.
 
-- [ ] **Step 1: Run existing section tests to verify baseline**
+- [x] **Step 1: Run existing section tests to verify baseline**
 Run: `npm test src/components/sections/`
 
-- [ ] **Step 2: Update `WhatWeDoSection.tsx` for mobile magazine cards**
+- [x] **Step 2: Update `WhatWeDoSection.tsx` for mobile magazine cards**
 - Set full width image headers (4:3 aspect ratio), gold badge overlays (`#F5A623`).
 - Single-column cards on mobile, 48px touch links.
 - Apply Malayalam line height `1.7` across summary and highlight items.
 
-- [ ] **Step 3: Update `EventsSection.tsx` with horizontal swipe filter**
+- [x] **Step 3: Update `EventsSection.tsx` with horizontal swipe filter**
 - Ensure category filter bar scrolls horizontally smoothly with `overflow-x-auto no-scrollbar py-2`.
 - Minimum 44px–48px touch targets for each category pill.
 - Prominent 2026 District Conference card in `#2A1610` Umber with festival red badge.
 
-- [ ] **Step 4: Update `HomePage.tsx` News & Membership Banners**
+- [x] **Step 4: Update `HomePage.tsx` News & Membership Banners**
 - Restyle lead story with responsive 16:10 aspect ratio and festival tag.
 - Secondary stories stack cleanly with generous tap padding.
 - Join movement banner adapts to single column on mobile with stacked action buttons.
 
-- [ ] **Step 5: Run tests across sections**
+- [x] **Step 5: Run tests across sections**
 Run: `npm test`
 Expected: ALL PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 ```bash
 git add src/components/sections/WhatWeDoSection.tsx src/components/sections/EventsSection.tsx src/pages/HomePage.tsx
 git commit -m "feat(sections): mobile editorial magazine cards and swipeable event filters"
@@ -329,7 +329,7 @@ git commit -m "feat(sections): mobile editorial magazine cards and swipeable eve
 - Consumes: HTML5 file input with `capture="user"`, native Web Share API
 - Produces: Self-contained camera capture, probabilistic match display, and touch-swipeable lightbox.
 
-- [ ] **Step 1: Write test for Find My Photos camera upload and privacy disclosure**
+- [x] **Step 1: Write test for Find My Photos camera upload and privacy disclosure**
 Create `src/components/common/FindMyPhotos.test.tsx`:
 ```tsx
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -349,21 +349,21 @@ describe('FindMyPhotos', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify initial failure / missing assertions**
+- [x] **Step 2: Run test to verify initial failure / missing assertions**
 Run: `npm test src/components/common/FindMyPhotos.test.tsx`
 
-- [ ] **Step 3: Enhance `FindMyPhotos.tsx`**
+- [x] **Step 3: Enhance `FindMyPhotos.tsx`**
 - Add native mobile front camera capture `<input type="file" accept="image/*" capture="user">`.
 - Render explicit privacy commitment card: "100% Client-Side. No selfies uploaded. No biometric templates stored."
 - Results header: "POSSIBLE MATCHES // സാധ്യതയുള്ള ചിത്രങ്ങൾ".
 - Touch-friendly 2-column mobile photo grid with click-to-lightbox.
 - Connect to full-screen mobile swipe lightbox with Web Share API (`navigator.share`).
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npm test src/components/common/FindMyPhotos.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/common/FindMyPhotos.tsx src/components/common/FindMyPhotos.test.tsx src/components/conference/LightboxModal.tsx src/pages/MediaPage.tsx
 git commit -m "feat(photos): mobile-first camera capture, privacy card and touch lightbox"
@@ -377,21 +377,21 @@ git commit -m "feat(photos): mobile-first camera capture, privacy card and touch
 - Modify: Any files needing polish after verification
 - Test: Full Vitest test suite (`npm test`) and production build (`npm run build`)
 
-- [ ] **Step 1: Run full test suite**
+- [x] **Step 1: Run full test suite**
 Run: `npm test`
 Expected: All tests PASS.
 
-- [ ] **Step 2: Run production build**
+- [x] **Step 2: Run production build**
 Run: `npm run build`
 Expected: Clean build with 0 TypeScript and 0 bundler errors.
 
-- [ ] **Step 3: Verify running dev server across mobile viewports via Playwright**
+- [x] **Step 3: Verify running dev server across mobile viewports via Playwright**
 Inspect `http://127.0.0.1:5173/` at 360×800, 390×844, and 430×932 using `mcp__playwright__browser_navigate`, `mcp__playwright__browser_resize`, and `mcp__playwright__browser_take_screenshot`. Verify:
 - No horizontal scrollbar (`document.documentElement.scrollWidth <= window.innerWidth`).
 - Bottom navigation renders and navigates to `/programs`, `/media`, `/news`.
 - Language toggle switches text cleanly.
 
-- [ ] **Step 4: Final commit on feature branch**
+- [x] **Step 4: Final commit on feature branch**
 ```bash
 git add -A
 git commit -m "feat(mobile): complete mobile-first redesign with festival theme and bottom nav"
