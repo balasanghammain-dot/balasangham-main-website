@@ -63,42 +63,51 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
   const isAboutActive = location.pathname.startsWith('/about');
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FFF9EF]/95 backdrop-blur-md border-t-2 border-[#C90000] border-b border-[#241914]/10 transition-all duration-200">
+    <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-md border-t-2 border-berry border-b border-festival/20 transition-all duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-200 ${isScrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
           {/* Logo & Brand Name */}
           <Link
             to="/"
-            className="flex items-center gap-3 group focus:outline-hidden focus:ring-2 focus:ring-[#C90000] rounded-md p-1 shrink-0 active:scale-[0.98] transition-transform"
+            className="flex items-center gap-3 group focus:outline-hidden focus:ring-2 focus:ring-berry rounded-full p-1 shrink-0 active:scale-[0.98] transition-transform"
           >
-            <BalasanghamFlag className="w-10 h-6 sm:w-11 sm:h-6.5 transition-transform group-hover:scale-105" />
+            <div className="p-1 rounded-xl bg-white shadow-xs border border-festival/30 group-hover:rotate-6 transition-transform">
+              <BalasanghamFlag className="w-9 h-5.5 sm:w-10 sm:h-6 transition-transform" />
+            </div>
             <div className="flex flex-col">
               <span
-                className={`text-lg sm:text-xl font-black tracking-tight text-[#171514] group-hover:text-[#C90000] transition-colors ${
+                className={`text-lg sm:text-xl font-black tracking-tight text-ink group-hover:text-berry transition-colors ${
                   ml ? 'font-malayalam' : ''
                 }`}
               >
                 {ml ? 'ബാലസംഘം' : 'Balasangham'}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-bold text-[#241914]/70 uppercase tracking-widest -mt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-bold text-ink/70 uppercase tracking-widest -mt-0.5">
                 {ml ? 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി' : 'Kannur District Committee'}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-6 text-[13px] font-bold tracking-wide uppercase text-[#241914]/85">
+          <nav className="hidden xl:flex items-center gap-6 text-[13px] font-bold tracking-wide uppercase text-ink/85">
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `py-1.5 transition-colors border-b-2 active:scale-[0.98] ${
+                `relative py-1.5 transition-colors active:scale-[0.98] ${
                   isActive
-                    ? 'text-[#C90000] border-[#C90000] font-black'
-                    : 'border-transparent hover:text-[#C90000] hover:border-[#C90000]'
+                    ? 'text-berry font-black'
+                    : 'hover:text-berry text-ink/80'
                 }`
               }
             >
-              {ml ? 'ഹോം' : 'Home'}
+              {({ isActive }) => (
+                <>
+                  <span>{ml ? 'ഹോം' : 'Home'}</span>
+                  {isActive && (
+                    <span className="absolute bottom-0 inset-x-0 h-0.5 bg-berry rounded-full animate-pop-in" />
+                  )}
+                </>
+              )}
             </NavLink>
 
             {/* About Dropdown */}
@@ -106,25 +115,28 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
               <button
                 type="button"
                 onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
-                className={`flex items-center gap-1 py-1.5 transition-colors border-b-2 active:scale-[0.98] ${
+                className={`flex items-center gap-1 py-1.5 transition-colors relative active:scale-[0.98] ${
                   isAboutActive
-                    ? 'text-[#C90000] border-[#C90000] font-black'
-                    : 'border-transparent hover:text-[#C90000] hover:border-[#C90000]'
+                    ? 'text-berry font-black'
+                    : 'hover:text-berry text-ink/80'
                 }`}
               >
                 <span>{ml ? 'ഞങ്ങളെക്കുറിച്ച്' : 'About'}</span>
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
+                {isAboutActive && (
+                  <span className="absolute bottom-0 inset-x-0 h-0.5 bg-berry rounded-full" />
+                )}
               </button>
 
               {aboutDropdownOpen && (
-                <div className="absolute top-full left-0 w-64 mt-2 bg-[#FFF9EF] rounded-xl shadow-lg border border-[#241914]/15 py-2 z-50 animate-in fade-in slide-in-from-top-1">
+                <div className="absolute top-full left-0 w-64 mt-2 bg-white rounded-2xl shadow-warm-lg border-2 border-festival/30 py-2 z-50 animate-pop-in">
                   {aboutSublinks.map((sub, idx) => (
                     <Link
                       key={idx}
                       to={sub.to}
                       onClick={() => setAboutDropdownOpen(false)}
-                      className={`block px-4 py-2 text-xs sm:text-sm text-[#241914] hover:bg-[#E9DDC9]/50 hover:text-[#C90000] font-medium transition-colors ${
-                        location.pathname === sub.to ? 'text-[#C90000] font-bold bg-[#E9DDC9]/60' : ''
+                      className={`block px-4 py-2.5 text-xs sm:text-sm text-ink hover:bg-festival/15 hover:text-berry font-medium transition-colors ${
+                        location.pathname === sub.to ? 'text-berry font-bold bg-festival/20' : ''
                       }`}
                     >
                       {ml ? sub.labelMl : sub.label}
@@ -139,14 +151,21 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  `py-1.5 transition-colors border-b-2 active:scale-[0.98] ${
+                  `relative py-1.5 transition-colors active:scale-[0.98] ${
                     isActive
-                      ? 'text-[#C90000] border-[#C90000] font-black'
-                      : 'border-transparent hover:text-[#C90000] hover:border-[#C90000]'
+                      ? 'text-berry font-black'
+                      : 'hover:text-berry text-ink/80'
                   }`
                 }
               >
-                {ml ? link.labelMl : link.label}
+                {({ isActive }) => (
+                  <>
+                    <span>{ml ? link.labelMl : link.label}</span>
+                    {isActive && (
+                      <span className="absolute bottom-0 inset-x-0 h-0.5 bg-berry rounded-full animate-pop-in" />
+                    )}
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>
@@ -155,7 +174,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           <div className="hidden sm:flex items-center gap-3 shrink-0">
             <Link
               to="/join"
-              className="px-3.5 py-1.5 text-xs font-bold rounded-md bg-[#C90000] text-white hover:bg-[#A30000] transition-all shadow-xs active:scale-[0.97]"
+              className="px-4 py-2 text-xs font-bold rounded-full bg-berry text-white hover:bg-berry-dark hover:shadow-festive transition-all shadow-xs active:scale-[0.97]"
             >
               {ml ? 'അംഗത്വം' : 'Join Us'}
             </Link>
@@ -163,9 +182,9 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             <button
               type="button"
               onClick={onOpenAnthem}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-md bg-[#E9DDC9] text-[#241914] hover:bg-[#C90000] hover:text-white transition-all duration-200 border border-[#241914]/15 active:scale-[0.97]"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full bg-festival/20 text-ink hover:bg-festival hover:text-ink transition-all duration-200 border border-festival/40 active:scale-[0.97]"
             >
-              <Music className="w-3.5 h-3.5 text-[#C90000]" />
+              <Music className="w-3.5 h-3.5 text-berry" />
               <span className={ml ? 'font-malayalam' : ''}>{ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}</span>
             </button>
 
@@ -178,95 +197,76 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-full text-ink hover:bg-festival/20 hover:text-berry transition-colors border border-festival/30"
+              aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation menu"
-              className="p-2 rounded-md text-[#241914] hover:text-[#C90000] hover:bg-[#E9DDC9]/50 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-[#C90000] active:scale-[0.97]"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="xl:hidden border-b border-[#241914]/15 bg-[#FFF9EF] px-4 pt-3 pb-6 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[85vh] overflow-y-auto shadow-xl">
-          <nav className="flex flex-col space-y-1">
+        <div className="xl:hidden bg-cream-deep border-b-2 border-festival/30 px-4 pt-3 pb-6 space-y-2 animate-pop-in">
+          <NavLink
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-xl text-sm font-bold text-ink hover:bg-festival/20 hover:text-berry"
+          >
+            {ml ? 'ഹോം' : 'Home'}
+          </NavLink>
+
+          <div className="pl-3 border-l-2 border-festival/30 space-y-1">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-berry font-bold block pt-1">
+              {ml ? 'ഞങ്ങളെക്കുറിച്ച്' : 'ABOUT'}
+            </span>
+            {aboutSublinks.map((sub, idx) => (
+              <Link
+                key={idx}
+                to={sub.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-xs text-ink/80 hover:text-berry font-medium"
+              >
+                {ml ? sub.labelMl : sub.label}
+              </Link>
+            ))}
+          </div>
+
+          {mainLinks.slice(1).map((link) => (
             <NavLink
-              to="/"
+              key={link.to}
+              to={link.to}
               onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `px-3 py-2 rounded-md text-sm font-bold active:scale-[0.98] ${
-                  isActive ? 'bg-[#E9DDC9] text-[#C90000]' : 'text-[#241914] hover:bg-[#E9DDC9]/40'
-                }`
-              }
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-ink hover:bg-festival/20 hover:text-berry"
             >
-              {ml ? 'ഹോം' : 'Home'}
+              {ml ? link.labelMl : link.label}
             </NavLink>
+          ))}
 
-            {/* About in Mobile */}
-            <div className="px-3 py-1.5 font-bold text-xs uppercase tracking-wider text-[#241914]/50">
-              {ml ? 'ഞങ്ങളെക്കുറിച്ച്' : 'About'}
-            </div>
-            <div className="pl-3 space-y-1 border-l-2 border-[#C90000]/30 ml-2">
-              {aboutSublinks.map((sub, idx) => (
-                <NavLink
-                  key={idx}
-                  to={sub.to}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `block px-3 py-1.5 rounded-md text-sm font-semibold active:scale-[0.98] ${
-                      isActive ? 'bg-[#E9DDC9] text-[#C90000] font-bold' : 'text-[#241914]/85 hover:bg-[#E9DDC9]/40'
-                    }`
-                  }
-                >
-                  {ml ? sub.labelMl : sub.label}
-                </NavLink>
-              ))}
-            </div>
-
-            <div className="pt-2 space-y-1 border-t border-[#241914]/10">
-              {mainLinks.slice(1).map((link) => (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `block px-3 py-2 rounded-md text-sm font-bold active:scale-[0.98] ${
-                      isActive ? 'bg-[#E9DDC9] text-[#C90000]' : 'text-[#241914] hover:bg-[#E9DDC9]/40'
-                    }`
-                  }
-                >
-                  {ml ? link.labelMl : link.label}
-                </NavLink>
-              ))}
-
-              <div className="pt-3 flex flex-col gap-2">
-                <NavLink
-                  to="/join"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-2.5 rounded-md text-center text-sm font-bold text-white bg-[#C90000] hover:bg-[#A30000] shadow-xs active:scale-[0.97]"
-                >
-                  {ml ? 'അംഗത്വത്തിൽ പങ്കാളിയാകൂ' : 'Join Balasangham'}
-                </NavLink>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenAnthem();
-                  }}
-                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-md text-xs font-bold text-[#241914] bg-[#E9DDC9] border border-[#241914]/15 active:scale-[0.97]"
-                >
-                  <Music className="w-3.5 h-3.5 text-[#C90000]" />
-                  <span>{ml ? 'പതാകഗാനം ശ്രവിക്കുക' : 'Listen to Flag Song'}</span>
-                </button>
-              </div>
-            </div>
-          </nav>
+          <div className="pt-4 flex items-center gap-3">
+            <Link
+              to="/join"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex-1 py-2.5 text-center text-xs font-bold rounded-full bg-berry text-white shadow-festive"
+            >
+              {ml ? 'അംഗത്വം എടുക്കൂ' : 'Join Us'}
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAnthem();
+              }}
+              className="flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-full bg-festival text-ink border border-festival-deep/30"
+            >
+              <Music className="w-3.5 h-3.5 text-berry" />
+              <span>{ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}</span>
+            </button>
+          </div>
         </div>
       )}
     </header>
   );
 };
-
-export default Navbar;

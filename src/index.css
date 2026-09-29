@@ -3,16 +3,65 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 12 10% 15%;
+    --card: 40 33% 97%;
+    --card-foreground: 12 10% 15%;
+    --popover: 40 33% 97%;
+    --popover-foreground: 12 10% 15%;
+    --primary: 357 76% 47%;
+    --primary-foreground: 40 33% 97%;
+    --secondary: 42 90% 62%;
+    --secondary-foreground: 12 10% 15%;
+    --muted: 36 29% 92%;
+    --muted-foreground: 24 7% 39%;
+    --accent: 42 90% 62%;
+    --accent-foreground: 12 10% 15%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 36 22% 85%;
+    --input: 36 22% 85%;
+    --ring: 357 76% 47%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 12 10% 15%;
+    --foreground: 40 33% 97%;
+    --card: 12 10% 15%;
+    --card-foreground: 40 33% 97%;
+    --popover: 12 10% 15%;
+    --popover-foreground: 40 33% 97%;
+    --primary: 357 76% 47%;
+    --primary-foreground: 40 33% 97%;
+    --secondary: 42 90% 62%;
+    --secondary-foreground: 12 10% 15%;
+    --muted: 24 10% 22%;
+    --muted-foreground: 36 22% 70%;
+    --accent: 42 90% 62%;
+    --accent-foreground: 12 10% 15%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 24 10% 25%;
+    --input: 24 10% 25%;
+    --ring: 357 76% 47%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
   html {
     scroll-behavior: smooth;
-    background-color: #F4EBDD;
-    color: #171514;
+    background-color: #FAF7F2;
+    color: #2B2523;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    background-color: #F4EBDD;
-    color: #171514;
+    background-color: #FAF7F2;
+    color: #2B2523;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -35,8 +84,8 @@
 
 /* Subtle paper texture */
 .bg-paper-grain {
-  background-color: #F4EBDD;
-  background-image: radial-gradient(#241914 0.4px, transparent 0.4px);
+  background-color: #FAF7F2;
+  background-image: radial-gradient(#2B2523 0.35px, transparent 0.35px);
   background-size: 24px 24px;
 }
 

@@ -1,6 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { RedStarIcon } from '../motifs/RedStarIcon';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 
 const programImages = [
   {
@@ -49,22 +49,22 @@ export const WhatWeDoSection = () => {
   const ml = language === 'ml';
 
   return (
-    <section id="what-we-do" className="py-16 sm:py-24 bg-[#F4EBDD] scroll-mt-16 relative overflow-hidden border-b border-[#241914]/15 bg-paper-grain">
+    <section id="what-we-do" className="py-16 sm:py-24 bg-cream scroll-mt-16 relative overflow-hidden border-b border-festival/20 bg-paper-grain">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
           <div className="flex items-center gap-2 mb-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-[#E9DDC9] border border-[#241914]/15 text-[#241914] text-xs font-bold uppercase tracking-wider shadow-2xs">
-              <RedStarIcon size={14} className="text-[#C90000]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-festival/20 border border-festival/40 text-ink text-xs font-bold uppercase tracking-wider shadow-2xs">
+              <RedStarIcon size={14} className="text-berry" />
               <span className={ml ? 'font-malayalam' : ''}>{t.whatWeDo.sectionTag}</span>
             </div>
-            <span className="text-xs font-mono uppercase tracking-widest text-[#241914]/60">
-              // CULTURAL MAGAZINE INDEX
+            <span className="text-xs font-mono uppercase tracking-widest text-ink/60">
+              // CULTURAL ARCHIVE INDEX
             </span>
           </div>
 
           <h2
-            className={`text-3xl sm:text-5xl font-black text-[#171514] tracking-tight uppercase leading-[1.05] mb-4 ${
+            className={`text-3xl sm:text-5xl font-black text-ink tracking-tight uppercase leading-[1.05] mb-4 ${
               ml ? 'font-malayalam normal-case text-3xl sm:text-4xl' : ''
             }`}
           >
@@ -72,7 +72,7 @@ export const WhatWeDoSection = () => {
           </h2>
 
           <p
-            className={`text-base sm:text-lg text-[#241914]/80 leading-relaxed font-medium ${
+            className={`text-base sm:text-lg text-ink/80 leading-relaxed font-medium ${
               ml ? 'font-malayalam-body leading-[1.8]' : ''
             }`}
           >
@@ -80,7 +80,7 @@ export const WhatWeDoSection = () => {
           </p>
         </div>
 
-        {/* Alternating Cultural Magazine Feature Blocks */}
+        {/* Cultural Feature Blocks with Warm Festive Cards */}
         <div className="space-y-12 sm:space-y-16">
           {t.whatWeDo.initiatives.map((item, idx) => {
             const isEven = idx % 2 === 1;
@@ -91,7 +91,7 @@ export const WhatWeDoSection = () => {
             return (
               <article
                 key={item.id}
-                className="bg-[#FFF9EF] rounded-xl border border-[#241914]/15 shadow-warm p-6 sm:p-8 lg:p-10 transition-all hover:border-[#C90000]/40 group"
+                className="bg-white/95 rounded-3xl border-2 border-festival/30 shadow-warm-lg p-6 sm:p-8 lg:p-10 transition-all hover:border-berry/40 hover:-translate-y-1 duration-300 group"
               >
                 <div
                   className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${
@@ -100,45 +100,46 @@ export const WhatWeDoSection = () => {
                 >
                   {/* Visual Column */}
                   <div className={`lg:col-span-5 ${isEven ? 'lg:col-start-8' : ''}`}>
-                    <div className="relative bg-[#241914] rounded-lg overflow-hidden border border-[#241914]/20 shadow-md aspect-4/3 sm:aspect-16/10">
+                    <div className="relative bg-ink rounded-2xl overflow-hidden border border-festival/20 shadow-md aspect-4/3 sm:aspect-16/10">
                       <img
                         src={programMeta.image}
                         alt={programMeta.alt}
-                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#171514]/80 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent pointer-events-none" />
                       <div className="absolute bottom-0 inset-x-0 p-3 text-white">
-                        <span className="text-[10px] font-mono uppercase tracking-widest text-[#E9DDC9] block">
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-festival block">
                           {programMeta.caption}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Editorial Text Column */}
+                  {/* Text Column */}
                   <div className={`lg:col-span-7 space-y-4 ${isEven ? 'lg:col-start-1' : ''}`}>
-                    <div className="flex items-center justify-between border-b border-[#241914]/10 pb-3">
+                    <div className="flex items-center justify-between border-b border-ink/10 pb-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-3xl sm:text-4xl font-black font-mono text-[#C90000]">
+                        <span className="text-3xl sm:text-4xl font-black font-mono text-berry">
                           {numStr}
                         </span>
                         <div>
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-[#C90000] font-bold block">
-                            PROGRAM // {item.badge}
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-widest text-berry font-bold px-2.5 py-0.5 rounded-full bg-berry/10">
+                            <Sparkles className="w-3 h-3 text-festival-deep" />
+                            {item.badge}
                           </span>
-                          <span className="text-xs font-mono text-[#241914]/50 uppercase tracking-wider">
+                          <span className="text-xs font-mono text-ink/50 uppercase tracking-wider block mt-0.5">
                             ANNUAL INITIATIVE
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs font-mono text-[#241914]/60 uppercase tracking-wider hidden sm:inline">
+                      <span className="text-xs font-mono text-ink/60 uppercase tracking-wider hidden sm:inline">
                         VOL. 2026 // {numStr}
                       </span>
                     </div>
 
                     <h3
-                      className={`text-2xl sm:text-3xl font-black text-[#171514] tracking-tight group-hover:text-[#C90000] transition-colors ${
+                      className={`text-2xl sm:text-3xl font-black text-ink tracking-tight group-hover:text-berry transition-colors ${
                         ml ? 'font-malayalam' : ''
                       }`}
                     >
@@ -146,7 +147,7 @@ export const WhatWeDoSection = () => {
                     </h3>
 
                     <p
-                      className={`text-sm sm:text-base text-[#241914]/80 leading-relaxed font-medium ${
+                      className={`text-sm sm:text-base text-ink/80 leading-relaxed font-medium ${
                         ml ? 'font-malayalam-body leading-[1.8]' : ''
                       }`}
                     >
@@ -156,23 +157,23 @@ export const WhatWeDoSection = () => {
                     {/* Highlights */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
                       {item.highlights.map((h, i) => (
-                        <div key={i} className="flex items-start gap-2 text-xs font-medium text-[#241914]/85">
-                          <CheckCircle2 className="w-4 h-4 text-[#C90000] shrink-0 mt-0.5" />
+                        <div key={i} className="flex items-start gap-2 text-xs font-medium text-ink/85">
+                          <CheckCircle2 className="w-4 h-4 text-berry shrink-0 mt-0.5" />
                           <span className={ml ? 'font-malayalam-body leading-[1.6]' : ''}>{h}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Action link */}
-                    <div className="pt-4 flex items-center justify-between border-t border-[#241914]/10">
+                    <div className="pt-4 flex items-center justify-between border-t border-ink/10">
                       <a
                         href={`/programs/${slug}`}
-                        className="inline-flex items-center gap-2 text-xs font-mono uppercase font-bold tracking-wider text-[#C90000] hover:text-[#A30000] transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-deep hover:bg-festival/20 text-xs font-mono uppercase font-bold tracking-wider text-berry hover:text-berry-dark transition-all border border-ink/5"
                       >
                         <span>{ml ? 'വിശദ വിവരങ്ങൾ കാണുക' : 'EXPLORE PROGRAM'}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </a>
-                      <span className="text-[11px] font-mono text-[#241914]/50">
+                      <span className="text-[11px] font-mono text-ink/50">
                         REF: PRG-{numStr}
                       </span>
                     </div>
@@ -181,31 +182,6 @@ export const WhatWeDoSection = () => {
               </article>
             );
           })}
-        </div>
-
-        {/* Editorial Index Footer Note */}
-        <div className="mt-14 p-6 sm:p-8 rounded-xl bg-[#E9DDC9] border border-[#241914]/20 shadow-warm flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center sm:text-left">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#C90000] font-bold block">
-              STATEWIDE GRASSROOTS SCOPE // 20,000+ UNITS
-            </span>
-            <h4 className={`text-lg font-black text-[#171514] ${ml ? 'font-malayalam' : ''}`}>
-              {ml ? 'കുട്ടികൾ പഠിക്കുന്നു, ചിന്തിക്കുന്നു, പോരാടുന്നു' : 'Every Child A Citizen, Creator, and Leader'}
-            </h4>
-            <p className={`text-xs text-[#241914]/75 max-w-xl ${ml ? 'font-malayalam-body' : ''}`}>
-              {ml
-                ? 'സംസ്ഥാനത്തുടനീളം ഇരുപതിനായിരത്തിലേറെ യൂണിറ്റുകളിലൂടെ കുട്ടികളുടെ സർഗ്ഗപ്രവർത്തനങ്ങൾ നിത്യേന നടക്കുന്നു.'
-                : 'Active weekly gatherings across 20,000 neighborhood units fostering progressive childhood camaraderie.'}
-            </p>
-          </div>
-
-          <a
-            href="/programs"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#C90000] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#A30000] transition-colors shadow-xs shrink-0"
-          >
-            <span>{ml ? 'എല്ലാ പരിപാടികളും കാണുക' : 'VIEW ALL PROGRAMS'}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
         </div>
       </div>
     </section>
