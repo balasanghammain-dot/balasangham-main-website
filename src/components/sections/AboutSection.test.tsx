@@ -1,14 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
 import { AboutSection } from './AboutSection';
 
 describe('AboutSection Component (Pillar 1)', () => {
   it('renders section heading and the 4 foundational core values cards', () => {
     render(
-      <LanguageProvider>
-        <AboutSection />
-      </LanguageProvider>
+      <MemoryRouter>
+        <LanguageProvider>
+          <AboutSection />
+        </LanguageProvider>
+      </MemoryRouter>
     );
 
     expect(screen.getByRole('heading', { level: 2, name: /What is Balasangham\?|ആരാണ് ബാലസംഘം\?/i })).toBeInTheDocument();
@@ -20,9 +23,11 @@ describe('AboutSection Component (Pillar 1)', () => {
 
   it('renders child-led democratic governance hierarchy levels', () => {
     render(
-      <LanguageProvider>
-        <AboutSection />
-      </LanguageProvider>
+      <MemoryRouter>
+        <LanguageProvider>
+          <AboutSection />
+        </LanguageProvider>
+      </MemoryRouter>
     );
 
     expect(screen.getByText(/Unit Committee|യൂണിറ്റ് സമിതി/i)).toBeInTheDocument();

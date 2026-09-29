@@ -85,6 +85,20 @@ export default {
         'paper-surface': '#F5E9D3',
         'warm-white': '#FFFDF7',
 
+        // Reference 2026 Palette Specification
+        'sun-bright': '#FFD84D',
+        'sun-primary': '#FFC928',
+        'warm-orange': '#FF9F00',
+        'deep-orange': '#F57C00',
+        'warm-cream': '#FFF4D6',
+        'soft-cream': '#FFF9E8',
+        'deep-red': '#D71920',
+        'kerala-blue': '#168BD4',
+        'kerala-purple': '#7B2CBF',
+        'kerala-green': '#2E9E5B',
+        'dark-brown': '#321A12',
+        'near-black': '#181313',
+
         // Brand Aliases
         'brand-red': '#D41C24',
         'brand-red-dark': '#B31219',

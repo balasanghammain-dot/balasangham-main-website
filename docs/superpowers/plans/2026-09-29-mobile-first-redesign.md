@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Transform Balasangham Kannur website into an editorial magazine mobile-first web app with a persistent bottom thumb bar, festival palette styling, and an interactive client-side "Find My Photos" flow.
+**Goal:** Transform Balasangham Kannur website into an editorial magazine mobile-first web app with a persistent bottom thumb bar, festival palette styling, and responsive media galleries.
 
-**Architecture:** Implement safe-area layout primitives and responsive styling tokens matching `balasangham-festival-theme.jpeg`. Introduce a dedicated mobile bottom navigation bar (`BottomNav.tsx`) and mobile drawer, refactor `HomePage.tsx` editorial sections to fluid clamp/touch scales, and enhance `FindMyPhotos.tsx` with one-tap camera capture and touch-friendly lightbox viewer.
+**Architecture:** Implement safe-area layout primitives and responsive styling tokens matching `balasangham-festival-theme.jpeg`. Introduce a dedicated mobile bottom navigation bar (`BottomNav.tsx`) and mobile drawer, refactor `HomePage.tsx` editorial sections to fluid clamp/touch scales, and enhance media galleries with touch-friendly lightbox viewer.
 
 **Tech Stack:** React 18, React Router v6, TypeScript 5.7, Tailwind CSS 3.4, Lucide React, Vitest 3, Testing Library.
 
@@ -15,7 +15,6 @@
 - Touch target minimum: 48px × 48px for thumb reachability.
 - Safe area insets: `pt-[env(safe-area-inset-top)]` and `pb-[env(safe-area-inset-bottom)]`.
 - Malayalam font line-height: min 1.65–1.7 to prevent conjunct/descender clipping.
-- Privacy in "Find My Photos": 100% client-side, zero face embeddings persisted, probabilistic labeling ("POSSIBLE MATCHES").
 - Never commit directly to `main`; all work on feature branch `feat/mobile-first-redesign`.
 
 ## Review Focus
@@ -317,57 +316,15 @@ git commit -m "feat(sections): mobile editorial magazine cards and swipeable eve
 
 ---
 
-### Task 6: Dedicated Mobile "Find My Photos" Flow & Lightbox
+### Task 6: Touch Lightbox & Media Gallery Archive
 
 **Files:**
-- Modify: `src/components/common/FindMyPhotos.tsx`
 - Modify: `src/components/conference/LightboxModal.tsx`
 - Modify: `src/pages/MediaPage.tsx`
-- Test: `src/components/common/FindMyPhotos.test.tsx` (Create)
 
 **Interfaces:**
-- Consumes: HTML5 file input with `capture="user"`, native Web Share API
-- Produces: Self-contained camera capture, probabilistic match display, and touch-swipeable lightbox.
-
-- [x] **Step 1: Write test for Find My Photos camera upload and privacy disclosure**
-Create `src/components/common/FindMyPhotos.test.tsx`:
-```tsx
-import { render, screen, fireEvent } from '@testing-library/react';
-import { LanguageProvider } from '../../context/LanguageContext';
-import { FindMyPhotos } from './FindMyPhotos';
-
-describe('FindMyPhotos', () => {
-  it('renders privacy notice and native camera trigger', () => {
-    render(
-      <LanguageProvider>
-        <FindMyPhotos />
-      </LanguageProvider>
-    );
-    expect(screen.getByText(/client-side|ഉപകരണത്തിൽ/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /camera|സെൽഫി|selfie/i })).toBeInTheDocument();
-  });
-});
-```
-
-- [x] **Step 2: Run test to verify initial failure / missing assertions**
-Run: `npm test src/components/common/FindMyPhotos.test.tsx`
-
-- [x] **Step 3: Enhance `FindMyPhotos.tsx`**
-- Add native mobile front camera capture `<input type="file" accept="image/*" capture="user">`.
-- Render explicit privacy commitment card: "100% Client-Side. No selfies uploaded. No biometric templates stored."
-- Results header: "POSSIBLE MATCHES // സാധ്യതയുള്ള ചിത്രങ്ങൾ".
-- Touch-friendly 2-column mobile photo grid with click-to-lightbox.
-- Connect to full-screen mobile swipe lightbox with Web Share API (`navigator.share`).
-
-- [x] **Step 4: Run test to verify it passes**
-Run: `npm test src/components/common/FindMyPhotos.test.tsx`
-Expected: PASS
-
-- [x] **Step 5: Commit**
-```bash
-git add src/components/common/FindMyPhotos.tsx src/components/common/FindMyPhotos.test.tsx src/components/conference/LightboxModal.tsx src/pages/MediaPage.tsx
-git commit -m "feat(photos): mobile-first camera capture, privacy card and touch lightbox"
-```
+- Consumes: Touch-swipeable lightbox and media archive tabs
+- Produces: Responsive photo grid, full-screen touch lightbox with Web Share API (`navigator.share`).
 
 ---
 

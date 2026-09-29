@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { LightboxModal } from '../components/conference/LightboxModal';
-import { FindMyPhotos } from '../components/common/FindMyPhotos';
 import { RedStarIcon } from '../components/motifs/RedStarIcon';
 import { ArchiveImage } from '../types/content';
 import {
@@ -11,7 +10,6 @@ import {
   Image as ImageIcon,
   Archive,
   ExternalLink,
-  Search,
   Eye
 } from 'lucide-react';
 import { YoutubeIcon } from '../components/common/SocialIcons';
@@ -205,7 +203,6 @@ export const MediaPage = () => {
   const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
   const [lightboxImages, setLightboxImages] = useState<ArchiveImage[]>(photosList);
   const [lightboxIndex, setLightboxIndex] = useState<number>(0);
-  const [showFindPhotos, setShowFindPhotos] = useState<boolean>(false);
 
   const openLightbox = (images: ArchiveImage[], index: number) => {
     setLightboxImages(images);
@@ -242,26 +239,7 @@ export const MediaPage = () => {
                   : 'Documentary photography, verified conference posters, stage backdrops, and official video archives of Balasangham.'}
               </p>
             </div>
-
-            {/* Find My Photos Quick Toggle */}
-            <div className="shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowFindPhotos(!showFindPhotos)}
-                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#D32020] hover:bg-[#B31219] text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-festive active:scale-95"
-              >
-                <Search className="w-4 h-4" />
-                <span>{showFindPhotos ? (ml ? 'ആർക്കൈവിലേക്ക് മടങ്ങുക' : 'BACK TO GALLERY') : (ml ? 'എന്റെ ഫോട്ടോകൾ കണ്ടെത്തുക →' : 'FIND MY PHOTOS →')}</span>
-              </button>
-            </div>
           </div>
-
-          {/* Toggleable Find My Photos Embed */}
-          {showFindPhotos && (
-            <div className="mt-10">
-              <FindMyPhotos />
-            </div>
-          )}
 
           {/* 4 Primary Editorial Archive Tabs */}
           <div className="flex items-center gap-2 sm:gap-3 mt-10 pt-6 border-t border-festival/20 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
@@ -354,7 +332,7 @@ export const MediaPage = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <p className={`text-sm font-bold text-ink leading-snug ${ml ? 'font-malayalam' : ''}`}>
+                      <p className={`text-sm font-bold text-ink leading-snug ${ml ? 'font-malayalam leading-[1.65]' : ''}`}>
                         {photo.caption[language]}
                       </p>
                       <div className="pt-2 border-t border-festival/20 flex items-center justify-between text-[11px] font-mono text-ink/50">
@@ -404,7 +382,7 @@ export const MediaPage = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <p className={`text-xs sm:text-sm font-bold text-ink leading-snug ${ml ? 'font-malayalam' : ''}`}>
+                      <p className={`text-xs sm:text-sm font-bold text-ink leading-snug ${ml ? 'font-malayalam leading-[1.65]' : ''}`}>
                         {poster.caption[language]}
                       </p>
                       <div className="pt-2 border-t border-festival/20 flex items-center justify-between text-[10px] font-mono text-ink/50">
@@ -484,11 +462,11 @@ export const MediaPage = () => {
                         <span>{vid.duration}</span>
                       </div>
 
-                      <h3 className={`text-lg font-black text-ink leading-snug group-hover:text-[#D32020] transition-colors ${ml ? 'font-malayalam' : ''}`}>
+                      <h3 className={`text-lg font-black text-ink leading-snug group-hover:text-[#D32020] transition-colors ${ml ? 'font-malayalam leading-[1.4]' : ''}`}>
                         {ml ? vid.titleMl : vid.title}
                       </h3>
 
-                      <p className={`text-xs text-ink/75 leading-relaxed font-medium ${ml ? 'font-malayalam-body' : ''}`}>
+                      <p className={`text-xs text-ink/75 leading-relaxed font-medium ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>
                         {ml ? vid.descriptionMl : vid.description}
                       </p>
                     </div>
@@ -498,7 +476,7 @@ export const MediaPage = () => {
                         href={vid.youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#D32020] hover:text-[#B31219]"
+                        className="min-h-[48px] inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#D32020] hover:text-[#B31219]"
                       >
                         <span>{ml ? 'യൂട്യൂബിൽ കാണുക' : 'WATCH ON YOUTUBE'}</span>
                         <ExternalLink className="w-3.5 h-3.5" />

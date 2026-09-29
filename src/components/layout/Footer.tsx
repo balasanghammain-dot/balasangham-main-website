@@ -9,7 +9,7 @@ export const Footer = () => {
   const ml = language === 'ml';
 
   return (
-    <footer className="bg-ink text-cream pt-16 pb-[calc(3rem+env(safe-area-inset-bottom))] border-t-2 border-berry">
+    <footer className="bg-ink text-cream pt-16 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-12 border-t-2 border-berry">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-cream/15">
           {/* Col 1: Brand & Slogan */}

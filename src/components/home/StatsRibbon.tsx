@@ -57,7 +57,7 @@ export const StatsRibbon = () => {
                 </div>
                 <div
                   className={`text-xs font-bold text-ink/75 mt-1 uppercase tracking-wider ${
-                    language === 'ml' ? 'font-malayalam normal-case text-sm leading-[1.6]' : ''
+                    language === 'ml' ? 'font-malayalam normal-case text-sm leading-[1.7]' : ''
                   }`}
                 >
                   {stat.label}

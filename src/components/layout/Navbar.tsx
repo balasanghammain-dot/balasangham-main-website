@@ -193,7 +193,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
 
           {/* Mobile Menu Button */}
           <div className="flex xl:hidden items-center gap-2">
-            <LanguageToggle className="scale-90" />
+            <LanguageToggle />
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -213,7 +213,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           <NavLink
             to="/"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 rounded-xl text-sm font-bold text-ink hover:bg-festival/20 hover:text-berry"
+            className="flex items-center min-h-[48px] px-3 py-2 rounded-xl text-sm font-bold text-ink hover:bg-festival/20 hover:text-berry"
           >
             {ml ? 'ഹോം' : 'Home'}
           </NavLink>
@@ -227,7 +227,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
                 key={idx}
                 to={sub.to}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-1.5 text-xs text-ink/80 hover:text-berry font-medium"
+                className="flex items-center min-h-[48px] py-1.5 text-xs text-ink/80 hover:text-berry font-medium"
               >
                 {ml ? sub.labelMl : sub.label}
               </Link>
@@ -239,7 +239,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
               key={link.to}
               to={link.to}
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-xl text-sm font-bold text-ink hover:bg-festival/20 hover:text-berry"
+              className="flex items-center min-h-[48px] px-3 py-2 rounded-xl text-sm font-bold text-ink hover:bg-festival/20 hover:text-berry"
             >
               {ml ? link.labelMl : link.label}
             </NavLink>

@@ -1,14 +1,17 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
 import { EventsSection } from './EventsSection';
 
 describe('EventsSection Component (Pillar 3)', () => {
   it('renders section title and filters items based on selected tab', () => {
     render(
-      <LanguageProvider>
-        <EventsSection />
-      </LanguageProvider>
+      <MemoryRouter>
+        <LanguageProvider>
+          <EventsSection />
+        </LanguageProvider>
+      </MemoryRouter>
     );
 
     expect(screen.getByRole('heading', { level: 2, name: /Events Conducted|മേളകളും പരിപാടികളും/i })).toBeInTheDocument();

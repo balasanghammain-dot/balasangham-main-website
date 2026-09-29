@@ -1,4 +1,5 @@
 import { ComponentType } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { GovernanceDiagram } from './GovernanceDiagram';
 import { RedStarIcon } from '../motifs/RedStarIcon';
@@ -23,60 +24,67 @@ export const AboutSection = () => {
   const ml = language === 'ml';
 
   return (
-    <section id="about" className="py-16 sm:py-24 bg-cream scroll-mt-16 relative overflow-hidden border-b border-festival/20 bg-paper-grain">
+    <section id="about" className="py-16 sm:py-24 bg-[#FFF9E8] scroll-mt-16 relative overflow-hidden border-b border-[#F57C00]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Eyebrow Tag */}
         <div className="flex items-center gap-2 mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-festival/20 border border-festival/40 text-ink text-xs font-bold uppercase tracking-wider shadow-2xs">
-            <RedStarIcon size={14} className="text-berry" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFC928]/30 border border-[#FF9F00]/40 text-[#321A12] text-xs font-bold uppercase tracking-wider shadow-2xs">
+            <RedStarIcon size={14} className="text-[#D71920]" />
             <span className={ml ? 'font-malayalam' : ''}>{t.about.sectionTag}</span>
           </div>
-          <span className="text-xs font-mono uppercase tracking-widest text-ink/60">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#321A12]/60">
             // DOCUMENTARY ARCHIVE
           </span>
         </div>
 
         {/* Section Heading & Large Editorial Statement */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
-          <div className="lg:col-span-7">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10">
+          <div className="lg:col-span-8 space-y-4">
             <h2
-              className={`text-3xl sm:text-4xl lg:text-5xl font-black text-ink tracking-tight mb-4 uppercase ${
+              className={`text-3xl sm:text-4xl lg:text-5xl font-black text-[#321A12] tracking-tight uppercase ${
                 ml ? 'font-malayalam normal-case text-3xl sm:text-4xl' : ''
               }`}
             >
               {t.about.heading}
             </h2>
-            <p className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold text-berry leading-snug tracking-tight ${ml ? 'font-malayalam' : ''}`}>
+            <p className={`text-2xl sm:text-3xl font-extrabold text-[#D71920] leading-snug tracking-tight ${ml ? 'font-malayalam leading-[1.4]' : ''}`}>
               {ml
                 ? '“അറിവിലൂടെയും സംസ്കാരത്തിലൂടെയും കൂട്ടായ പ്രവർത്തനത്തിലൂടെയും തലമുറകളെ വാർത്തെടുക്കുന്നു.”'
-                : '“Building generations through knowledge, culture and collective action.”'}
+                : '“Building generations through knowledge, culture, and collective action.”'}
             </p>
-          </div>
-          <div className="lg:col-span-5">
-            <p className={`text-sm sm:text-base text-ink/80 leading-relaxed font-medium ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
+            <p className={`text-base sm:text-lg text-[#321A12]/80 leading-relaxed font-medium max-w-3xl ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
               {t.about.intro}
             </p>
+            <div className="pt-2">
+              <Link
+                to="/about/history"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#D71920] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#B31219] transition-all shadow-xs min-h-[48px]"
+              >
+                <span>{ml ? 'ഞങ്ങളുടെ ചരിത്രം അറിയുക' : 'READ OUR STORY'}</span>
+                <span>→</span>
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Large Documentary Photograph with Alongside Content */}
-        <div className="bg-white/95 rounded-3xl p-6 sm:p-8 border-2 border-festival/30 shadow-warm-lg mb-14 overflow-hidden relative">
+        <div className="bg-white/95 rounded-3xl p-6 sm:p-8 border-2 border-[#FFC928]/40 shadow-warm-lg mb-14 overflow-hidden relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Documentary Photograph */}
             <div className="lg:col-span-6 relative">
-              <div className="relative overflow-hidden rounded-2xl border border-festival/20 shadow-md bg-ink group">
+              <div className="relative overflow-hidden rounded-2xl border border-[#FFC928]/30 shadow-md bg-[#321A12] group">
                 <img
                   src="/images/venalthumbikal-children.jpeg"
                   alt="Balasangham children cultural troupe performing on stage in traditional attire"
                   className="w-full h-72 sm:h-96 object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent p-5 text-white">
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-festival block mb-1">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#321A12]/90 via-[#321A12]/40 to-transparent p-5 text-white">
+                  <span className="text-[11px] font-mono uppercase tracking-widest text-[#FFD84D] block mb-1">
                     DOCUMENTARY ARCHIVE // വേനൽത്തുമ്പികൾ
                   </span>
                   <p className={`text-xs sm:text-sm font-bold ${ml ? 'font-malayalam' : ''}`}>
-                    {ml ? 'കുട്ടികൾ പഠിക്കുന്നു, കളിക്കുന്നു, വളരുന്നു — വേദിയിലെ കുട്ടിക്കൂട്ടായ്മ' : 'Children learning, playing, and creating together in solidarity'}
+                    {ml ? 'കുട്ടികൾ പഠിക്കുന്നു, കളിക്കുന്നു, വളരുന്നു: വേദിയിലെ കുട്ടിക്കൂട്ടായ്മ' : 'Children learning, playing, and creating together in solidarity'}
                   </p>
                 </div>
               </div>
@@ -85,14 +93,14 @@ export const AboutSection = () => {
             {/* Alongside Organization Highlights & Big Numbers */}
             <div className="lg:col-span-6 space-y-6">
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-berry/10 text-berry text-xs font-mono uppercase tracking-wider font-bold">
-                  <Sparkles className="w-3.5 h-3.5 text-festival-deep" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D71920]/10 text-[#D71920] text-xs font-mono uppercase tracking-wider font-bold">
+                  <Sparkles className="w-3.5 h-3.5 text-[#F57C00]" />
                   HISTORIC SCALE & REACH // 1938–2026
                 </div>
-                <h3 className={`text-2xl sm:text-3xl font-black text-ink tracking-tight ${ml ? 'font-malayalam' : ''}`}>
+                <h3 className={`text-2xl sm:text-3xl font-black text-[#321A12] tracking-tight ${ml ? 'font-malayalam' : ''}`}>
                   {ml ? '88 വർഷത്തെ പാരമ്പര്യം' : '88 Years of Continuous History'}
                 </h3>
-                <p className={`text-sm text-ink/80 leading-relaxed font-medium ${ml ? 'font-malayalam-body leading-[1.75]' : ''}`}>
+                <p className={`text-sm text-[#321A12]/80 leading-relaxed font-medium ${ml ? 'font-malayalam-body leading-[1.75]' : ''}`}>
                   {ml
                     ? '1938-ൽ കല്ല്യാശ്ശേരിയിലെ വിപ്ലവ മണ്ണിൽ കൃഷ്ണപിള്ളയും എ.കെ.ജിയും ഇ.എം.എസും കൊളുത്തിയ തിരിനാളമാണ് ഇന്ന് കേരളത്തിലെ ലക്ഷക്കണക്കിന് കുട്ടികളുടെ ആത്മാഭിമാനമായി പടർന്നുപന്തലിച്ചത്.'
                     : 'Founded in 1938 in Kalliasseri, Kannur under anti-colonial pioneers P. Krishna Pillai, A.K. Gopalan, and E.M.S. Namboodiripad to emancipate rural children from agrarian bondage and illiteracy.'}
@@ -100,39 +108,39 @@ export const AboutSection = () => {
               </div>
 
               {/* Big Stats Row */}
-              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-ink/10">
-                <div className="bg-cream-deep/60 p-3 rounded-2xl border border-ink/5">
-                  <div className="text-2xl sm:text-3xl font-black text-berry">88+</div>
-                  <div className={`text-[11px] font-bold text-ink/70 uppercase tracking-wider mt-0.5 ${ml ? 'font-malayalam normal-case' : ''}`}>
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#321A12]/10">
+                <div className="bg-[#FFF4D6]/60 p-3 rounded-2xl border border-[#321A12]/5">
+                  <div className="text-2xl sm:text-3xl font-black text-[#D71920]">88+</div>
+                  <div className={`text-[11px] font-bold text-[#321A12]/70 uppercase tracking-wider mt-0.5 ${ml ? 'font-malayalam normal-case' : ''}`}>
                     {ml ? 'വർഷത്തെ ചരിത്രം' : 'Years History'}
                   </div>
                 </div>
-                <div className="bg-cream-deep/60 p-3 rounded-2xl border border-ink/5">
-                  <div className="text-2xl sm:text-3xl font-black text-ink">1M+</div>
-                  <div className={`text-[11px] font-bold text-ink/70 uppercase tracking-wider mt-0.5 ${ml ? 'font-malayalam normal-case' : ''}`}>
+                <div className="bg-[#FFF4D6]/60 p-3 rounded-2xl border border-[#321A12]/5">
+                  <div className="text-2xl sm:text-3xl font-black text-[#321A12]">1M+</div>
+                  <div className={`text-[11px] font-bold text-[#321A12]/70 uppercase tracking-wider mt-0.5 ${ml ? 'font-malayalam normal-case' : ''}`}>
                     {ml ? 'കുട്ടികൾ' : 'Child Members'}
                   </div>
                 </div>
-                <div className="bg-cream-deep/60 p-3 rounded-2xl border border-ink/5">
-                  <div className="text-2xl sm:text-3xl font-black text-festival-deep">20,000+</div>
-                  <div className={`text-[11px] font-bold text-ink/70 uppercase tracking-wider mt-0.5 ${ml ? 'font-malayalam normal-case' : ''}`}>
+                <div className="bg-[#FFF4D6]/60 p-3 rounded-2xl border border-[#321A12]/5">
+                  <div className="text-2xl sm:text-3xl font-black text-[#F57C00]">20,000+</div>
+                  <div className={`text-[11px] font-bold text-[#321A12]/70 uppercase tracking-wider mt-0.5 ${ml ? 'font-malayalam normal-case' : ''}`}>
                     {ml ? 'യൂണിറ്റുകൾ' : 'Active Units'}
                   </div>
                 </div>
               </div>
 
               {/* Foundational Pillars Checkpoints */}
-              <div className="space-y-2 pt-2 text-xs font-bold text-ink/85">
+              <div className="space-y-2 pt-2 text-xs font-bold text-[#321A12]/85">
                 <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-berry shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#D71920] shrink-0" />
                   <span className={ml ? 'font-malayalam text-sm' : ''}>{ml ? 'കുട്ടികളാൽ നേരിട്ട് തിരഞ്ഞെടുക്കപ്പെടുന്ന ജനാധിപത്യ സമിതികൾ' : 'Democratic committees elected directly by children'}</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-festival-deep shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#F57C00] shrink-0" />
                   <span className={ml ? 'font-malayalam text-sm' : ''}>{ml ? 'മതനിരപേക്ഷതയും മാനവ സാഹോദര്യവും ജീവിതമൂല്യമാക്കുന്നു' : 'Secular human fraternity as the foundational ethos'}</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-mango shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#FF9F00] shrink-0" />
                   <span className={ml ? 'font-malayalam text-sm' : ''}>{ml ? 'ശാസ്ത്രബോധവും യുക്തിചിന്തയും വളർത്തുന്ന പഠനക്കളരികൾ' : 'Scientific inquiry, rational thinking, and arts camps'}</span>
                 </div>
               </div>

@@ -1,14 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
 import { WhatWeDoSection } from './WhatWeDoSection';
 
 describe('WhatWeDoSection Component (Pillar 2)', () => {
   it('renders all 6 signature initiatives', () => {
     render(
-      <LanguageProvider>
-        <WhatWeDoSection />
-      </LanguageProvider>
+      <MemoryRouter>
+        <LanguageProvider>
+          <WhatWeDoSection />
+        </LanguageProvider>
+      </MemoryRouter>
     );
 
     expect(screen.getByRole('heading', { level: 2, name: /What We Do|പ്രവർത്തനങ്ങൾ/i })).toBeInTheDocument();

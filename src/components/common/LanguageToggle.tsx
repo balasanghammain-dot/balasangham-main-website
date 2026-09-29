@@ -13,7 +13,7 @@ export const LanguageToggle = ({ className = '' }: { className?: string }) => {
         type="button"
         onClick={() => setLanguage('en')}
         aria-pressed={language === 'en'}
-        className={`px-3 py-1 text-xs sm:text-xs font-bold rounded-sm transition-all duration-150 min-h-[32px] min-w-[40px] active:scale-95 ${
+        className={`px-3 py-1 text-xs font-bold rounded-sm transition-all duration-150 min-h-[48px] min-w-[48px] flex items-center justify-center active:scale-95 ${
           language === 'en'
             ? 'bg-[#C90000] text-white shadow-xs'
             : 'text-[#241914]/80 hover:text-[#C90000]'
@@ -25,7 +25,7 @@ export const LanguageToggle = ({ className = '' }: { className?: string }) => {
         type="button"
         onClick={() => setLanguage('ml')}
         aria-pressed={language === 'ml'}
-        className={`px-3 py-1 text-xs sm:text-xs font-bold rounded-sm transition-all duration-150 font-malayalam min-h-[32px] min-w-[52px] active:scale-95 ${
+        className={`px-3 py-1 text-xs font-bold rounded-sm transition-all duration-150 font-malayalam min-h-[48px] min-w-[48px] flex items-center justify-center active:scale-95 ${
           language === 'ml'
             ? 'bg-[#C90000] text-white shadow-xs'
             : 'text-[#241914]/80 hover:text-[#C90000]'

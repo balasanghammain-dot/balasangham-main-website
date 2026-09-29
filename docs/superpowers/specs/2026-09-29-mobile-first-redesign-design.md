@@ -8,7 +8,7 @@
   - Safe-area insets for notched and dynamic island devices.
   - Thumb-zone ergonomics (min 48px touch targets, sticky bottom navigation).
   - Uncompromised Malayalam typography (min 1.65–1.7 line height for conjunct scripts).
-  - Privacy-preserving client-side face discovery flow ("Find My Photos").
+  - High-performance, touch-friendly visual archives and documentary photography.
 
 ---
 
@@ -55,7 +55,7 @@ padding-right: env(safe-area-inset-right);
 - 5 Primary Destinations:
   1. **Home** (`/`) - Icon: `Home`
   2. **Programs** (`/programs`) - Icon: `Sparkles`
-  3. **Photos / Cam** (`/media`) - Icon: `Camera`
+  3. **Photos** (`/media`) - Icon: `Camera`
   4. **News** (`/news`) - Icon: `Newspaper`
   5. **Join** (`/join`) - Icon: `UserPlus` (prominent red pill)
 
@@ -104,22 +104,15 @@ padding-right: env(safe-area-inset-right);
 
 ---
 
-## 5. Dedicated "Find My Photos" Mobile Workflow
+## 5. Touch-Friendly Media & Visual Archive Lightbox
 
-### Flow Steps
-1. **Event Selector**:
-   - Touch pills selecting event gallery (`District Conference 2026`, `Venalthumbikal Troupe`, `State Kalolsavam`).
-2. **Camera & Upload Trigger**:
-   - `<input type="file" accept="image/*" capture="user">` for one-tap native front-camera selfie.
-   - Secondary button for photo gallery upload.
-   - Immediate client-side thumbnail preview with "Retake" button.
-3. **Privacy Architecture & Guarantees**:
-   - Informational card: "100% Client-Side Search. No selfies are sent to any server. No biometric templates saved."
-   - Search results clearly designated: "POSSIBLE MATCHES // സാധ്യതയുള്ള ചിത്രങ്ങൾ".
-4. **Results Grid**:
-   - 2-column touch photo grid with subtle match tags.
-   - Empty state with retry suggestions (lighting, framing).
-5. **Full-Screen Photo Viewer / Lightbox**:
+### Gallery Features
+1. **Curated Categories**:
+   - Touch pills selecting media format (`Photos`, `Posters`, `Stage Backdrops`, `Videos & Songs`).
+2. **Responsive Visual Grid**:
+   - Clean 2-column on mobile, 3-column on tablet, and 4-column on desktop.
+   - High-fidelity imagery with captions and historical context.
+3. **Full-Screen Photo Viewer / Lightbox**:
    - Full-screen modal (`fixed inset-0 z-50 bg-[#2A1610]/95`).
    - Touch gestures: swipe left/right for next/prev photo.
    - Actions: Web Share API button, high-resolution download, close button.

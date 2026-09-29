@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { RedStarIcon } from '../motifs/RedStarIcon';
 import { Calendar, MapPin, ArrowRight, Sparkles } from 'lucide-react';
@@ -137,7 +138,7 @@ export const EventsSection = () => {
 
                       <h3
                         className={`text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight ${
-                          ml ? 'font-malayalam' : ''
+                          ml ? 'font-malayalam leading-[1.35]' : ''
                         }`}
                       >
                         {event.title}
@@ -166,13 +167,13 @@ export const EventsSection = () => {
                           <RedStarIcon size={12} className="text-berry" />
                           <span>{ml ? 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി' : 'BALASANGHAM KANNUR'}</span>
                         </div>
-                        <a
-                          href="/events/kannur-district-conference-2026"
-                          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-berry hover:bg-berry-dark text-white text-xs font-mono uppercase font-bold tracking-wider transition-all shadow-festive hover:scale-105 active:scale-95"
+                        <Link
+                          to="/events/kannur-district-conference-2026"
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-berry hover:bg-berry-dark text-white text-xs font-mono uppercase font-bold tracking-wider transition-all shadow-festive hover:scale-105 active:scale-95 min-h-[48px]"
                         >
                           <span>{ml ? 'സമ്മേളന വിവരങ്ങൾ കാണുക' : 'VIEW CONFERENCE DETAILS'}</span>
                           <ArrowRight className="w-3.5 h-3.5" />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -199,7 +200,7 @@ export const EventsSection = () => {
 
                   <h3
                     className={`font-black text-xl text-ink mb-3 group-hover:text-berry transition-colors leading-snug ${
-                      ml ? 'font-malayalam' : ''
+                      ml ? 'font-malayalam leading-[1.4]' : ''
                     }`}
                   >
                     {event.title}
@@ -218,13 +219,13 @@ export const EventsSection = () => {
                   <span className="text-xs font-mono uppercase tracking-wider text-berry font-bold px-2.5 py-0.5 rounded-full bg-berry/10">
                     {event.category.toUpperCase()}
                   </span>
-                  <a
-                    href={`/events/${event.id}`}
-                    className="font-bold text-berry hover:text-berry-dark flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                  <Link
+                    to={`/events/${event.id}`}
+                    className="font-bold text-berry hover:text-berry-dark inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform min-h-[48px] px-2 -my-2"
                   >
                     <span>{ml ? 'വിശദാംശങ്ങൾ' : 'Details'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  </Link>
                 </div>
               </article>
             );
