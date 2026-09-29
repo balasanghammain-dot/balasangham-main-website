@@ -7,16 +7,16 @@ export const LanguageToggle = ({ className = '' }: { className?: string }) => {
     <div
       role="group"
       aria-label="Language selection"
-      className={`inline-flex items-center rounded-md bg-[#E9DDC9]/70 p-0.5 border border-[#241914]/15 shadow-xs ${className}`}
+      className={`inline-flex items-center rounded-full bg-dark-brown/5 p-0.5 border border-dark-brown/10 ${className}`}
     >
       <button
         type="button"
         onClick={() => setLanguage('en')}
         aria-pressed={language === 'en'}
-        className={`px-3 py-1 text-xs font-bold rounded-sm transition-all duration-150 min-h-[48px] min-w-[48px] flex items-center justify-center active:scale-95 ${
+        className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-150 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 ${
           language === 'en'
-            ? 'bg-[#C90000] text-white shadow-xs'
-            : 'text-[#241914]/80 hover:text-[#C90000]'
+            ? 'bg-deep-red text-white shadow-sm'
+            : 'text-dark-brown/70 hover:text-deep-red'
         }`}
       >
         EN
@@ -25,10 +25,10 @@ export const LanguageToggle = ({ className = '' }: { className?: string }) => {
         type="button"
         onClick={() => setLanguage('ml')}
         aria-pressed={language === 'ml'}
-        className={`px-3 py-1 text-xs font-bold rounded-sm transition-all duration-150 font-malayalam min-h-[48px] min-w-[48px] flex items-center justify-center active:scale-95 ${
+        className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-150 font-malayalam min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 ${
           language === 'ml'
-            ? 'bg-[#C90000] text-white shadow-xs'
-            : 'text-[#241914]/80 hover:text-[#C90000]'
+            ? 'bg-deep-red text-white shadow-sm'
+            : 'text-dark-brown/70 hover:text-deep-red'
         }`}
       >
         മലയാളം

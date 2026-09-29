@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { Navbar } from './components/layout/Navbar';
-import { BottomNav } from './components/layout/BottomNav';
 import { Footer } from './components/layout/Footer';
 import { AnthemModal } from './components/anthem/AnthemModal';
 import { ScrollToTop } from './components/common/ScrollToTop';
@@ -35,9 +34,9 @@ export default function App() {
     <LanguageProvider>
       <BrowserRouter>
         <ScrollToTop />
-        <div className="min-h-screen bg-surface-cream text-charcoal flex flex-col selection:bg-brand-red selection:text-white">
+        <div className="min-h-screen bg-soft-cream text-dark-brown flex flex-col">
           <Navbar onOpenAnthem={() => setAnthemOpen(true)} />
-          <main className="flex-1 pb-20 md:pb-0">
+          <main className="flex-1">
             <Routes>
               <Route path="/" element={<HomePage onOpenAnthem={() => setAnthemOpen(true)} />} />
 
@@ -76,7 +75,6 @@ export default function App() {
             </Routes>
           </main>
           <Footer />
-          <BottomNav />
           <AnthemModal isOpen={anthemOpen} onClose={() => setAnthemOpen(false)} />
         </div>
       </BrowserRouter>
