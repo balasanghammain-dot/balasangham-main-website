@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { ArchiveImage } from '../../types/content';
 import { useLanguage } from '../../context/LanguageContext';
-import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download, Share2 } from 'lucide-react';
 
 interface LightboxModalProps {
   images: ArchiveImage[];
@@ -129,6 +129,26 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
         >
           <Download className="w-5 h-5" aria-hidden="true" />
         </a>
+        {typeof navigator !== 'undefined' && 'share' in navigator && (
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await navigator.share({
+                  title: currentImage.alt[language],
+                  text: currentImage.caption[language],
+                  url: window.location.origin + currentImage.src,
+                });
+              } catch {
+                // Ignore cancel
+              }
+            }}
+            aria-label={language === 'ml' ? 'പങ്കുവെക്കുക' : 'Share image'}
+            className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none focus:ring-2 focus:ring-white transition-colors"
+          >
+            <Share2 className="w-5 h-5" aria-hidden="true" />
+          </button>
+        )}
         <button
           ref={closeButtonRef}
           type="button"

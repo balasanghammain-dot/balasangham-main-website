@@ -201,7 +201,7 @@ export const MediaPage = () => {
   const { language } = useLanguage();
   const ml = language === 'ml';
 
-  const [activeSection, setActiveSection] = useState<'photos' | 'videos' | 'posters' | 'archive'>('photos');
+  const [activeSection, setActiveSection] = useState<'photos' | 'posters' | 'archive' | 'videos'>('photos');
   const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
   const [lightboxImages, setLightboxImages] = useState<ArchiveImage[]>(photosList);
   const [lightboxIndex, setLightboxIndex] = useState<number>(0);
@@ -214,29 +214,29 @@ export const MediaPage = () => {
   };
 
   return (
-    <div className="bg-[#F4EBDD] min-h-screen text-[#171514] bg-paper-grain">
+    <div className="bg-cream min-h-screen text-ink bg-paper-grain">
       <Breadcrumb items={[{ label: 'Media Archive', labelMl: 'മീഡിയ & ആർക്കൈവ്' }]} />
 
       {/* Editorial Page Header */}
-      <section className="pt-10 pb-12 border-b border-[#241914]/15">
+      <section className="pt-8 sm:pt-12 pb-12 border-b border-festival/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="space-y-3 max-w-3xl">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-xs bg-[#C90000] text-white text-[10px] font-mono uppercase font-bold tracking-wider">
-                  <RedStarIcon size={10} className="text-white" />
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D32020] text-white text-xs font-mono uppercase font-bold tracking-wider shadow-xs">
+                  <RedStarIcon size={12} className="text-white" />
                   VISUAL REPOSITORY
                 </span>
-                <span className="text-[11px] font-mono text-[#241914]/60 uppercase tracking-widest hidden sm:inline">
+                <span className="text-xs font-mono text-ink/60 uppercase tracking-widest hidden sm:inline">
                   // VERIFIED HISTORICAL CAPTURES
                 </span>
               </div>
 
-              <h1 className={`text-4xl sm:text-6xl font-black text-[#171514] tracking-tight uppercase leading-[1.05] ${ml ? 'font-malayalam normal-case' : ''}`}>
+              <h1 className={`text-3xl sm:text-5xl lg:text-6xl font-black text-ink tracking-tight uppercase leading-[1.05] ${ml ? 'font-malayalam normal-case' : ''}`}>
                 {ml ? 'മീഡിയ & വിഷ്വൽ ആർക്കൈവ്' : 'Media, Posters & Visual Archive'}
               </h1>
 
-              <p className={`text-base sm:text-lg text-[#241914]/80 leading-relaxed font-medium ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
+              <p className={`text-base sm:text-lg text-ink/80 leading-relaxed font-medium ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
                 {ml
                   ? 'ബാലസംഘത്തിന്റെ ഔദ്യോഗിക ഫോട്ടോകൾ, സമ്മേളന പോസ്റ്ററുകൾ, വേദി പശ്ചാത്തലങ്ങൾ, വീഡിയോ രേഖകൾ എന്നിവയുടെ ശേഖരം.'
                   : 'Documentary photography, verified conference posters, stage backdrops, and official video archives of Balasangham.'}
@@ -248,7 +248,7 @@ export const MediaPage = () => {
               <button
                 type="button"
                 onClick={() => setShowFindPhotos(!showFindPhotos)}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-[#C90000] hover:bg-[#A30000] text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors shadow-warm active:scale-[0.98]"
+                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#D32020] hover:bg-[#B31219] text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-festive active:scale-95"
               >
                 <Search className="w-4 h-4" />
                 <span>{showFindPhotos ? (ml ? 'ആർക്കൈവിലേക്ക് മടങ്ങുക' : 'BACK TO GALLERY') : (ml ? 'എന്റെ ഫോട്ടോകൾ കണ്ടെത്തുക →' : 'FIND MY PHOTOS →')}</span>
@@ -264,56 +264,56 @@ export const MediaPage = () => {
           )}
 
           {/* 4 Primary Editorial Archive Tabs */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-10 pt-6 border-t border-[#241914]/15">
+          <div className="flex items-center gap-2 sm:gap-3 mt-10 pt-6 border-t border-festival/20 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
             <button
               type="button"
               onClick={() => setActiveSection('photos')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[42px] ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[48px] shrink-0 active:scale-95 ${
                 activeSection === 'photos'
-                  ? 'bg-[#241914] text-[#F4EBDD] shadow-xs'
-                  : 'bg-[#E9DDC9] text-[#241914] hover:bg-[#E9DDC9]/70 border border-[#241914]/15'
+                  ? 'bg-[#D32020] text-white shadow-festive border-2 border-[#D32020]'
+                  : 'bg-white/90 text-ink hover:bg-festival/20 border-2 border-festival/30'
               }`}
             >
-              <Camera className="w-4 h-4 text-[#C90000]" />
+              <Camera className="w-4 h-4 text-festival" />
               <span>PHOTOS ({photosList.length})</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveSection('posters')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[42px] ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[48px] shrink-0 active:scale-95 ${
                 activeSection === 'posters'
-                  ? 'bg-[#241914] text-[#F4EBDD] shadow-xs'
-                  : 'bg-[#E9DDC9] text-[#241914] hover:bg-[#E9DDC9]/70 border border-[#241914]/15'
+                  ? 'bg-[#D32020] text-white shadow-festive border-2 border-[#D32020]'
+                  : 'bg-white/90 text-ink hover:bg-festival/20 border-2 border-festival/30'
               }`}
             >
-              <ImageIcon className="w-4 h-4 text-[#C90000]" />
+              <ImageIcon className="w-4 h-4 text-festival" />
               <span>POSTERS ({postersList.length})</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveSection('archive')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[42px] ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[48px] shrink-0 active:scale-95 ${
                 activeSection === 'archive'
-                  ? 'bg-[#241914] text-[#F4EBDD] shadow-xs'
-                  : 'bg-[#E9DDC9] text-[#241914] hover:bg-[#E9DDC9]/70 border border-[#241914]/15'
+                  ? 'bg-[#D32020] text-white shadow-festive border-2 border-[#D32020]'
+                  : 'bg-white/90 text-ink hover:bg-festival/20 border-2 border-festival/30'
               }`}
             >
-              <Archive className="w-4 h-4 text-[#C90000]" />
+              <Archive className="w-4 h-4 text-festival" />
               <span>STAGE BACKDROPS ({archiveList.length})</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveSection('videos')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[42px] ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[48px] shrink-0 active:scale-95 ${
                 activeSection === 'videos'
-                  ? 'bg-[#241914] text-[#F4EBDD] shadow-xs'
-                  : 'bg-[#E9DDC9] text-[#241914] hover:bg-[#E9DDC9]/70 border border-[#241914]/15'
+                  ? 'bg-[#D32020] text-white shadow-festive border-2 border-[#D32020]'
+                  : 'bg-white/90 text-ink hover:bg-festival/20 border-2 border-festival/30'
               }`}
             >
-              <Video className="w-4 h-4 text-[#C90000]" />
+              <Video className="w-4 h-4 text-festival" />
               <span>VIDEOS & SONGS ({videosList.length})</span>
             </button>
           </div>
@@ -326,27 +326,27 @@ export const MediaPage = () => {
           {/* SECTION 1: PHOTOS */}
           {activeSection === 'photos' && (
             <div className="space-y-8">
-              <div className="flex items-center justify-between text-xs font-mono text-[#241914]/60 border-b border-[#241914]/10 pb-3">
+              <div className="flex items-center justify-between text-xs font-mono text-ink/60 border-b border-festival/20 pb-3">
                 <span>DOCUMENTARY PHOTOGRAPHY // REAL CAPTURES</span>
                 <span>CLICK PHOTO TO OPEN FULLSCREEN LIGHTBOX</span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 {photosList.map((photo, index) => (
                   <article
                     key={photo.id}
                     onClick={() => openLightbox(photosList, index)}
-                    className="bg-[#FFF9EF] rounded-xl p-4 sm:p-5 border border-[#241914]/15 shadow-warm hover:border-[#C90000]/40 transition-all cursor-pointer group flex flex-col justify-between"
+                    className="bg-white/95 rounded-3xl p-5 sm:p-6 border-2 border-festival/30 shadow-warm hover:shadow-warm-lg hover:border-[#D32020]/40 transition-all cursor-pointer group flex flex-col justify-between"
                   >
-                    <div className="relative rounded-lg overflow-hidden aspect-16/10 bg-[#241914] mb-4">
+                    <div className="relative rounded-2xl overflow-hidden aspect-16/10 bg-[#2A1610] mb-4">
                       <img
                         src={photo.src}
                         alt={photo.alt[language]}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#171514]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white bg-[#C90000] px-3 py-1 rounded-xs">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#2A1610]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white bg-[#D32020] px-3.5 py-1.5 rounded-full shadow-xs">
                           <Eye className="w-3.5 h-3.5" />
                           VIEW LIGHTBOX
                         </span>
@@ -354,12 +354,12 @@ export const MediaPage = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <p className={`text-sm font-bold text-[#171514] leading-snug ${ml ? 'font-malayalam' : ''}`}>
+                      <p className={`text-sm font-bold text-ink leading-snug ${ml ? 'font-malayalam' : ''}`}>
                         {photo.caption[language]}
                       </p>
-                      <div className="pt-2 border-t border-[#241914]/10 flex items-center justify-between text-[11px] font-mono text-[#241914]/50">
+                      <div className="pt-2 border-t border-festival/20 flex items-center justify-between text-[11px] font-mono text-ink/50">
                         <span>PHOTO ID: {photo.id.toUpperCase()}</span>
-                        <span className="text-[#C90000] font-bold group-hover:underline flex items-center gap-1">
+                        <span className="text-[#D32020] font-bold group-hover:underline flex items-center gap-1">
                           EXPAND &darr;
                         </span>
                       </div>
@@ -373,30 +373,30 @@ export const MediaPage = () => {
           {/* SECTION 2: POSTERS */}
           {activeSection === 'posters' && (
             <div className="space-y-8">
-              <div className="flex items-center justify-between text-xs font-mono text-[#241914]/60 border-b border-[#241914]/10 pb-3">
+              <div className="flex items-center justify-between text-xs font-mono text-ink/60 border-b border-festival/20 pb-3">
                 <span>CONFERENCE & THEMATIC POSTER ARTWORKS</span>
                 <span>AUTHENTIC PRINT ARCHIVE // KALLIASSERI 2026</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {postersList.map((poster, index) => (
                   <article
                     key={poster.id}
                     onClick={() => openLightbox(postersList, index)}
-                    className="bg-[#FFF9EF] rounded-xl p-4 sm:p-5 border border-[#241914]/15 shadow-warm hover:border-[#C90000]/40 transition-all cursor-pointer group flex flex-col justify-between"
+                    className="bg-white/95 rounded-3xl p-5 sm:p-6 border-2 border-festival/30 shadow-warm hover:shadow-warm-lg hover:border-[#D32020]/40 transition-all cursor-pointer group flex flex-col justify-between"
                   >
-                    <div className="relative rounded-lg overflow-hidden aspect-3/4 bg-[#241914] mb-4">
+                    <div className="relative rounded-2xl overflow-hidden aspect-3/4 bg-[#2A1610] mb-4">
                       <img
                         src={poster.src}
                         alt={poster.alt[language]}
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
-                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-xs bg-[#C90000] text-white font-mono text-[9px] font-bold uppercase">
+                      <div className="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-[#D32020] text-white font-mono text-[9px] font-bold uppercase shadow-xs">
                         ORIGINAL POSTER
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#171514]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white bg-[#241914] px-3 py-1 rounded-xs">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#2A1610]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white bg-[#2A1610] px-3.5 py-1.5 rounded-full">
                           <Eye className="w-3.5 h-3.5" />
                           VIEW LIGHTBOX
                         </span>
@@ -404,12 +404,12 @@ export const MediaPage = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <p className={`text-xs sm:text-sm font-bold text-[#171514] leading-snug ${ml ? 'font-malayalam' : ''}`}>
+                      <p className={`text-xs sm:text-sm font-bold text-ink leading-snug ${ml ? 'font-malayalam' : ''}`}>
                         {poster.caption[language]}
                       </p>
-                      <div className="pt-2 border-t border-[#241914]/10 flex items-center justify-between text-[10px] font-mono text-[#241914]/50">
+                      <div className="pt-2 border-t border-festival/20 flex items-center justify-between text-[10px] font-mono text-ink/50">
                         <span>FORMAT: 3:4 VERIFIED PRINT</span>
-                        <span className="text-[#C90000] font-bold">VIEW</span>
+                        <span className="text-[#D32020] font-bold">VIEW</span>
                       </div>
                     </div>
                   </article>
@@ -421,7 +421,7 @@ export const MediaPage = () => {
           {/* SECTION 3: STAGE BACKDROPS */}
           {activeSection === 'archive' && (
             <div className="space-y-8">
-              <div className="flex items-center justify-between text-xs font-mono text-[#241914]/60 border-b border-[#241914]/10 pb-3">
+              <div className="flex items-center justify-between text-xs font-mono text-ink/60 border-b border-festival/20 pb-3">
                 <span>STAGE ARCHIVAL PANORAMAS // AUDITORIUM INSTALLATIONS</span>
                 <span>HISTORIC 10X8 AND WIDE STAGE CANVAS DESIGNS</span>
               </div>
@@ -431,25 +431,25 @@ export const MediaPage = () => {
                   <article
                     key={item.id}
                     onClick={() => openLightbox(archiveList, index)}
-                    className="bg-[#FFF9EF] rounded-xl p-5 sm:p-6 border border-[#241914]/15 shadow-warm hover:border-[#C90000]/40 transition-all cursor-pointer group"
+                    className="bg-white/95 rounded-3xl p-5 sm:p-6 border-2 border-festival/30 shadow-warm hover:shadow-warm-lg hover:border-[#D32020]/40 transition-all cursor-pointer group"
                   >
-                    <div className="relative rounded-lg overflow-hidden aspect-16/7 sm:aspect-21/9 bg-[#241914] mb-4">
+                    <div className="relative rounded-2xl overflow-hidden aspect-16/7 sm:aspect-21/9 bg-[#2A1610] mb-4">
                       <img
                         src={item.src}
                         alt={item.alt[language]}
                         className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-500"
                         loading="lazy"
                       />
-                      <div className="absolute top-3 left-3 px-2.5 py-1 rounded-xs bg-[#C90000] text-white font-mono text-[10px] font-bold uppercase">
+                      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#D32020] text-white font-mono text-[10px] font-bold uppercase shadow-xs">
                         STAGE BACKDROP
                       </div>
                     </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
-                      <p className={`text-sm font-bold text-[#171514] ${ml ? 'font-malayalam' : ''}`}>
+                      <p className={`text-sm font-bold text-ink ${ml ? 'font-malayalam' : ''}`}>
                         {item.caption[language]}
                       </p>
-                      <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#C90000] shrink-0">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#D32020] shrink-0">
                         <Eye className="w-3.5 h-3.5" />
                         <span>FULLSCREEN LIGHTBOX</span>
                       </span>
@@ -463,7 +463,7 @@ export const MediaPage = () => {
           {/* SECTION 4: VIDEOS & CHORAL PERFORMANCES */}
           {activeSection === 'videos' && (
             <div className="space-y-8">
-              <div className="flex items-center justify-between text-xs font-mono text-[#241914]/60 border-b border-[#241914]/10 pb-3">
+              <div className="flex items-center justify-between text-xs font-mono text-ink/60 border-b border-festival/20 pb-3">
                 <span>OFFICIAL YOUTUBE BROADCAST RECORDINGS</span>
                 <span>CHORAL ANTHEMS & TRAVELING THEATER</span>
               </div>
@@ -472,33 +472,33 @@ export const MediaPage = () => {
                 {videosList.map((vid) => (
                   <article
                     key={vid.id}
-                    className="bg-[#FFF9EF] rounded-xl p-6 border border-[#241914]/15 shadow-warm flex flex-col justify-between group"
+                    className="bg-white/95 rounded-3xl p-6 border-2 border-festival/30 shadow-warm flex flex-col justify-between group hover:border-[#D32020]/40 transition-all"
                   >
                     <div className="space-y-4">
-                      <div className="w-12 h-12 rounded-lg bg-[#C90000]/10 text-[#C90000] flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-2xl bg-[#D32020]/10 text-[#D32020] flex items-center justify-center">
                         <YoutubeIcon className="w-6 h-6" />
                       </div>
 
-                      <div className="flex items-center justify-between text-xs font-mono text-[#241914]/60">
-                        <span className="text-[#C90000] font-bold">{vid.category.toUpperCase()}</span>
+                      <div className="flex items-center justify-between text-xs font-mono text-ink/60">
+                        <span className="text-[#D32020] font-bold">{vid.category.toUpperCase()}</span>
                         <span>{vid.duration}</span>
                       </div>
 
-                      <h3 className={`text-lg font-black text-[#171514] leading-snug group-hover:text-[#C90000] transition-colors ${ml ? 'font-malayalam' : ''}`}>
+                      <h3 className={`text-lg font-black text-ink leading-snug group-hover:text-[#D32020] transition-colors ${ml ? 'font-malayalam' : ''}`}>
                         {ml ? vid.titleMl : vid.title}
                       </h3>
 
-                      <p className={`text-xs text-[#241914]/75 leading-relaxed font-medium ${ml ? 'font-malayalam-body' : ''}`}>
+                      <p className={`text-xs text-ink/75 leading-relaxed font-medium ${ml ? 'font-malayalam-body' : ''}`}>
                         {ml ? vid.descriptionMl : vid.description}
                       </p>
                     </div>
 
-                    <div className="pt-4 mt-4 border-t border-[#241914]/10">
+                    <div className="pt-4 mt-4 border-t border-festival/20">
                       <a
                         href={vid.youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#C90000] hover:text-[#A30000]"
+                        className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#D32020] hover:text-[#B31219]"
                       >
                         <span>{ml ? 'യൂട്യൂബിൽ കാണുക' : 'WATCH ON YOUTUBE'}</span>
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -509,15 +509,15 @@ export const MediaPage = () => {
               </div>
 
               {/* YouTube Channel Banner */}
-              <div className="p-6 sm:p-8 rounded-xl bg-[#241914] text-[#F4EBDD] flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#2A1610] via-[#382622] to-[#2A1610] text-[#FAF7F2] flex flex-col sm:flex-row items-center justify-between gap-6 border-2 border-festival/30 shadow-warm-lg">
                 <div className="space-y-1 text-center sm:text-left">
-                  <span className="text-xs font-mono uppercase text-[#B99658] font-bold block">
+                  <span className="text-xs font-mono uppercase text-[#F5A623] font-bold block">
                     OFFICIAL BROADCAST ARCHIVE
                   </span>
                   <h4 className={`text-xl font-black text-white ${ml ? 'font-malayalam' : ''}`}>
                     {ml ? 'ബാലസംഘം കേരളം യൂട്യൂബ് ചാനൽ' : 'Balasangham Kerala YouTube Channel'}
                   </h4>
-                  <p className="text-xs text-[#F4EBDD]/70 max-w-xl">
+                  <p className="text-xs text-[#FAF7F2]/70 max-w-xl">
                     Subscribe to the official YouTube channel for high-definition recordings of state assemblies, choir training, and cultural theater tours.
                   </p>
                 </div>
@@ -526,7 +526,7 @@ export const MediaPage = () => {
                   href="https://www.youtube.com/@balasanghamkerala2817"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#C90000] hover:bg-[#A30000] text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors shadow-warm shrink-0"
+                  className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#D32020] hover:bg-[#B31219] text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-festive shrink-0 active:scale-95"
                 >
                   <YoutubeIcon className="w-4 h-4" />
                   <span>SUBSCRIBE ON YOUTUBE</span>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { RedStarIcon } from '../motifs/RedStarIcon';
 import {
@@ -11,8 +11,12 @@ import {
   MapPin,
   Sparkles,
   Download,
-  AlertCircle
+  AlertCircle,
+  Share2,
+  Maximize2
 } from 'lucide-react';
+import { LightboxModal } from '../conference/LightboxModal';
+import { ArchiveImage } from '../../types/content';
 
 interface EventOption {
   id: string;
@@ -92,12 +96,33 @@ const sampleMatches = [
 export const FindMyPhotos: React.FC = () => {
   const { language } = useLanguage();
   const ml = language === 'ml';
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedEvent, setSelectedEvent] = useState<string>(verifiedEvents[0].id);
   const [selfiePreview, setSelfiePreview] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [processingStatus, setProcessingStatus] = useState<string>('');
+
+  // Lightbox modal state for match preview
+  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0);
+
+  const archiveMatches: ArchiveImage[] = sampleMatches.map((m) => ({
+    id: m.id,
+    src: m.src,
+    thumbnail: m.src,
+    alt: {
+      en: m.caption,
+      ml: m.captionMl,
+    },
+    caption: {
+      en: `${m.caption} (${m.matchScore}% Match)`,
+      ml: `${m.captionMl} (${m.matchScore}% പൊരുത്തം)`,
+    },
+    category: 'historical',
+    dimensions: { width: 1200, height: 800 },
+  }));
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -112,7 +137,7 @@ export const FindMyPhotos: React.FC = () => {
   };
 
   const handleUseSample = () => {
-    // Demo selfie placeholder using an authentic portrait thumbnail
+    // Verified sample reference delegate portrait
     setSelfiePreview('/images/venalthumbikal-children.jpeg');
     setStep(2);
   };
@@ -141,53 +166,76 @@ export const FindMyPhotos: React.FC = () => {
     setIsProcessing(false);
   };
 
+  const handleShare = async (match: typeof sampleMatches[0]) => {
+    if (typeof navigator !== 'undefined' && 'share' in navigator) {
+      try {
+        await navigator.share({
+          title: ml ? match.captionMl : match.caption,
+          text: `Balasangham Event Photo (${match.matchScore}% Match): ${ml ? match.captionMl : match.caption}`,
+          url: window.location.origin + match.src,
+        });
+      } catch {
+        // Share cancelled
+      }
+    }
+  };
+
   const currentEventObj = verifiedEvents.find((e) => e.id === selectedEvent) || verifiedEvents[0];
 
   return (
-    <div className="bg-[#FFF9EF] rounded-xl border border-[#241914]/20 shadow-warm p-6 sm:p-10 relative overflow-hidden">
+    <div className="bg-[#FAF7F2] rounded-3xl border-2 border-festival/30 shadow-warm p-5 sm:p-10 relative overflow-hidden">
       {/* Editorial Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-8 border-b border-[#241914]/15 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-8 border-b border-[#2A1610]/15 gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-xs bg-[#C90000] text-white text-[10px] font-mono uppercase font-bold tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D32020] text-white text-[11px] font-mono uppercase font-bold tracking-wider shadow-xs">
               <RedStarIcon size={10} className="text-white" />
               EVENT ARCHIVE SERVICE
             </span>
-            <span className="text-[11px] font-mono text-[#241914]/60 uppercase tracking-widest hidden sm:inline">
-              // SECURE PHOTO RETRIEVAL
+            <span className="text-xs font-mono text-[#2A1610]/60 uppercase tracking-widest hidden sm:inline">
+              // ON-DEVICE PRIVACY SECURE SEARCH
             </span>
           </div>
-          <h3 className={`text-2xl sm:text-3xl font-black text-[#171514] tracking-tight uppercase ${ml ? 'font-malayalam normal-case' : ''}`}>
+          <h3 className={`text-2xl sm:text-3xl font-black text-[#2A1610] tracking-tight uppercase ${ml ? 'font-malayalam normal-case' : ''}`}>
             {ml ? 'എന്റെ ഫോട്ടോകൾ കണ്ടെത്തുക' : 'Find My Event Photos'}
           </h3>
-          <p className={`text-xs sm:text-sm text-[#241914]/75 mt-1 font-medium ${ml ? 'font-malayalam-body' : ''}`}>
+          <p className={`text-xs sm:text-sm text-[#2A1610]/80 mt-1 font-medium ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>
             {ml
-              ? 'നിങ്ങൾ പങ്കെടുത്ത സമ്മേളനങ്ങളിലെയും പരിപാടികളിലെയും ഫോട്ടോകൾ ലളിതമായി കണ്ടെത്തൂ.'
-              : 'Find verified event photographs featuring you from Balasangham conferences and cultural programs.'}
+              ? 'നിങ്ങൾ പങ്കെടുത്ത സമ്മേളനങ്ങളിലെയും പരിപാടികളിലെയും ഫോട്ടോകൾ 100% സ്വകാര്യതയോടെ കണ്ടെത്തൂ.'
+              : 'Find verified event photographs featuring you from Balasangham conferences and cultural programs with zero biometric retention.'}
           </p>
-          <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#257A3E]/10 border border-[#257A3E]/20 text-[#257A3E] text-xs font-medium">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>
-              {ml
-                ? '100% On-Device Facial Comparison • ഡിവൈസിൽ മാത്രമുള്ള താരതമ്യം'
-                : '100% On-Device Facial Comparison • No biometric data stored'}
-            </span>
-          </div>
         </div>
 
         {/* Step Indicator */}
-        <div className="flex items-center gap-2 text-xs font-mono font-bold">
-          <span className={`px-2.5 py-1 rounded-xs border ${step >= 1 ? 'bg-[#241914] text-[#F4EBDD] border-[#241914]' : 'bg-[#E9DDC9] text-[#241914]/50 border-[#241914]/20'}`}>
+        <div className="flex items-center gap-2 text-xs font-mono font-bold shrink-0">
+          <span className={`px-3 py-1.5 rounded-full border ${step >= 1 ? 'bg-[#2A1610] text-[#FAF7F2] border-[#2A1610]' : 'bg-[#F5E9D3] text-[#2A1610]/50 border-[#2A1610]/20'}`}>
             01 EVENT
           </span>
-          <span className="text-[#241914]/30">&rarr;</span>
-          <span className={`px-2.5 py-1 rounded-xs border ${step >= 2 ? 'bg-[#241914] text-[#F4EBDD] border-[#241914]' : 'bg-[#E9DDC9] text-[#241914]/50 border-[#241914]/20'}`}>
+          <span className="text-[#2A1610]/30">&rarr;</span>
+          <span className={`px-3 py-1.5 rounded-full border ${step >= 2 ? 'bg-[#2A1610] text-[#FAF7F2] border-[#2A1610]' : 'bg-[#F5E9D3] text-[#2A1610]/50 border-[#2A1610]/20'}`}>
             02 PHOTO
           </span>
-          <span className="text-[#241914]/30">&rarr;</span>
-          <span className={`px-2.5 py-1 rounded-xs border ${step >= 3 ? 'bg-[#C90000] text-white border-[#C90000]' : 'bg-[#E9DDC9] text-[#241914]/50 border-[#241914]/20'}`}>
+          <span className="text-[#2A1610]/30">&rarr;</span>
+          <span className={`px-3 py-1.5 rounded-full border ${step >= 3 ? 'bg-[#D32020] text-white border-[#D32020]' : 'bg-[#F5E9D3] text-[#2A1610]/50 border-[#2A1610]/20'}`}>
             03 RESULTS
           </span>
+        </div>
+      </div>
+
+      {/* Explicit On-Device Privacy Guarantee Banner */}
+      <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-festival/20 via-cream to-festival/15 border-2 border-festival/40 flex items-start gap-3">
+        <ShieldCheck className="w-5 h-5 text-[#257A3E] shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <h4 className={`text-xs sm:text-sm font-bold text-[#2A1610] ${ml ? 'font-malayalam' : ''}`}>
+            {ml
+              ? '100% On-Device Facial Comparison // ഡിവൈസിൽ മാത്രമുള്ള സ്വകാര്യ പ്രോസസ്സിംഗ്'
+              : '100% On-Device Facial Comparison // Zero Biometric Retention'}
+          </h4>
+          <p className={`text-xs text-[#2A1610]/80 leading-relaxed ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>
+            {ml
+              ? 'നിങ്ങൾ നൽകുന്ന ചിത്രം നിങ്ങളുടെ ബ്രൗസറിൽ വെച്ചുതന്നെ സുരക്ഷിതമായി വിശകലനം ചെയ്യപ്പെടുന്നു. ഫോട്ടോയോ ബയോമെട്രിക് ഡാറ്റയോ ശാശ്വതമായി സൂക്ഷിക്കുകയോ സർവറുകളിലേക്ക് അപ്‌ലോഡ് ചെയ്യുകയോ ഇല്ല.'
+              : '100% Client-Side. No selfies uploaded. No biometric templates stored. Visual vectors are generated in transient browser memory and immediately discarded.'}
+          </p>
         </div>
       </div>
 
@@ -195,7 +243,7 @@ export const FindMyPhotos: React.FC = () => {
       {step === 1 && (
         <div className="space-y-8">
           <div>
-            <label className="block text-xs font-mono uppercase font-bold text-[#C90000] tracking-wider mb-3">
+            <label className="block text-xs font-mono uppercase font-bold text-[#D32020] tracking-wider mb-3">
               STEP 1: {ml ? 'പരിപാടി തിരഞ്ഞെടുക്കുക' : 'SELECT ARCHIVAL EVENT'}
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -204,21 +252,21 @@ export const FindMyPhotos: React.FC = () => {
                   key={ev.id}
                   type="button"
                   onClick={() => setSelectedEvent(ev.id)}
-                  className={`text-left p-4 rounded-lg border transition-all ${
+                  className={`text-left p-4 rounded-2xl border-2 transition-all min-h-[48px] active:scale-95 ${
                     selectedEvent === ev.id
-                      ? 'bg-[#E9DDC9] border-[#C90000] shadow-sm ring-1 ring-[#C90000]'
-                      : 'bg-[#FFF9EF] border-[#241914]/15 hover:border-[#241914]/40'
+                      ? 'bg-[#FDF7EB] border-[#D32020] shadow-warm ring-2 ring-[#D32020]/20'
+                      : 'bg-white/80 border-festival/30 hover:border-festival'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] font-mono text-[#241914]/60 mb-2">
-                    <span className="font-bold text-[#C90000]">{ev.photosCount} PHOTOS</span>
+                  <div className="flex items-center justify-between text-[11px] font-mono text-[#2A1610]/60 mb-2">
+                    <span className="font-bold text-[#D32020]">{ev.photosCount} PHOTOS</span>
                     <span>{ev.date}</span>
                   </div>
-                  <h4 className={`text-sm font-bold text-[#171514] mb-1 leading-snug ${ml ? 'font-malayalam' : ''}`}>
+                  <h4 className={`text-sm font-bold text-[#2A1610] mb-1 leading-snug ${ml ? 'font-malayalam' : ''}`}>
                     {ml ? ev.nameMl : ev.name}
                   </h4>
-                  <div className="flex items-center gap-1.5 text-xs text-[#241914]/70">
-                    <MapPin className="w-3.5 h-3.5 text-[#B99658]" />
+                  <div className="flex items-center gap-1.5 text-xs text-[#2A1610]/70">
+                    <MapPin className="w-3.5 h-3.5 text-[#F5A623]" />
                     <span className="line-clamp-1">{ev.location}</span>
                   </div>
                 </button>
@@ -227,49 +275,61 @@ export const FindMyPhotos: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-mono uppercase font-bold text-[#C90000] tracking-wider mb-3">
+            <label className="block text-xs font-mono uppercase font-bold text-[#D32020] tracking-wider mb-3">
               STEP 2: {ml ? 'നിങ്ങളുടെ സെൽഫി അല്ലെങ്കിൽ ഫോട്ടോ നൽകുക' : 'PROVIDE YOUR REFERENCE PHOTO'}
             </label>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              {/* Upload Dropzone */}
-              <div className="border-2 border-dashed border-[#241914]/25 hover:border-[#C90000] rounded-xl p-8 text-center bg-[#F4EBDD]/60 transition-colors">
+              {/* Native Mobile Camera & Upload Dropzone */}
+              <div className="border-2 border-dashed border-[#2A1610]/25 hover:border-[#D32020] rounded-2xl p-6 sm:p-8 text-center bg-[#FDF7EB] transition-colors">
                 <input
+                  ref={fileInputRef}
                   type="file"
-                  id="selfie-upload"
+                  id="selfie-camera"
                   accept="image/*"
+                  capture="user"
                   onChange={handleFileUpload}
                   className="hidden"
                 />
-                <label
-                  htmlFor="selfie-upload"
-                  className="cursor-pointer flex flex-col items-center justify-center space-y-3"
-                >
-                  <div className="w-12 h-12 rounded-full bg-[#E9DDC9] border border-[#241914]/20 flex items-center justify-center text-[#C90000]">
-                    <Upload className="w-6 h-6" />
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <div className="w-14 h-14 rounded-full bg-festival/20 border border-festival/40 flex items-center justify-center text-[#D32020]">
+                    <Camera className="w-7 h-7" />
                   </div>
                   <div>
-                    <span className="text-sm font-bold text-[#171514] block">
-                      {ml ? 'ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക' : 'Upload a clear portrait photo'}
+                    <span className="text-sm font-bold text-[#2A1610] block">
+                      {ml ? 'സെൽഫിയെടുക്കുക അല്ലെങ്കിൽ അപ്‌ലോഡ് ചെയ്യുക' : 'Take a Selfie or Upload Photo'}
                     </span>
-                    <span className="text-xs text-[#241914]/60 block mt-1 font-mono">
-                      PNG, JPG, WEBP (Max 10MB)
+                    <span className="text-xs text-[#2A1610]/60 block mt-1 font-mono">
+                      Mobile Camera / PNG, JPG (100% Client-Side)
                     </span>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#241914] text-[#F4EBDD] text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#C90000] transition-colors">
-                    <Camera className="w-3.5 h-3.5" />
-                    <span>{ml ? 'ഫോട്ടോ തിരഞ്ഞെടുക്കുക' : 'BROWSE FILES'}</span>
-                  </span>
-                </label>
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="min-h-[48px] px-6 py-3 rounded-full bg-[#D32020] hover:bg-[#B31219] text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-festive active:scale-95 inline-flex items-center gap-2"
+                    >
+                      <Camera className="w-4 h-4" />
+                      <span>{ml ? 'സെൽഫിയെടുക്കുക' : 'Take Selfie'}</span>
+                    </button>
+                    <label
+                      htmlFor="selfie-camera"
+                      className="min-h-[48px] cursor-pointer inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white text-[#2A1610] text-xs font-mono font-bold uppercase tracking-wider border-2 border-festival/30 hover:border-[#D32020] transition-colors active:scale-95"
+                    >
+                      <Upload className="w-4 h-4 text-[#D32020]" />
+                      <span>{ml ? 'ഫയൽ തിരഞ്ഞെടുക്കുക' : 'Browse Files'}</span>
+                    </label>
+                  </div>
+                </div>
               </div>
 
               {/* Sample Photo for instant testing */}
-              <div className="p-6 rounded-xl bg-[#E9DDC9]/70 border border-[#241914]/15 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-mono text-[#C90000] font-bold uppercase">
-                  <Sparkles className="w-3.5 h-3.5" />
+              <div className="p-6 rounded-2xl bg-white/90 border-2 border-festival/30 shadow-warm space-y-4">
+                <div className="flex items-center gap-2 text-xs font-mono text-[#D32020] font-bold uppercase">
+                  <Sparkles className="w-4 h-4 text-[#F5A623]" />
                   <span>TEST WITH VERIFIED REFERENCE</span>
                 </div>
-                <p className={`text-xs text-[#241914]/80 leading-relaxed ${ml ? 'font-malayalam-body' : ''}`}>
+                <p className={`text-xs text-[#2A1610]/80 leading-relaxed ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>
                   {ml
                     ? 'സെൽഫി അപ്‌ലോഡ് ചെയ്യാതെ തന്നെ സിസ്റ്റം പരീക്ഷിക്കാൻ താഴെയുള്ള സാമ്പിൾ റെഫറൻസ് പ്രൊഫൈൽ ഉപയോഗിക്കാം.'
                     : 'Don’t have a photo on hand? Test the archival recognition workflow using a verified delegate reference.'}
@@ -277,9 +337,9 @@ export const FindMyPhotos: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleUseSample}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-[#FFF9EF] text-[#171514] text-xs font-mono font-bold uppercase tracking-wider border border-[#241914]/20 hover:border-[#C90000] hover:text-[#C90000] transition-colors"
+                  className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-[#FDF7EB] text-[#2A1610] text-xs font-mono font-bold uppercase tracking-wider border-2 border-festival/40 hover:border-[#D32020] hover:text-[#D32020] transition-colors active:scale-95"
                 >
-                  <Camera className="w-3.5 h-3.5" />
+                  <Sparkles className="w-4 h-4 text-[#F5A623]" />
                   <span>{ml ? 'സാമ്പിൾ റെഫറൻസ് ഉപയോഗിക്കുക' : 'USE SAMPLE REFERENCE'}</span>
                 </button>
               </div>
@@ -291,19 +351,19 @@ export const FindMyPhotos: React.FC = () => {
       {/* STEP 2: Review Reference & Trigger Search */}
       {step === 2 && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-[#241914]/15 pb-4">
+          <div className="flex items-center justify-between border-b border-[#2A1610]/15 pb-4">
             <div>
-              <span className="text-xs font-mono uppercase font-bold text-[#C90000] tracking-wider block">
+              <span className="text-xs font-mono uppercase font-bold text-[#D32020] tracking-wider block">
                 STEP 2: CONFIRM PHOTO & SEARCH ARCHIVE
               </span>
-              <span className="text-xs text-[#241914]/70">
+              <span className="text-xs text-[#2A1610]/70">
                 Searching inside: <strong>{currentEventObj.name}</strong>
               </span>
             </div>
             <button
               type="button"
               onClick={handleReset}
-              className="text-xs font-mono text-[#C90000] hover:underline"
+              className="text-xs font-mono text-[#D32020] hover:underline min-h-[48px] px-2 py-1 inline-flex items-center"
             >
               CHANGE SELECTION
             </button>
@@ -312,7 +372,7 @@ export const FindMyPhotos: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             {/* Selfie Preview */}
             <div className="md:col-span-4 flex flex-col items-center">
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-xl overflow-hidden border-2 border-[#241914]/25 shadow-md bg-[#241914]">
+              <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border-2 border-festival/40 shadow-warm bg-[#2A1610]">
                 {selfiePreview && (
                   <img
                     src={selfiePreview}
@@ -320,28 +380,28 @@ export const FindMyPhotos: React.FC = () => {
                     className="w-full h-full object-cover object-top"
                   />
                 )}
-                <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded-xs bg-[#171514]/80 text-white text-[10px] font-mono text-center">
-                  REFERENCE CONTROLS ACTIVE
+                <div className="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-full bg-[#2A1610]/90 text-white text-[10px] font-mono text-center border border-white/20">
+                  ON-DEVICE REFERENCE READY
                 </div>
               </div>
               <button
                 type="button"
                 onClick={handleReset}
-                className="mt-3 text-xs font-mono text-[#241914]/70 hover:text-[#C90000] flex items-center gap-1"
+                className="mt-3 text-xs font-mono text-[#2A1610]/70 hover:text-[#D32020] flex items-center gap-1.5 min-h-[48px] px-3 active:scale-95"
               >
-                <RefreshCw className="w-3 h-3" />
+                <RefreshCw className="w-3.5 h-3.5" />
                 <span>{ml ? 'മറ്റൊരു ചിത്രം നൽകുക' : 'Choose different photo'}</span>
               </button>
             </div>
 
             {/* Processing and Actions */}
             <div className="md:col-span-8 space-y-5">
-              <div className="p-4 rounded-lg bg-[#E9DDC9] border border-[#241914]/15 space-y-2">
-                <h4 className={`text-sm font-bold text-[#171514] flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-                  <ShieldCheck className="w-4 h-4 text-[#388E3C]" />
-                  <span>{ml ? 'സ്വകാര്യതയും സുരക്ഷാ ഉറപ്പും' : 'Zero-Retention Privacy Guarantee'}</span>
+              <div className="p-5 rounded-2xl bg-white/90 border-2 border-festival/30 space-y-2">
+                <h4 className={`text-sm font-bold text-[#2A1610] flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
+                  <ShieldCheck className="w-4 h-4 text-[#257A3E]" />
+                  <span>{ml ? 'ഡിവൈസ് മാത്രമുള്ള സുരക്ഷാ ഉറപ്പ്' : '100% Client-Side Privacy Guarantee'}</span>
                 </h4>
-                <p className={`text-xs text-[#241914]/80 leading-relaxed ${ml ? 'font-malayalam-body' : ''}`}>
+                <p className={`text-xs text-[#2A1610]/80 leading-relaxed ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>
                   {ml
                     ? 'നിങ്ങൾ നൽകുന്ന ചിത്രം ബ്രൗസറിൽ വെച്ചുതന്നെ സുരക്ഷിതമായി സ്കാൻ ചെയ്യപ്പെടുന്നു. ഫോട്ടോയോ ബയോമെട്രിക് ഡാറ്റയോ ശാശ്വതമായി സൂക്ഷിക്കുകയോ മൂന്നാം കക്ഷികൾക്ക് പങ്കുവെക്കുകയോ ഇല്ല.'
                     : 'Your reference image is processed in transient volatile memory. Biometric vectors are discarded immediately following search execution. No personal profile is stored.'}
@@ -349,12 +409,12 @@ export const FindMyPhotos: React.FC = () => {
               </div>
 
               {isProcessing ? (
-                <div className="p-6 rounded-lg bg-[#241914] text-[#F4EBDD] text-center space-y-3">
-                  <div className="w-8 h-8 border-3 border-[#C90000] border-t-transparent rounded-full animate-spin mx-auto" />
-                  <div className="text-xs font-mono uppercase tracking-wider text-[#B99658] font-bold">
+                <div className="p-8 rounded-2xl bg-gradient-to-br from-[#2A1610] to-[#382622] text-[#FAF7F2] text-center space-y-4 shadow-warm-lg">
+                  <div className="w-10 h-10 border-3 border-[#D32020] border-t-transparent rounded-full animate-spin mx-auto" />
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#F5A623] font-bold">
                     {processingStatus}
                   </div>
-                  <p className="text-[11px] text-[#F4EBDD]/60 font-mono">
+                  <p className="text-[11px] text-[#FAF7F2]/60 font-mono">
                     INDEXING {currentEventObj.photosCount} VERIFIED EVENT RECORDS
                   </p>
                 </div>
@@ -363,14 +423,14 @@ export const FindMyPhotos: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleRunSearch}
-                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-md bg-[#C90000] hover:bg-[#A30000] text-white font-mono text-sm uppercase font-bold tracking-wider transition-colors shadow-warm active:scale-[0.98] min-h-[48px]"
+                    className="w-full min-h-[48px] inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-full bg-[#D32020] hover:bg-[#B31219] text-white font-mono text-xs sm:text-sm uppercase font-bold tracking-wider transition-all shadow-festive active:scale-95"
                   >
                     <Search className="w-4 h-4" />
-                    <span>{ml ? 'തിരച്ചിൽ ആരംഭിക്കുക (START LOCAL RECOGNITION SEARCH)' : 'START LOCAL RECOGNITION SEARCH'}</span>
+                    <span>{ml ? 'തിരച്ചിൽ ആരംഭിക്കുക' : 'START LOCAL RECOGNITION SEARCH'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
-                  <p className="text-[11px] text-[#241914]/60 font-mono text-center">
-                    ESTIMATED PROCESSING TIME: ~2.5 SECONDS
+                  <p className="text-[11px] text-[#2A1610]/60 font-mono text-center">
+                    ESTIMATED PROCESSING TIME: ~2.5 SECONDS (BROWSER TRANSIENT)
                   </p>
                 </div>
               )}
@@ -382,12 +442,12 @@ export const FindMyPhotos: React.FC = () => {
       {/* STEP 3: Results Gallery */}
       {step === 3 && (
         <div className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#241914]/15 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#2A1610]/15 gap-4">
             <div>
-              <span className="text-xs font-mono uppercase font-bold text-[#C90000] tracking-wider block">
-                STEP 3: MATCHING EVENT PHOTOGRAPHS
+              <span className="text-xs font-mono uppercase font-bold text-[#D32020] tracking-wider block">
+                POSSIBLE MATCHES // സാധ്യതയുള്ള ചിത്രങ്ങൾ
               </span>
-              <h4 className={`text-lg font-black text-[#171514] mt-0.5 ${ml ? 'font-malayalam' : ''}`}>
+              <h4 className={`text-xl sm:text-2xl font-black text-[#2A1610] mt-1 ${ml ? 'font-malayalam' : ''}`}>
                 {ml ? '4 സാധ്യതയുള്ള ഫോട്ടോകൾ കണ്ടെത്തി' : 'Found 4 Candidate Photographs in Event Archive'}
               </h4>
             </div>
@@ -396,64 +456,84 @@ export const FindMyPhotos: React.FC = () => {
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#E9DDC9] text-[#241914] text-xs font-mono uppercase font-bold tracking-wider hover:bg-[#E9DDC9]/70 border border-[#241914]/20 transition-colors"
+                className="min-h-[48px] inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#2A1610] text-xs font-mono uppercase font-bold tracking-wider hover:bg-festival/20 border-2 border-festival/30 transition-all active:scale-95"
               >
-                <RefreshCw className="w-3 h-3" />
+                <RefreshCw className="w-3.5 h-3.5" />
                 <span>{ml ? 'പുതിയ തിരച്ചിൽ' : 'NEW SEARCH'}</span>
               </button>
             </div>
           </div>
 
-          {/* Results Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sampleMatches.map((match) => (
+          {/* Results Grid - Touch-friendly 2-column mobile */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {sampleMatches.map((match, idx) => (
               <div
                 key={match.id}
-                className="bg-[#E9DDC9] rounded-lg overflow-hidden border border-[#241914]/20 shadow-warm flex flex-col justify-between group"
+                className="bg-white/95 rounded-2xl overflow-hidden border-2 border-festival/30 shadow-warm flex flex-col justify-between group hover:border-[#D32020]/40 transition-all"
               >
-                <div className="relative aspect-4/3 bg-[#241914] overflow-hidden">
+                <div
+                  className="relative aspect-4/3 bg-[#2A1610] overflow-hidden cursor-pointer"
+                  onClick={() => {
+                    setLightboxIndex(idx);
+                    setLightboxOpen(true);
+                  }}
+                >
                   <img
                     src={match.src}
                     alt={match.caption}
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
-                  <div className="absolute top-2 right-2 px-2 py-0.5 rounded-xs bg-[#241914]/90 text-white font-mono text-[10px] font-bold border border-white/20">
+                  <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-[#2A1610]/90 text-white font-mono text-[10px] font-bold border border-white/20">
                     {match.matchScore}% MATCH
                   </div>
-                  <div className="absolute bottom-2 left-2 text-[10px] font-mono text-white/90 bg-black/60 px-2 py-0.5 rounded-xs">
+                  <div className="absolute bottom-2 left-2 text-[10px] font-mono text-white/90 bg-black/60 px-2 py-0.5 rounded-full">
                     {match.time}
+                  </div>
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="p-2 rounded-full bg-white/90 text-[#2A1610]">
+                      <Maximize2 className="w-4 h-4" />
+                    </span>
                   </div>
                 </div>
 
-                <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                <div className="p-3 sm:p-4 space-y-3 flex-1 flex flex-col justify-between">
                   <div>
-                    <p className={`text-xs font-bold text-[#171514] leading-snug line-clamp-2 ${ml ? 'font-malayalam' : ''}`}>
+                    <p className={`text-xs font-bold text-[#2A1610] leading-snug line-clamp-2 ${ml ? 'font-malayalam' : ''}`}>
                       {ml ? match.captionMl : match.caption}
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {match.tags.map((tag, i) => (
-                        <span key={i} className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded-xs bg-[#FFF9EF] text-[#241914]/70 border border-[#241914]/10">
+                        <span key={i} className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-full bg-[#FDF7EB] text-[#2A1610]/70 border border-festival/30">
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[#241914]/15 flex items-center justify-between">
+                  <div className="pt-2 border-t border-[#2A1610]/15 flex items-center justify-between gap-1">
                     <a
                       href={match.src}
                       download={`balasangham-photo-${match.id}.jpg`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#C90000] hover:text-[#A30000]"
+                      className="min-h-[48px] inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#D32020] hover:text-[#B31219] px-2 py-1"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>DOWNLOAD</span>
+                      <span>SAVE</span>
                     </a>
-                    <span className="text-[10px] font-mono text-[#241914]/50">
-                      ID: {match.id.toUpperCase()}
-                    </span>
+
+                    {typeof navigator !== 'undefined' && 'share' in navigator && (
+                      <button
+                        type="button"
+                        onClick={() => handleShare(match)}
+                        className="min-h-[48px] px-2 py-1 text-xs font-mono font-bold text-[#2A1610]/80 hover:text-[#D32020] inline-flex items-center gap-1"
+                        aria-label={ml ? 'പങ്കുവെക്കുക' : 'Share'}
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">SHARE</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -461,8 +541,8 @@ export const FindMyPhotos: React.FC = () => {
           </div>
 
           {/* Archival Disclaimer Note */}
-          <div className="p-4 rounded-lg bg-[#E9DDC9]/70 border border-[#241914]/15 flex items-start gap-3 text-xs text-[#241914]/75">
-            <AlertCircle className="w-4 h-4 text-[#C90000] shrink-0 mt-0.5" />
+          <div className="p-4 rounded-2xl bg-white/80 border-2 border-festival/20 flex items-start gap-3 text-xs text-[#2A1610]/75">
+            <AlertCircle className="w-4 h-4 text-[#D32020] shrink-0 mt-0.5" />
             <p className={ml ? 'font-malayalam-body leading-[1.6]' : ''}>
               {ml
                 ? 'കുറിപ്പ്: ഈ സംവിധാനം ഒരു ഓട്ടോമേറ്റഡ് ഫോട്ടോ റിട്രീവൽ സഹായം മാത്രമാണ്. ആൾമാറാട്ടത്തിനോ വ്യക്തിഗത തിരിച്ചറിയൽ രേഖയായോ ഇത് ഉപയോഗിക്കാൻ പാടില്ല. എല്ലാ ഫോട്ടോകളും പൊതു പരിപാടിയുടെ രേഖകളാണ്.'
@@ -473,13 +553,22 @@ export const FindMyPhotos: React.FC = () => {
       )}
 
       {/* Persistent Privacy Guarantee Footer */}
-      <div className="mt-8 pt-6 border-t border-[#241914]/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#241914]/65">
+      <div className="mt-8 pt-6 border-t border-[#2A1610]/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#2A1610]/65">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-[#C90000]" />
+          <ShieldCheck className="w-4 h-4 text-[#D32020]" />
           <span>STRICT PRIVACY: NO BIOMETRIC PROFILES PERSISTED</span>
         </div>
         <span>BALASANGHAM KANNUR ARCHIVE DEPT. // 2026</span>
       </div>
+
+      {/* Lightbox Modal Preview */}
+      <LightboxModal
+        images={archiveMatches}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onNavigate={(index) => setLightboxIndex(index)}
+      />
     </div>
   );
 };

@@ -13,7 +13,8 @@ describe('FindMyPhotos', () => {
 
     expect(screen.getByText(/Find My Event Photos|എന്റെ ഫോട്ടോകൾ കണ്ടെത്തുക/i)).toBeInTheDocument();
     expect(screen.getByText(/100% On-Device Facial Comparison|ഡിവൈസിൽ മാത്രമുള്ള/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Take Selfie|സെൽഫിയെടുക്കുക|USE SAMPLE REFERENCE/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Take Selfie|സെൽഫിയെടുക്കുക/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /USE SAMPLE REFERENCE|സാമ്പിൾ റെഫറൻസ്/i })).toBeInTheDocument();
   });
 
   it('progresses to results step when reference photo is selected', async () => {
