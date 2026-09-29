@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { Navbar } from './components/layout/Navbar';
+import { BottomNav } from './components/layout/BottomNav';
 import { Footer } from './components/layout/Footer';
 import { AnthemModal } from './components/anthem/AnthemModal';
 import { ScrollToTop } from './components/common/ScrollToTop';
@@ -75,6 +76,7 @@ export default function App() {
             </Routes>
           </main>
           <Footer />
+          <BottomNav />
           <AnthemModal isOpen={anthemOpen} onClose={() => setAnthemOpen(false)} />
         </div>
       </BrowserRouter>
