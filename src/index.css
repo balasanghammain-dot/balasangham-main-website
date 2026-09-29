@@ -65,6 +65,15 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  /* Safe Area Utility Classes */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
   /* Critical Malayalam conjunct preservation */
   [lang="ml"], .font-malayalam, .font-malayalam-body {
     line-height: 1.7;

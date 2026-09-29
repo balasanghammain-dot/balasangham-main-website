@@ -45,4 +45,10 @@ describe('Balasangham Main Website Integration', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it('provides safe-area utility and mobile layout container', () => {
+    const { container } = render(<App />);
+    const mainEl = container.querySelector('main');
+    expect(mainEl).toHaveClass('pb-20');
+  });
 });

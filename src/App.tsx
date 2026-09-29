@@ -36,7 +36,7 @@ export default function App() {
         <ScrollToTop />
         <div className="min-h-screen bg-surface-cream text-charcoal flex flex-col selection:bg-brand-red selection:text-white">
           <Navbar onOpenAnthem={() => setAnthemOpen(true)} />
-          <main className="flex-1">
+          <main className="flex-1 pb-20 md:pb-0">
             <Routes>
               <Route path="/" element={<HomePage onOpenAnthem={() => setAnthemOpen(true)} />} />
 

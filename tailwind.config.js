@@ -76,6 +76,15 @@ export default {
         'gold': '#EAA816',
         'offwhite': '#FFFDF9',
 
+        // Festival 2026 Editorial Tokens
+        'festival-red': '#D32020',
+        'festival-gold': '#F5A623',
+        'festival-green': '#257A3E',
+        'festival-umber': '#2A1610',
+        'parchment-bg': '#FDF7EB',
+        'paper-surface': '#F5E9D3',
+        'warm-white': '#FFFDF7',
+
         // Brand Aliases
         'brand-red': '#D41C24',
         'brand-red-dark': '#B31219',
