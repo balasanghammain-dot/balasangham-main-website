@@ -168,7 +168,7 @@ export const WhatWeDoSection = () => {
                     <div className="pt-4 flex items-center justify-between border-t border-ink/10">
                       <a
                         href={`/programs/${slug}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-deep hover:bg-festival/20 text-xs font-mono uppercase font-bold tracking-wider text-berry hover:text-berry-dark transition-all border border-ink/5"
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-cream-deep hover:bg-festival/20 text-xs font-mono uppercase font-bold tracking-wider text-[#D32020] hover:text-[#B71C1C] transition-all border border-ink/5 min-h-[48px] active:scale-95"
                       >
                         <span>{ml ? 'വിശദ വിവരങ്ങൾ കാണുക' : 'EXPLORE PROGRAM'}</span>
                         <ArrowRight className="w-3.5 h-3.5" />

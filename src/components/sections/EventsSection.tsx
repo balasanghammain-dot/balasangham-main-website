@@ -55,18 +55,18 @@ export const EventsSection = () => {
           </p>
         </div>
 
-        {/* Filter Tabs with Rounded-Full Festive Pills */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-12 border-b border-ink/10 pb-4">
+        {/* Filter Tabs with Rounded-Full Festive Pills (Horizontal touch-scroll on mobile) */}
+        <div className="flex items-center gap-2 sm:gap-3 mb-12 border-b border-ink/10 pb-4 overflow-x-auto no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
           {filterTabs.map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveCategory(tab.id)}
               aria-pressed={activeCategory === tab.id}
-              className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[40px] hover:scale-105 active:scale-95 ${
+              className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider transition-all min-h-[48px] shrink-0 active:scale-95 ${
                 activeCategory === tab.id
-                  ? 'bg-berry text-white shadow-festive border-2 border-berry'
-                  : 'bg-white/80 text-ink hover:bg-festival/20 border-2 border-festival/30'
+                  ? 'bg-[#D32020] text-white shadow-festive border-2 border-[#D32020]'
+                  : 'bg-white/90 text-ink hover:bg-festival/20 border-2 border-festival/30'
               } ${ml ? 'font-malayalam normal-case' : ''}`}
             >
               {tab.label}

@@ -193,10 +193,10 @@ export const HomePage = ({ onOpenAnthem }: HomePageProps) => {
                   : 'Connect with your neighborhood unit, village ward, or school cluster across Kannur to join the world’s largest democratic children’s cultural movement.'}
               </p>
 
-              <div className="pt-2 flex flex-wrap gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <Link
                   to="/join"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-berry hover:bg-berry-dark text-white font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-festive hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#D32020] hover:bg-[#B71C1C] text-white font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-festive active:scale-95 min-h-[48px]"
                 >
                   <span className={ml ? 'font-malayalam normal-case' : ''}>
                     {ml ? 'എങ്ങനെ ചേരാം (HOW TO JOIN)' : 'HOW TO JOIN'}
@@ -206,7 +206,7 @@ export const HomePage = ({ onOpenAnthem }: HomePageProps) => {
 
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-festival hover:bg-sun text-ink font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-sm hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#F5A623] hover:bg-[#F5A623]/90 text-[#2A1610] font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-sm active:scale-95 min-h-[48px]"
                 >
                   <span className={ml ? 'font-malayalam normal-case' : ''}>
                     {ml ? 'സമ്പർക്ക വിവരങ്ങൾ' : 'CONNECT WITH US'}
