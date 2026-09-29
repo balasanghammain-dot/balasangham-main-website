@@ -1,0 +1,61 @@
+{
+  "name": "Balasangham",
+  "nameMalayalam": "ബാലസംഘം",
+  "unit": "Kannur District Committee",
+  "unitMalayalam": "ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി",
+  "tagline": "Study, Contemplate, Act",
+  "taglineMalayalam": "പഠനം, മനനം, ചലനം",
+  "actionSlogan": "Study, Struggle, Grow",
+  "actionSloganMalayalam": "പഠിക്കുക, പോരാടുക, വളരുക",
+  "founded": "1938-12-28",
+  "foundingPlace": "Kalliasseri, Kannur District, Kerala",
+  "status": "Democratic, secular, progressive children's cultural and educational movement",
+  "membership": {
+    "totalMembers": "1,000,000+",
+    "units": "20,000+",
+    "districts": 14,
+    "targetAge": "5–16 years"
+  },
+  "symbols": {
+    "flag": {
+      "base": "Crisp white rectangular cloth",
+      "emblem": "Blood-red five-pointed star (രക്തതാര) in the center",
+      "meaning": "White represents innocence, truth, peace, and equality; Red star represents progressive vision, struggle against injustice, and human dignity."
+    },
+    "dove": {
+      "name": "White Dove (വെള്ളിപ്രാവ്)",
+      "meaning": "Universal peace, international solidarity, and anti-war advocacy."
+    },
+    "song": {
+      "title": "Pathakaganam (പതാകഗാനം)",
+      "firstLine": "ഉണരുക ഉയരുക ശുഭ്രപതാകേ / ഉജ്ജ്വല കർമ്മപതാകേ...",
+      "status": "Official flag anthem sung at all gatherings"
+    }
+  },
+  "leadershipKannur": {
+    "term": "2024–2026",
+    "electedDate": "2024-10-06",
+    "conferenceLocation": "Pilathara, Kannur",
+    "president": "K. Surya",
+    "secretary": "M.P. Gokul",
+    "convener": "P. Sumeshan",
+    "coordinator": "Vishnu Jayan",
+    "vicePresidents": ["Darshana Sanoj", "Amal Prem"],
+    "jointSecretaries": ["K.V. Aadith", "Devika S. Dev"],
+    "jointConveners": ["T. Satheesh Kumar", "P.K. Sheela"],
+    "committeeSize": 71,
+    "executiveSize": 17
+  },
+  "digitalPresence": {
+    "facebookKannur": "https://www.facebook.com/balasangham.kannur/",
+    "facebookState": "https://www.facebook.com/balasangham.kerala/",
+    "instagramState": "https://www.instagram.com/balasanghamkeralam/",
+    "youtubeState": "https://www.youtube.com/@balasanghamkerala2817",
+    "domainAudit": {
+      "domain": "balasangham.com",
+      "status": "expired",
+      "checkedDate": "2026-09-28",
+      "note": "Domain redirects to registrar auction page; not an active official website"
+    }
+  }
+}

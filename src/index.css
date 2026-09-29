@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Critical Malayalam conjunct preservation */
+  [lang="ml"], .font-malayalam, .font-malayalam-body {
+    line-height: 1.7;
+    font-feature-settings: "kern" 1;
+  }
+}

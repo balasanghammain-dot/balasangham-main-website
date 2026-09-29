@@ -1,0 +1,75 @@
+[
+  {
+    "id": "venalthumbikal",
+    "name": "Venalthumbikal",
+    "nameMalayalam": "വേനൽത്തുമ്പികൾ",
+    "englishSubtitle": "Summer Dragonflies — Children's Traveling Cultural Theater",
+    "type": "Traveling Cultural Theater",
+    "scope": "Statewide and District-wide",
+    "schedule": "Annual summer vacation (April – May)",
+    "inceptionYear": 1990,
+    "description": "Kerala's largest traveling children's theater troupe, touring thousands of rural and urban localities with original street plays, folk songs, rhythmic dances, and puppetry dedicated to child rights, environmental conservation, and social equality.",
+    "verified": true,
+    "source": "https://ml.wikipedia.org/wiki/%E0%B4%AC%E0%B4%BE%E0%B4%B2%E0%B4%B8%E0%B4%82%E0%B4%98%E0%B4%82"
+  },
+  {
+    "id": "venal-kalari",
+    "name": "Venal Kalari",
+    "nameMalayalam": "വേനൽ കളരി",
+    "englishSubtitle": "Vacation Creative and Folk Arts Camps",
+    "type": "Camp Workshop",
+    "scope": "Unit and Area levels",
+    "schedule": "Summer vacation (April – May)",
+    "description": "Residential and day workshop camps training school children in theater arts, clay sculpture, folk rhythms, creative writing, public discourse, and indigenous cultural forms, fostering personality growth without commercial pressures.",
+    "verified": true,
+    "source": "Organization KB"
+  },
+  {
+    "id": "kilikkoodu",
+    "name": "Kilikkoodu",
+    "nameMalayalam": "കിളിക്കൂട് മാസിക",
+    "englishSubtitle": "Official Monthly Children's Magazine",
+    "type": "Periodical Publication",
+    "scope": "Statewide circulation",
+    "schedule": "Monthly print publication",
+    "description": "The official children's magazine published by Balasangham, presenting creative writing, scientific features, nature columns, world affairs, and artwork submitted by child members across 20,000 neighborhood units.",
+    "verified": true,
+    "source": "https://en.wikipedia.org/wiki/Balasangam"
+  },
+  {
+    "id": "shasthra-deepthi",
+    "name": "Shasthra Deepthi & Nature Camps",
+    "nameMalayalam": "ശാസ്ത്ര ദീപ്തിയും പരിസ്ഥിതി ക്യാമ്പുകളും",
+    "englishSubtitle": "Science Popularization and Nature Defense",
+    "type": "Educational Science Initiative",
+    "scope": "Unit, Area, and District levels",
+    "schedule": "Year-round workshops and camps",
+    "description": "Educational drives aimed at cultivating scientific inquiry and rational thought through night sky observation with telescopes, hands-on scientific experiments debunking superstitious claims, biodiversity mapping, and local waterbody restoration drives.",
+    "verified": true,
+    "source": "Deshabhimani archives"
+  },
+  {
+    "id": "kutti-koottams",
+    "name": "Kutti Koottams & Reading Clubs",
+    "nameMalayalam": "കുട്ടിക്കൂട്ടങ്ങളും വായനശാലകളും",
+    "englishSubtitle": "Neighborhood Assemblies and Reading Rooms",
+    "type": "Democratic Neighborhood Assembly",
+    "scope": "Ward/Village Unit level",
+    "schedule": "Weekly gatherings",
+    "description": "Weekly neighborhood gatherings in rural and urban wards where child members manage book borrowing, conduct group storytelling, review current affairs, and make collective decisions on local initiatives.",
+    "verified": true,
+    "source": "Organization KB"
+  },
+  {
+    "id": "anti-drug-vigilance",
+    "name": "Anti-Substance & Child Safety Vigilance",
+    "nameMalayalam": "ലഹരിവിരുദ്ധ ജാഗ്രത",
+    "englishSubtitle": "Community Defense Against Substance Abuse",
+    "type": "Social Defense Campaign",
+    "scope": "Statewide and District-wide",
+    "schedule": "Periodic mass student campaigns",
+    "description": "Mass mobilization of children, parents, and teachers through massive human chains, street theater, flash mobs, and neighborhood vigils to protect young minds from narcotics and digital exploitation.",
+    "verified": true,
+    "source": "Deshabhimani reporting"
+  }
+]

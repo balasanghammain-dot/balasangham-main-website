@@ -1,0 +1,112 @@
+[
+  {
+    "claim": "Balasangham founded on December 28, 1938 at Kalliasseri, Kannur with E.K. Nayanar as president and Berlin Kunhananthan Nair as secretary",
+    "source": "Malayalam Wikipedia & Historical Archives",
+    "url": "https://ml.wikipedia.org/wiki/%E0%B4%AC%E0%B4%BE%E0%B4%B2%E0%B4%B8%E0%B4%82%E0%B4%98%E0%B4%82",
+    "sourceType": "secondary",
+    "publishedAt": "2024-05-10",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "historical"
+  },
+  {
+    "claim": "Balasangham is Kerala's largest children's organization with over 1 million members across 20,000 units",
+    "source": "The Hindu / English Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Balasangam",
+    "sourceType": "secondary",
+    "publishedAt": "2024-08-15",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "organization"
+  },
+  {
+    "claim": "Balasangham Kannur District Conference 2026 scheduled for October 10 & 11, 2026 at Kalliasseri with theme 'പോരാട്ടത്തിന്റെ ബാല്യം ✊🏻'",
+    "source": "Balasangham Kannur Official Poster & Announcement",
+    "url": "https://www.instagram.com/p/DdqrAIsTF0w/?stkn=N3NvZzFzdWdmaGVp",
+    "sourceType": "official",
+    "publishedAt": "2026-09-24",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "event"
+  },
+  {
+    "claim": "Balasangham Kannur District Committee office bearers elected in October 2024: President K. Surya, Secretary M.P. Gokul, Convener P. Sumeshan, Coordinator Vishnu Jayan",
+    "source": "Deshabhimani Daily (Kannur Edition)",
+    "url": "https://www.deshabhimani.com/kerala/kannur/1141933",
+    "sourceType": "news",
+    "publishedAt": "2024-10-07",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "kannur"
+  },
+  {
+    "claim": "Balasangham organized statewide secular children's collectives titled 'Sodarathwena' on Sree Narayana Guru Samadhi Day across all Area centers",
+    "source": "Deshabhimani Daily",
+    "url": "https://www.deshabhimani.com/district-news/-77879/balasangham-with-secular-collectives-lq9",
+    "sourceType": "news",
+    "publishedAt": "2026-09-22",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "state"
+  },
+  {
+    "claim": "Pinarayi Area Conference of Balasangham held on September 6, 2026 at Kottayam Angadi, Kannur",
+    "source": "Balasangham Pinarayi Area Committee Announcement",
+    "url": "https://balasangham2026.vercel.app/",
+    "sourceType": "official",
+    "publishedAt": "2026-09-01",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "kannur"
+  },
+  {
+    "claim": "Venalthumbikal is Kerala's traveling children's theater operating since 1990 during summer vacations",
+    "source": "The Hindu / Malayalam Wikipedia",
+    "url": "https://ml.wikipedia.org/wiki/%E0%B4%AC%E0%B4%BE%E0%B4%B2%E0%B4%B8%E0%B4%82%E0%B4%98%E0%B4%82",
+    "sourceType": "secondary",
+    "publishedAt": "2023-04-12",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "organization"
+  },
+  {
+    "claim": "Official Balasangham Pathakaganam (Flag Song) beginning 'ഉണരുക ഉയരുക ശുഭ്രപതാകേ...'",
+    "source": "User-Provided Organization Knowledge Base",
+    "url": "docs/ORGANIZATION_KB.md",
+    "sourceType": "user-provided",
+    "publishedAt": "2026-09-27",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "organization"
+  },
+  {
+    "claim": "Legacy domain balasangham.com is currently expired and redirects to domain broker",
+    "source": "HTTP Protocol Verification",
+    "url": "http://www.balasangham.com",
+    "sourceType": "official-audit",
+    "publishedAt": "2026-09-28",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "organization"
+  },
+  {
+    "claim": "M. Vijin, former Balasangham State Secretary, serves as MLA for Kalliasseri Legislative Assembly Constituency",
+    "source": "Kerala Niyamasabha Official Records & Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/M._Vijin",
+    "sourceType": "institutional",
+    "publishedAt": "2024-01-10",
+    "checkedAt": "2026-09-28",
+    "verified": true,
+    "confidence": "HIGH",
+    "scope": "kalliasseri"
+  }
+]

@@ -1,0 +1,96 @@
+{
+  "organization": {
+    "name": "Balasangham",
+    "malayalamName": "ബാലസംഘം",
+    "districtUnit": "Balasangham Kannur District Committee",
+    "districtUnitMalayalam": "ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി",
+    "philosophicalMotto": "പഠനം, മനനം, ചലനം",
+    "philosophicalMottoEnglish": "Study, Contemplate, Act",
+    "actionSlogan": "പഠിക്കുക, പോരാടുക, വളരുക",
+    "actionSloganEnglish": "Study, Struggle, Grow",
+    "foundingDate": "1938-12-28",
+    "foundingPlace": "Kalliasseri, Kannur District, Malabar",
+    "membership": {
+      "childMembers": "1,000,000+",
+      "neighborhoodUnits": "20,000+",
+      "districts": 14
+    },
+    "kannurCommittee": {
+      "electedDate": "2024-10-06",
+      "president": "K. Surya",
+      "secretary": "M.P. Gokul",
+      "convener": "P. Sumeshan",
+      "coordinator": "Vishnu Jayan",
+      "committeeStrength": 71,
+      "executiveStrength": 17
+    },
+    "verifiedFacebook": "https://www.facebook.com/balasangham.kannur/",
+    "domainAudit": {
+      "domain": "balasangham.com",
+      "status": "expired",
+      "verifiedDate": "2026-09-28"
+    }
+  },
+  "history": [
+    {
+      "year": "1938",
+      "date": "1938-12-28",
+      "title": "Genesis of Desheeya Balasangham",
+      "location": "Kalliasseri, Kannur",
+      "description": "Peasant and working-class children organized under anti-colonial pioneers P. Krishna Pillai, AKG, EMS, and K.P.R. Gopalan. E.K. Nayanar elected first president, Berlin Kunhananthan Nair secretary.",
+      "scope": "kalliasseri",
+      "verified": true
+    },
+    {
+      "year": "1940–1943",
+      "title": "Anti-Imperialist & Agrarian Resistance",
+      "location": "North Malabar",
+      "description": "Active participation in anti-colonial protests; Kayyur martyr Chirukandan and juvenile convict Choorukkadan Krishnan Nair were Balasangham activists.",
+      "scope": "historical",
+      "verified": true
+    },
+    {
+      "year": "1972",
+      "title": "Deshabhimani Balasangham Formation",
+      "location": "Kerala",
+      "description": "Reorganization of children's reading clubs and cultural circles across Kerala districts.",
+      "scope": "state",
+      "verified": true
+    },
+    {
+      "year": "1980",
+      "date": "1980-12-28",
+      "title": "Statewide Democratic Reconstitution",
+      "location": "Kerala",
+      "description": "Unified statewide children's federation established with its child-led democratic constitution, white flag with red star, and motto 'Study, Contemplate, Act'.",
+      "scope": "state",
+      "verified": true
+    },
+    {
+      "year": "1990",
+      "title": "Inception of Venalthumbikal Troupe",
+      "location": "Kerala",
+      "description": "Regional 'Kalivandi' vacation theater squads unified statewide into the Venalthumbikal traveling children's theater.",
+      "scope": "state",
+      "verified": true
+    },
+    {
+      "year": "2024",
+      "date": "2024-10-06",
+      "title": "Kannur District Conference at Pilathara",
+      "location": "Pilathara, Kannur",
+      "description": "Delegate assembly at Kulappuram EMS Vayanashala Auditorium electing 71-member District Committee led by K. Surya and M.P. Gokul.",
+      "scope": "kannur",
+      "verified": true
+    },
+    {
+      "year": "2026",
+      "date": "2026-10-10",
+      "title": "Kannur District Conference 2026",
+      "location": "Kalliasseri, Kannur",
+      "description": "Historic 88-year homecoming conference under the theme 'പോരാട്ടത്തിന്റെ ബാല്യം ✊🏻' at PCR Bank Auditorium, Kalliasseri.",
+      "scope": "kannur",
+      "verified": true
+    }
+  ]
+}
