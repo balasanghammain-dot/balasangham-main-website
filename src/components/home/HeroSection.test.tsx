@@ -21,4 +21,18 @@ describe('HeroSection Component', () => {
     fireEvent.click(anthemCta);
     expect(handleOpenAnthem).toHaveBeenCalledTimes(1);
   });
+
+  it('provides 48px touch targets for mobile hero actions and 2x2 stats grid', () => {
+    const { container } = render(
+      <LanguageProvider>
+        <HeroSection onOpenAnthem={vi.fn()} />
+      </LanguageProvider>
+    );
+
+    const exploreBtn = screen.getByRole('link', { name: /Explore Balasangham|ബാലസംഘത്തെ അറിയുക/i });
+    expect(exploreBtn).toHaveClass('min-h-[48px]');
+
+    const statsGrid = container.querySelector('.stats-grid-2x2');
+    expect(statsGrid).toBeInTheDocument();
+  });
 });

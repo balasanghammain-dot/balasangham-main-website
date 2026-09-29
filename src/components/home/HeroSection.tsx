@@ -119,10 +119,10 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
             </div>
 
             {/* Action Buttons with Festive Styling */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <a
                 href="#about"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-berry text-white font-bold text-sm hover:bg-berry-dark hover:shadow-festive hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-xs min-h-[44px]"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#D32020] text-white font-bold text-sm hover:bg-[#B71C1C] hover:shadow-festive hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-xs min-h-[48px]"
               >
                 <span className={ml ? 'font-malayalam text-base' : ''}>
                   {ml ? 'ബാലസംഘത്തെ അറിയുക' : 'Explore Balasangham'}
@@ -132,7 +132,7 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
 
               <a
                 href="/programs"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-festival hover:bg-sun text-ink font-bold text-sm shadow-xs border border-festival-deep/30 hover:-translate-y-0.5 active:translate-y-0 transition-all min-h-[44px]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#F5A623] hover:bg-[#F5A623]/90 text-[#2A1610] font-bold text-sm shadow-xs border border-[#2A1610]/15 hover:-translate-y-0.5 active:translate-y-0 transition-all min-h-[48px]"
               >
                 <span className={ml ? 'font-malayalam text-base' : ''}>
                   {ml ? 'പ്രവർത്തനങ്ങൾ' : 'Explore Programs'}
@@ -143,10 +143,10 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
               <button
                 type="button"
                 onClick={onOpenAnthem}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/90 text-ink font-bold text-sm border border-festival/40 hover:border-berry hover:text-berry hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-xs min-h-[44px]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/95 text-[#2A1610] font-bold text-sm border border-[#2A1610]/20 hover:border-[#D32020] hover:text-[#D32020] hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-xs min-h-[48px]"
                 aria-label={t.hero.listenAnthemBtn}
               >
-                <Music className="w-4 h-4 text-berry animate-bounce" />
+                <Music className="w-4 h-4 text-[#D32020] animate-bounce" />
                 <span className={ml ? 'font-malayalam text-base' : ''}>{t.hero.listenAnthemBtn}</span>
               </button>
             </div>

@@ -35,9 +35,9 @@ export const StatsRibbon = () => {
     <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 mt-8 sm:mt-12 animate-rise-in">
       <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-warm-lg border-2 border-festival/40 p-6 sm:p-8 relative overflow-hidden">
         {/* Subtle festive gradient line inspired by festival colors */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-berry via-festival to-mango" />
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#D32020] via-[#F5A623] to-[#257A3E]" />
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-y md:divide-y-0 md:divide-x divide-ink/10">
+        <div className="stats-grid-2x2 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-[#2A1610]/10">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             return (
