@@ -286,7 +286,7 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
         'Awaken and arise, pure white banner,\nRadiant flag of glorious action!\nAdorned with blood-red stars upon your chest,\nProud banner of Balasangham!\nRadiant flag of action, jewel-banner of human fraternity!',
         'Like the silver dove nurtured\nIn the heavenly nest of the sky,\nAs the very soul of human peace,\nYou awaken across our lands!',
         'Stitched with the beauty of dawn’s first ray,\nBearing the message of noble ideals,\nWith the sacred mantra of Study, Contemplate, Act,\nFly high across the boundless expanse!',
-        'Against hunger, prison walls, and unemployment,\nWhen unjust laws and oppression rise\nAgainst India’s childhood on its path to liberation,\nAgainst them all, we raise you high—\nOur proud banner of resistance!',
+        'Against hunger, prison walls, and unemployment,\nWhen unjust laws and oppression rise\nAgainst India’s childhood on its path to liberation,\nAgainst them all, we raise you high:\nOur proud banner of resistance!',
       ],
       audioMockupPlay: 'Play Flag Song',
       audioMockupPause: 'Pause Flag Song',

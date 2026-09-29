@@ -71,7 +71,7 @@ const photosList: ArchiveImage[] = [
     },
     caption: {
       en: 'Inaugural conference visual artwork: "Childhood of Struggle" (പോരാട്ടത്തിന്റെ ബാല്യം).',
-      ml: 'സമ്മേളന സാംസ്കാരിക പോസ്റ്റർ: "പോരാട്ടത്തിന്റെ ബാല്യം" — കല്ല്യാശ്ശേരി 2026.',
+      ml: 'സമ്മേളന സാംസ്കാരിക പോസ്റ്റർ: "പോരാട്ടത്തിന്റെ ബാല്യം", കല്ല്യാശ്ശേരി 2026.',
     },
     category: 'poster',
     dimensions: { width: 1200, height: 1600 },

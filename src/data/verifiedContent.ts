@@ -112,8 +112,8 @@ export const archiveImages: ArchiveImage[] = [
       source: posterSource
     },
     caption: {
-      ml: 'ഔദ്യോഗിക പ്രചാരണ പോസ്റ്റർ: പോരാട്ടത്തിന്റെ ബാല്യം — 2026 ഒക്ടോബർ 10, 11 കല്ല്യാശ്ശേരി',
-      en: 'Official campaign poster: Childhood of Struggle — 10–11 October 2026, Kalliasseri',
+      ml: 'ഔദ്യോഗിക പ്രചാരണ പോസ്റ്റർ: പോരാട്ടത്തിന്റെ ബാല്യം: 2026 ഒക്ടോബർ 10, 11 കല്ല്യാശ്ശേരി',
+      en: 'Official campaign poster: Childhood of Struggle, 10–11 October 2026, Kalliasseri',
       source: posterSource
     },
     category: 'poster',

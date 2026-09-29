@@ -4,6 +4,7 @@ import { AboutSection } from '../components/sections/AboutSection';
 import { WhatWeDoSection } from '../components/sections/WhatWeDoSection';
 import { EventsSection } from '../components/sections/EventsSection';
 import { HistorySection } from '../components/sections/HistorySection';
+import { MediaShowcaseSection } from '../components/home/MediaShowcaseSection';
 import { verifiedNews } from '../data/organizationData';
 import { ArrowRight, UserPlus, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -161,7 +162,10 @@ export const HomePage = ({ onOpenAnthem }: HomePageProps) => {
         </div>
       </section>
 
-      {/* 7. SIMPLE FINAL CTA: Warm Yellow/Cream Banner, Focused Single Primary Action */}
+      {/* 7. MEDIA & CULTURAL SHOWCASE: Blue Peace & Friendship Banner + 4-Photo Documentary Gallery */}
+      <MediaShowcaseSection />
+
+      {/* 8. SIMPLE FINAL CTA: Warm Yellow/Cream Banner, Focused Single Primary Action */}
       <section className="py-16 sm:py-24 bg-gradient-to-br from-[#FFD84D] via-[#FFC928] to-[#FF9F00] text-[#321A12] relative overflow-hidden border-b border-[#F57C00]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
