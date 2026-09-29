@@ -4,48 +4,27 @@
 
 @layer base {
   :root {
-    --background: 40 33% 97%;
-    --foreground: 12 10% 15%;
-    --card: 40 33% 97%;
-    --card-foreground: 12 10% 15%;
-    --popover: 40 33% 97%;
-    --popover-foreground: 12 10% 15%;
-    --primary: 357 76% 47%;
-    --primary-foreground: 40 33% 97%;
-    --secondary: 42 90% 62%;
-    --secondary-foreground: 12 10% 15%;
-    --muted: 36 29% 92%;
-    --muted-foreground: 24 7% 39%;
-    --accent: 42 90% 62%;
-    --accent-foreground: 12 10% 15%;
-    --destructive: 0 84.2% 60.2%;
+    /* Balasangham v2 — warm cream/yellow theme */
+    --background: 42 60% 96%;
+    --foreground: 15 28% 12%;
+    --card: 42 60% 96%;
+    --card-foreground: 15 28% 12%;
+    --popover: 42 60% 96%;
+    --popover-foreground: 15 28% 12%;
+    --primary: 355 80% 47%;
+    --primary-foreground: 42 60% 96%;
+    --secondary: 43 100% 58%;
+    --secondary-foreground: 15 28% 12%;
+    --muted: 38 40% 90%;
+    --muted-foreground: 20 10% 40%;
+    --accent: 43 100% 58%;
+    --accent-foreground: 15 28% 12%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 36 22% 85%;
-    --input: 36 22% 85%;
-    --ring: 357 76% 47%;
+    --border: 35 25% 85%;
+    --input: 35 25% 85%;
+    --ring: 355 80% 47%;
     --radius: 0.75rem;
-  }
-
-  .dark {
-    --background: 12 10% 15%;
-    --foreground: 40 33% 97%;
-    --card: 12 10% 15%;
-    --card-foreground: 40 33% 97%;
-    --popover: 12 10% 15%;
-    --popover-foreground: 40 33% 97%;
-    --primary: 357 76% 47%;
-    --primary-foreground: 40 33% 97%;
-    --secondary: 42 90% 62%;
-    --secondary-foreground: 12 10% 15%;
-    --muted: 24 10% 22%;
-    --muted-foreground: 36 22% 70%;
-    --accent: 42 90% 62%;
-    --accent-foreground: 12 10% 15%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 24 10% 25%;
-    --input: 24 10% 25%;
-    --ring: 357 76% 47%;
   }
 
   * {
@@ -54,48 +33,80 @@
 
   html {
     scroll-behavior: smooth;
-    background-color: #FAF7F2;
-    color: #2B2523;
+    background-color: #FFF9E8;
+    color: #321A12;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    background-color: #FAF7F2;
-    color: #2B2523;
+    background-color: #FFF9E8;
+    color: #321A12;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Safe Area Utility Classes */
-  .pt-safe {
-    padding-top: env(safe-area-inset-top, 0px);
-  }
+  /* Safe Area */
+  .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  /* Critical Malayalam conjunct preservation */
+  /* Malayalam conjunct preservation */
   [lang="ml"], .font-malayalam, .font-malayalam-body {
     line-height: 1.7;
     font-feature-settings: "kern" 1;
   }
 
-  /* Editorial display headings */
+  /* Editorial headings */
   h1, h2, h3, .font-display {
     letter-spacing: -0.025em;
   }
 
-  /* Tactile feedback on interactive elements (Apple fluid interface response) */
+  /* Tactile feedback */
   button, a[role="button"], .interactive-press {
     touch-action: manipulation;
   }
+
+  /* Selection */
+  ::selection {
+    background-color: #D71920;
+    color: white;
+  }
 }
 
-/* Subtle paper texture */
-.bg-paper-grain {
-  background-color: #FAF7F2;
-  background-image: radial-gradient(#2B2523 0.35px, transparent 0.35px);
-  background-size: 24px 24px;
+@layer components {
+  /* Section spacing */
+  .section-padding {
+    @apply py-section px-4 sm:px-6 lg:px-12;
+  }
+
+  .section-padding-sm {
+    @apply py-section-sm px-4 sm:px-6 lg:px-12;
+  }
+
+  /* Editorial container */
+  .editorial-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-12;
+  }
+
+  /* Scroll reveal — hidden by default, shown by IntersectionObserver */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered children */
+  .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
+  .reveal-stagger > .reveal:nth-child(2) { transition-delay: 100ms; }
+  .reveal-stagger > .reveal:nth-child(3) { transition-delay: 200ms; }
+  .reveal-stagger > .reveal:nth-child(4) { transition-delay: 300ms; }
+  .reveal-stagger > .reveal:nth-child(5) { transition-delay: 400ms; }
 }
 
 /* Reduced motion accessibility */
@@ -108,5 +119,9 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }
