@@ -165,6 +165,14 @@ export const FindMyPhotos: React.FC = () => {
               ? 'നിങ്ങൾ പങ്കെടുത്ത സമ്മേളനങ്ങളിലെയും പരിപാടികളിലെയും ഫോട്ടോകൾ ലളിതമായി കണ്ടെത്തൂ.'
               : 'Find verified event photographs featuring you from Balasangham conferences and cultural programs.'}
           </p>
+          <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#257A3E]/10 border border-[#257A3E]/20 text-[#257A3E] text-xs font-medium">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>
+              {ml
+                ? '100% On-Device Facial Comparison • ഡിവൈസിൽ മാത്രമുള്ള താരതമ്യം'
+                : '100% On-Device Facial Comparison • No biometric data stored'}
+            </span>
+          </div>
         </div>
 
         {/* Step Indicator */}
@@ -355,10 +363,10 @@ export const FindMyPhotos: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleRunSearch}
-                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-md bg-[#C90000] hover:bg-[#A30000] text-white font-mono text-sm uppercase font-bold tracking-wider transition-colors shadow-warm active:scale-[0.98]"
+                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-md bg-[#C90000] hover:bg-[#A30000] text-white font-mono text-sm uppercase font-bold tracking-wider transition-colors shadow-warm active:scale-[0.98] min-h-[48px]"
                   >
                     <Search className="w-4 h-4" />
-                    <span>{ml ? 'ഫോട്ടോകൾ തിരയുക' : 'FIND MY EVENT PHOTOS NOW'}</span>
+                    <span>{ml ? 'തിരച്ചിൽ ആരംഭിക്കുക (START LOCAL RECOGNITION SEARCH)' : 'START LOCAL RECOGNITION SEARCH'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                   <p className="text-[11px] text-[#241914]/60 font-mono text-center">
