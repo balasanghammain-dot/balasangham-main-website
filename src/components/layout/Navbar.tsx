@@ -144,6 +144,15 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
 
           {/* Desktop Actions */}
           <div className="hidden xl:flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={onOpenAnthem}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-dark-brown/70 hover:text-deep-red hover:bg-deep-red/5 transition-colors border border-dark-brown/10 min-h-[36px]"
+              aria-label="Flag Song"
+            >
+              <Music className="w-3.5 h-3.5 text-deep-red" />
+              <span className={ml ? 'font-malayalam normal-case' : ''}>{ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}</span>
+            </button>
             <LanguageToggle />
             <Button variant="default" size="sm" asChild>
               <Link to="/join">

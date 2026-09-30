@@ -1,38 +1,33 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { BrowserRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
 import { HeroSection } from './HeroSection';
 
 describe('HeroSection Component', () => {
-  it('renders hero headline, subtitle, and primary actions', () => {
-    const handleOpenAnthem = vi.fn();
+  it('renders hero headline and primary actions', () => {
     render(
-      <LanguageProvider>
-        <HeroSection onOpenAnthem={handleOpenAnthem} />
-      </LanguageProvider>
+      <BrowserRouter>
+        <LanguageProvider>
+          <HeroSection onOpenAnthem={vi.fn()} />
+        </LanguageProvider>
+      </BrowserRouter>
     );
 
-    expect(screen.getByText(/Study, Contemplate, Act/i)).toBeInTheDocument();
-    expect(screen.getByText('1,000,000+')).toBeInTheDocument();
-    expect(screen.getByText('20,000+')).toBeInTheDocument();
-    expect(screen.getByText('14')).toBeInTheDocument();
-
-    const anthemCta = screen.getByRole('button', { name: /Listen to Flag Song|പതാകഗാനം കേൾക്കുക/i });
-    fireEvent.click(anthemCta);
-    expect(handleOpenAnthem).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/Balasangham/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /JOIN|ചേരുക/i })).toBeInTheDocument();
   });
 
-  it('provides 48px touch targets for mobile hero actions and 2x2 stats grid', () => {
-    const { container } = render(
-      <LanguageProvider>
-        <HeroSection onOpenAnthem={vi.fn()} />
-      </LanguageProvider>
+  it('displays motto text in hero image overlay', () => {
+    render(
+      <BrowserRouter>
+        <LanguageProvider>
+          <HeroSection onOpenAnthem={vi.fn()} />
+        </LanguageProvider>
+      </BrowserRouter>
     );
 
-    const exploreBtn = screen.getByRole('link', { name: /Explore Balasangham|ബാലസംഘത്തെ അറിയുക/i });
-    expect(exploreBtn).toHaveClass('min-h-[48px]');
-
-    const statsGrid = container.querySelector('.stats-grid-2x2');
-    expect(statsGrid).toBeInTheDocument();
+    expect(screen.getByText(/പഠനം, മനനം, ചലനം/)).toBeInTheDocument();
+    expect(screen.getByText(/Study · Contemplate · Act/)).toBeInTheDocument();
   });
 });

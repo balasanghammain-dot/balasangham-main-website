@@ -2,24 +2,20 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
-import { ProgramsSection as WhatWeDoSection } from './WhatWeDoSection';
+import { ProgramsSection } from './WhatWeDoSection';
 
-describe('WhatWeDoSection Component (Pillar 2)', () => {
-  it('renders all 6 signature initiatives', () => {
+describe('ProgramsSection Component', () => {
+  it('renders section heading and program items', () => {
     render(
       <MemoryRouter>
         <LanguageProvider>
-          <WhatWeDoSection />
+          <ProgramsSection />
         </LanguageProvider>
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('heading', { level: 2, name: /What We Do|പ്രവർത്തനങ്ങൾ/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/Venalthumbikal|വേനൽത്തുമ്പികൾ/i)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Venal Kalari|വേനൽ കളരി/i)).toBeInTheDocument();
-    expect(screen.getByText(/Kilikkoodu|കിളിക്കൂട്/i)).toBeInTheDocument();
-    expect(screen.getByText(/Shasthra Deepthi|ശാസ്ത്ര ദീപ്തി/i)).toBeInTheDocument();
-    expect(screen.getByText(/Kutti Koottams|കുട്ടിക്കൂട്ടങ്ങൾ/i)).toBeInTheDocument();
-    expect(screen.getByText(/Anti-Drug|ലഹരിവിരുദ്ധ/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /What We Do|ഞങ്ങൾ എന്താണ്/i })).toBeInTheDocument();
+    expect(screen.getByText('01')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /View All Programs|എല്ലാ പരിപാടികളും/i })).toHaveAttribute('href', '/programs');
   });
 });

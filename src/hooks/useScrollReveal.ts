@@ -11,6 +11,12 @@ export function useScrollReveal<T extends HTMLElement = HTMLElement>() {
     const el = ref.current;
     if (!el) return;
 
+    if (typeof IntersectionObserver === 'undefined') {
+      el.querySelectorAll('.reveal').forEach((t) => t.classList.add('visible'));
+      if (el.classList.contains('reveal')) el.classList.add('visible');
+      return;
+    }
+
     // ponytail: single IntersectionObserver per container. Upgrade to shared global observer if perf needed.
     const observer = new IntersectionObserver(
       (entries) => {

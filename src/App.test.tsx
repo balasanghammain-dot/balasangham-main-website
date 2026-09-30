@@ -3,35 +3,29 @@ import { describe, it, expect } from 'vitest';
 import App from './App';
 
 describe('Balasangham Main Website Integration', () => {
-  it('renders all four foundational pillars on the page', () => {
+  it('renders homepage editorial sections', () => {
     render(<App />);
 
-    // Pillar 1: What is Balasangham
-    expect(screen.getByRole('heading', { level: 2, name: /What is Balasangham\?/i })).toBeInTheDocument();
+    // About section
+    expect(screen.getByRole('heading', { level: 2, name: /Democratic Movement|ജനാധിപത്യ പ്രസ്ഥാനം/i })).toBeInTheDocument();
 
-    // Pillar 2: What We Do
-    expect(screen.getByRole('heading', { level: 2, name: /What We Do/i })).toBeInTheDocument();
+    // Programs section
+    expect(screen.getByRole('heading', { level: 2, name: /What We Do|ഞങ്ങൾ എന്താണ്/i })).toBeInTheDocument();
 
-    // Pillar 3: Events Conducted
-    expect(screen.getByRole('heading', { level: 2, name: /Events Conducted/i })).toBeInTheDocument();
-
-    // Pillar 4: History & Heritage
-    expect(screen.getByRole('heading', { level: 2, name: /History & Heritage/i })).toBeInTheDocument();
+    // News section
+    expect(screen.getByRole('heading', { level: 2, name: /Latest Stories|പുതിയ വാർത്തകൾ/i })).toBeInTheDocument();
   });
 
-  it('switches between English and Malayalam seamlessly without breaking content', () => {
+  it('switches between English and Malayalam', () => {
     render(<App />);
 
     const mlButtons = screen.getAllByRole('button', { name: 'മലയാളം' });
     fireEvent.click(mlButtons[0]);
 
-    expect(screen.getAllByText('ആരാണ് ബാലസംഘം?').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('പ്രവർത്തനങ്ങൾ').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('മേളകളും പരിപാടികളും').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('ചരിത്രവും നാൾവഴികളും').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/ജനാധിപത്യ പ്രസ്ഥാനം/).length).toBeGreaterThan(0);
   });
 
-  it('opens and closes the Flag Song modal with authentic Malayalam song', () => {
+  it('opens and closes the Flag Song modal', () => {
     render(<App />);
 
     const anthemButtons = screen.getAllByRole('button', { name: /Flag Song|പതാകഗാനം/i });
@@ -44,11 +38,5 @@ describe('Balasangham Main Website Integration', () => {
     fireEvent.click(closeBtn);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  });
-
-  it('provides safe-area utility and mobile layout container', () => {
-    const { container } = render(<App />);
-    const mainEl = container.querySelector('main');
-    expect(mainEl).toHaveClass('pb-20');
   });
 });

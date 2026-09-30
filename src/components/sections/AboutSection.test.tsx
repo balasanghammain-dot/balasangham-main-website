@@ -4,8 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
 import { AboutSection } from './AboutSection';
 
-describe('AboutSection Component (Pillar 1)', () => {
-  it('renders section heading and the 4 foundational core values cards', () => {
+describe('AboutSection Component', () => {
+  it('renders section heading and description with story link', () => {
     render(
       <MemoryRouter>
         <LanguageProvider>
@@ -14,14 +14,11 @@ describe('AboutSection Component (Pillar 1)', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('heading', { level: 2, name: /What is Balasangham\?|ആരാണ് ബാലസംഘം\?/i })).toBeInTheDocument();
-    expect(screen.getByText(/Childhood Democracy|കുട്ടികളുടെ നേതൃത്വം/i)).toBeInTheDocument();
-    expect(screen.getByText(/Secular & Universal Fraternity|മതേതര സൗഹൃദം/i)).toBeInTheDocument();
-    expect(screen.getByText(/Scientific Inquiry & Rationality|ശാസ്ത്രബോധം/i)).toBeInTheDocument();
-    expect(screen.getByText(/Defense of Child Rights|അവകാശ പോരാട്ടം/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /Democratic Movement|ജനാധിപത്യ പ്രസ്ഥാനം/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Read Our Story|ഞങ്ങളുടെ കഥ/i })).toHaveAttribute('href', '/about');
   });
 
-  it('renders child-led democratic governance hierarchy levels', () => {
+  it('renders about image with alt text', () => {
     render(
       <MemoryRouter>
         <LanguageProvider>
@@ -30,8 +27,6 @@ describe('AboutSection Component (Pillar 1)', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Unit Committee|യൂണിറ്റ് സമിതി/i)).toBeInTheDocument();
-    expect(screen.getByText(/District Committee|ജില്ലാ സമിതി/i)).toBeInTheDocument();
-    expect(screen.getByText(/State Committee|സംസ്ഥാന സമിതി/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/children performing/i)).toBeInTheDocument();
   });
 });

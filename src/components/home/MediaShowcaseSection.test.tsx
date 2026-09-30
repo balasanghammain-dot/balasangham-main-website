@@ -2,30 +2,31 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
-import { MediaSection as MediaShowcaseSection } from './MediaShowcaseSection';
+import { MediaSection } from './MediaShowcaseSection';
 
-describe('MediaShowcaseSection Component', () => {
-  it('renders the peace banner and documentary gallery with 48px touch targets', () => {
+describe('MediaSection Component', () => {
+  it('renders archive heading and media link', () => {
     render(
       <BrowserRouter>
         <LanguageProvider>
-          <MediaShowcaseSection />
+          <MediaSection />
         </LanguageProvider>
       </BrowserRouter>
     );
 
-    // Banner and gallery headers
-    expect(screen.getByText(/Celebrations of Secular Childhood|കുട്ടിക്കാലത്തിന്റെ ഉത്സവനിമിഷങ്ങൾ/i)).toBeInTheDocument();
-    expect(screen.getByText(/Authentic Documentary Moments|വേദിയിലെയും കളിക്കളങ്ങളിലെയും ചിത്രങ്ങൾ/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /From the Archive|ചിത്രങ്ങളിലൂടെ/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /View Media|മീഡിയ കാണുക/i })).toHaveAttribute('href', '/media');
+  });
 
-    // Verification of documentary stories
-    expect(screen.getByText(/Venalthumbikal State Art Troupe|വേനൽത്തുമ്പികൾ കലാജാഥ/i)).toBeInTheDocument();
+  it('does not use conference poster image', () => {
+    render(
+      <BrowserRouter>
+        <LanguageProvider>
+          <MediaSection />
+        </LanguageProvider>
+      </BrowserRouter>
+    );
 
-    // Primary touch targets (48px)
-    const galleryCta = screen.getByRole('link', { name: /EXPLORE GALLERY|എല്ലാ ചിത്രങ്ങളും കാണുക/i });
-    expect(galleryCta).toHaveClass('min-h-[48px]');
-
-    // No conference poster used
     const images = screen.getAllByRole('img');
     images.forEach((img) => {
       expect(img.getAttribute('src')).not.toContain('conference-poster-2026.jpg');

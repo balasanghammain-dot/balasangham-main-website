@@ -1,25 +1,32 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
-import { EventSection as EventsSection } from './EventsSection';
+import { EventSection } from './EventsSection';
 
-describe('EventsSection Component (Pillar 3)', () => {
-  it('renders section title and filters items based on selected tab', () => {
+describe('EventSection Component', () => {
+  it('renders featured conference event with date and location', () => {
     render(
       <MemoryRouter>
         <LanguageProvider>
-          <EventsSection />
+          <EventSection />
         </LanguageProvider>
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('heading', { level: 2, name: /Events Conducted|മേളകളും പരിപാടികളും/i })).toBeInTheDocument();
-    expect(screen.getByText(/Bala Kalolsavam|ബാല കലോത്സവം/i)).toBeInTheDocument();
+    expect(screen.getByText('2026')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /VIEW EVENT|സമ്മേളന വിവരങ്ങൾ/i })).toBeInTheDocument();
+  });
 
-    const memorialFilter = screen.getByRole('button', { name: /Observance Days|Memorial|സ്മരണാ/i });
-    fireEvent.click(memorialFilter);
+  it('shows conference poster image', () => {
+    render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <EventSection />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
 
-    expect(screen.getByText(/Hiroshima & Nagasaki|ഹിരോഷിമ - നാഗസാക്കി/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/conference 2026 poster/i)).toBeInTheDocument();
   });
 });
