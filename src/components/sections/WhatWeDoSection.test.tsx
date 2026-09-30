@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
-import { WhatWeDoSection } from './WhatWeDoSection';
+import { ProgramsSection as WhatWeDoSection } from './WhatWeDoSection';
 
 describe('WhatWeDoSection Component (Pillar 2)', () => {
   it('renders all 6 signature initiatives', () => {

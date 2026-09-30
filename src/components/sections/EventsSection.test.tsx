@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
-import { EventsSection } from './EventsSection';
+import { EventSection as EventsSection } from './EventsSection';
 
 describe('EventsSection Component (Pillar 3)', () => {
   it('renders section title and filters items based on selected tab', () => {

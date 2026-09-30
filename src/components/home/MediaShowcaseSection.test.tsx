@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { LanguageProvider } from '../../context/LanguageContext';
-import { MediaShowcaseSection } from './MediaShowcaseSection';
+import { MediaSection as MediaShowcaseSection } from './MediaShowcaseSection';
 
 describe('MediaShowcaseSection Component', () => {
   it('renders the peace banner and documentary gallery with 48px touch targets', () => {
