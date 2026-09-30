@@ -18,7 +18,7 @@ export const Breadcrumb = ({ items }: { items: BreadcrumbItem[] }) => {
         <li>
           <Link
             to="/"
-            className="flex items-center gap-1 hover:text-brand-red transition-colors text-slate-600 font-medium"
+            className="flex items-center gap-1 hover:text-deep-red transition-colors text-slate-600 font-medium"
           >
             <Home className="w-3.5 h-3.5" />
             <span>{ml ? 'ഹോം' : 'Home'}</span>
@@ -38,7 +38,7 @@ export const Breadcrumb = ({ items }: { items: BreadcrumbItem[] }) => {
               ) : (
                 <Link
                   to={item.path}
-                  className="hover:text-brand-red transition-colors text-slate-600 truncate max-w-xs"
+                  className="hover:text-deep-red transition-colors text-slate-600 truncate max-w-xs"
                 >
                   {text}
                 </Link>

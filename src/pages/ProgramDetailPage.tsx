@@ -13,7 +13,7 @@ export const ProgramDetailPage = () => {
 
   if (!program) {
     return (
-      <div className="bg-surface-cream min-h-screen py-24 text-center px-4">
+      <div className="bg-soft-cream min-h-screen py-24 text-center px-4">
         <h1 className="text-2xl font-bold text-charcoal mb-4">
           {ml ? 'പരിപാടി കണ്ടെത്താനായില്ല' : 'Program Not Found'}
         </h1>
@@ -24,7 +24,7 @@ export const ProgramDetailPage = () => {
         </p>
         <Link
           to="/programs"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-red text-white font-bold text-sm shadow hover:bg-red-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-deep-red text-white font-bold text-sm shadow hover:bg-red-700 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{ml ? 'എല്ലാ പരിപാടികളിലേക്കും' : 'Back to All Programs'}</span>
@@ -34,7 +34,7 @@ export const ProgramDetailPage = () => {
   }
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'Programs', labelMl: 'പരിപാടികൾ', path: '/programs' },
@@ -46,14 +46,14 @@ export const ProgramDetailPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             to="/programs"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-red hover:text-red-700 mb-6 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-deep-red hover:text-red-700 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{ml ? 'എല്ലാ പരിപാടികളിലേക്കും മടങ്ങുക' : 'Back to Programs'}</span>
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="px-3 py-1 rounded-full bg-red-50 text-brand-red text-xs font-bold uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-red-50 text-deep-red text-xs font-bold uppercase tracking-wider">
               {program.category}
             </span>
             <span className="text-xs text-slate-500 font-medium">
@@ -68,9 +68,9 @@ export const ProgramDetailPage = () => {
             {ml ? program.title : program.titleMl}
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-surface-cream border border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-soft-cream border border-slate-200">
             <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5 text-brand-red shrink-0" />
+              <Calendar className="w-5 h-5 text-deep-red shrink-0" />
               <div>
                 <span className="text-[11px] uppercase font-bold text-slate-400 block">
                   {ml ? 'സമയം / കാലയളവ്' : 'Schedule'}
@@ -82,7 +82,7 @@ export const ProgramDetailPage = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <Globe className="w-5 h-5 text-brand-red shrink-0" />
+              <Globe className="w-5 h-5 text-deep-red shrink-0" />
               <div>
                 <span className="text-[11px] uppercase font-bold text-slate-400 block">
                   {ml ? 'വ്യാപ്തി' : 'Geographic Scope'}
@@ -110,7 +110,7 @@ export const ProgramDetailPage = () => {
           </h3>
           <div className="space-y-3">
             {(ml ? program.highlightsMl : program.highlights).map((hl: string, idx: number) => (
-              <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-surface-cream border border-slate-100">
+              <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-soft-cream border border-slate-100">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 <span className={`text-sm text-slate-700 ${ml ? 'font-malayalam-body' : ''}`}>{hl}</span>
               </div>
@@ -132,7 +132,7 @@ export const ProgramDetailPage = () => {
           </div>
           <Link
             to="/join"
-            className="px-5 py-2.5 rounded-lg bg-white text-brand-red text-xs font-bold hover:bg-slate-50 transition-colors shrink-0"
+            className="px-5 py-2.5 rounded-lg bg-white text-deep-red text-xs font-bold hover:bg-slate-50 transition-colors shrink-0"
           >
             {ml ? 'കൂടുതൽ വിവരങ്ങൾ' : 'How to Participate'}
           </Link>

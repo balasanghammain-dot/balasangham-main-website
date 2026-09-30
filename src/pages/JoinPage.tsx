@@ -11,7 +11,7 @@ export const JoinPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb items={[{ label: 'How to Join', labelMl: 'എങ്ങനെ ചേരാം' }]} />
 
       {/* Festive Hero Banner with Jumping Children */}
@@ -59,7 +59,7 @@ export const JoinPage = () => {
       <section className="py-16 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200/90 shadow-xl mb-12">
           <div className="text-center sm:text-left mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-red mb-1 block">
+            <span className="text-xs font-bold uppercase tracking-wider text-deep-red mb-1 block">
               {ml ? 'ഘട്ടങ്ങൾ' : '3 Simple Steps'}
             </span>
             <h2 className={`text-2xl sm:text-3xl font-extrabold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
@@ -98,14 +98,14 @@ export const JoinPage = () => {
               return (
                 <div
                   key={idx}
-                  className="flex flex-col sm:flex-row items-start gap-4 p-6 rounded-2xl bg-surface-cream/80 border border-slate-200 hover:border-brand-red/40 hover:bg-white hover:shadow-md transition-all duration-200"
+                  className="flex flex-col sm:flex-row items-start gap-4 p-6 rounded-2xl bg-soft-cream/80 border border-slate-200 hover:border-deep-red/40 hover:bg-white hover:shadow-md transition-all duration-200"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-brand-red/10 text-brand-red flex items-center justify-center font-black text-base shrink-0 shadow-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-deep-red/10 text-deep-red flex items-center justify-center font-black text-base shrink-0 shadow-xs">
                     <Icon className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-bold text-brand-red uppercase tracking-wider">
+                      <span className="text-xs font-bold text-deep-red uppercase tracking-wider">
                         {ml ? `ഘട്ടം ${s.step}` : `Step ${s.step}`}
                       </span>
                     </div>
@@ -138,7 +138,7 @@ export const JoinPage = () => {
           <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-red-50 via-amber-50 to-orange-50 border border-amber-200/70 overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
               <div className="lg:col-span-8">
-                <h3 className={`font-black text-brand-red mb-3 text-base sm:text-lg flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
+                <h3 className={`font-black text-deep-red mb-3 text-base sm:text-lg flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
                   <Sparkles className="w-5 h-5 text-amber-500" />
                   <span>{ml ? 'ബാലസംഘം കുട്ടികൾക്ക് സമ്മാനിക്കുന്നത്' : 'What Children Experience in Balasangham'}</span>
                 </h3>
@@ -190,7 +190,7 @@ export const JoinPage = () => {
         <div className="text-center">
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-brand-red text-white font-extrabold text-sm sm:text-base shadow-xl hover:bg-red-700 transition-all duration-200"
+            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-deep-red text-white font-extrabold text-sm sm:text-base shadow-xl hover:bg-red-700 transition-all duration-200"
           >
             <span className={ml ? 'font-malayalam' : ''}>{ml ? 'ജില്ലാ സമ്പർക്ക വിവരങ്ങൾ കാണുക' : 'View District Contact Channels'}</span>
             <ArrowRight className="w-4 h-4" />

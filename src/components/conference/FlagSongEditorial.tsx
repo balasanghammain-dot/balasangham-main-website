@@ -9,12 +9,12 @@ export const FlagSongEditorial: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'both' | 'ml' | 'en'>('both');
 
   return (
-    <section id="flag-song" className="py-16 sm:py-24 bg-surface-cream border-b border-border-subtle">
+    <section id="flag-song" className="py-16 sm:py-24 bg-soft-cream border-b border-border-subtle">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 text-brand-red text-xs font-bold tracking-wider uppercase mb-2">
-            <BookOpen className="w-4 h-4 text-brand-red" aria-hidden="true" />
+          <div className="inline-flex items-center gap-2 text-deep-red text-xs font-bold tracking-wider uppercase mb-2">
+            <BookOpen className="w-4 h-4 text-deep-red" aria-hidden="true" />
             <span>{language === 'ml' ? 'ഔദ്യോഗിക പതാകഗാനം' : 'Official Flag Song (Anthem)'}</span>
           </div>
 
@@ -32,7 +32,7 @@ export const FlagSongEditorial: React.FC = () => {
           </p>
 
           <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-border-subtle text-xs text-slate-600">
-            <ShieldCheck className="w-3.5 h-3.5 text-brand-red" />
+            <ShieldCheck className="w-3.5 h-3.5 text-deep-red" />
             <span>
               {language === 'ml' ? 'യഥാർത്ഥ വരികൾ • രേഖപ്പെടുത്തപ്പെട്ടത്' : 'Verbatim Lyrics • Verified Historical Record'}
             </span>
@@ -46,7 +46,7 @@ export const FlagSongEditorial: React.FC = () => {
               type="button"
               onClick={() => setActiveTab('both')}
               className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-red ${
-                activeTab === 'both' ? 'bg-brand-red text-white' : 'text-slate-600 hover:text-charcoal'
+                activeTab === 'both' ? 'bg-deep-red text-white' : 'text-slate-600 hover:text-charcoal'
               }`}
             >
               {language === 'ml' ? 'ദ്വിഭാഷാ രൂപം (മലയാളം & English)' : 'Bilingual View'}
@@ -55,7 +55,7 @@ export const FlagSongEditorial: React.FC = () => {
               type="button"
               onClick={() => setActiveTab('ml')}
               className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-red ${
-                activeTab === 'ml' ? 'bg-brand-red text-white' : 'text-slate-600 hover:text-charcoal'
+                activeTab === 'ml' ? 'bg-deep-red text-white' : 'text-slate-600 hover:text-charcoal'
               }`}
             >
               {language === 'ml' ? 'മലയാളം മാത്രം' : 'Malayalam Original'}
@@ -64,7 +64,7 @@ export const FlagSongEditorial: React.FC = () => {
               type="button"
               onClick={() => setActiveTab('en')}
               className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-red ${
-                activeTab === 'en' ? 'bg-brand-red text-white' : 'text-slate-600 hover:text-charcoal'
+                activeTab === 'en' ? 'bg-deep-red text-white' : 'text-slate-600 hover:text-charcoal'
               }`}
             >
               {language === 'ml' ? 'English തർജ്ജമ' : 'English Translation'}
@@ -87,7 +87,7 @@ export const FlagSongEditorial: React.FC = () => {
                 0{stanza.stanzaNumber}
               </div>
 
-              <div className="flex items-center gap-2 mb-6 text-brand-red font-bold text-xs uppercase tracking-wider">
+              <div className="flex items-center gap-2 mb-6 text-deep-red font-bold text-xs uppercase tracking-wider">
                 <RedStarIcon size={14} />
                 <span>
                   {language === 'ml' ? `ഭാഗം ${stanza.stanzaNumber}` : `Stanza ${stanza.stanzaNumber}`}
@@ -97,7 +97,7 @@ export const FlagSongEditorial: React.FC = () => {
               <div className={`grid gap-6 ${activeTab === 'both' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
                 {/* Malayalam Original */}
                 {(activeTab === 'both' || activeTab === 'ml') && (
-                  <div className="space-y-2 border-l-2 border-brand-red/30 pl-4 py-1">
+                  <div className="space-y-2 border-l-2 border-deep-red/30 pl-4 py-1">
                     <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">
                       മലയാളം
                     </span>

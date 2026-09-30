@@ -103,7 +103,7 @@ export const ObjectivesPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'About Us', labelMl: 'ഞങ്ങളെക്കുറിച്ച്', path: '/about' },
@@ -154,7 +154,7 @@ export const ObjectivesPage = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-bold text-brand-red tracking-wider uppercase">
+                      <span className="text-xs font-bold text-deep-red tracking-wider uppercase">
                         {ml ? `സ്തംഭം 0${i + 1}` : `Pillar 0${i + 1}`}
                       </span>
                     </div>

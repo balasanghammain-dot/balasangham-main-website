@@ -100,7 +100,7 @@ export const EventsPage = () => {
   ];
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb items={[{ label: 'Events', labelMl: 'പരിപാടികൾ' }]} />
 
       {/* Festive Hero Banner with Sunburst & Children */}
@@ -154,7 +154,7 @@ export const EventsPage = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all min-h-[42px] ${
                 activeTab === tab.id
-                  ? 'bg-brand-red text-white shadow-md'
+                  ? 'bg-deep-red text-white shadow-md'
                   : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
               } ${ml ? 'font-malayalam' : ''}`}
             >
@@ -167,13 +167,13 @@ export const EventsPage = () => {
         {(activeTab === 'all' || activeTab === 'upcoming') && (
           <div className="mb-14">
             <h2 className={`text-2xl font-bold text-charcoal mb-6 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-              <Sparkles className="w-5 h-5 text-brand-red" />
+              <Sparkles className="w-5 h-5 text-deep-red" />
               <span>{ml ? 'പ്രധാന വരാനിരിക്കുന്ന പരിപാടി' : 'Featured Upcoming Event'}</span>
             </h2>
 
             <div className="bg-gradient-to-r from-[#FBC02D] via-[#F57F17] to-[#D32F2F] rounded-3xl p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden border border-amber-300/40">
               {/* Subtle sunburst radiant layer */}
-              <div className="absolute inset-0 bg-radial from-white/20 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-radial from-white/20 via-transparent to-transparent pointer-events-none" />
 
               <div className="relative z-10 max-w-4xl">
                 <span className="inline-block px-3.5 py-1 rounded-full bg-white/25 backdrop-blur-md text-white text-xs font-black uppercase tracking-wider mb-4 border border-white/30 shadow-xs">
@@ -202,7 +202,7 @@ export const EventsPage = () => {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     to="/events/conference-2026"
-                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-brand-red font-black text-sm shadow-xl hover:bg-amber-50 hover:shadow-2xl transition-all"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-deep-red font-black text-sm shadow-xl hover:bg-amber-50 hover:shadow-2xl transition-all"
                   >
                     <span>{ml ? 'സമ്മേളന വിവരങ്ങൾ കാണുക' : 'Full Conference Details'}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -226,7 +226,7 @@ export const EventsPage = () => {
                   className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
                 >
                   <div>
-                    <span className="inline-block px-3 py-1 rounded-full bg-red-50 text-brand-red font-bold text-xs mb-3">
+                    <span className="inline-block px-3 py-1 rounded-full bg-red-50 text-deep-red font-bold text-xs mb-3">
                       {ml ? obs.dateMl : obs.date}
                     </span>
                     <h3 className={`text-lg font-bold text-charcoal mb-2 ${ml ? 'font-malayalam' : ''}`}>
@@ -257,7 +257,7 @@ export const EventsPage = () => {
                         <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
                           {conf.year}
                         </span>
-                        <span className="text-xs font-semibold text-brand-red uppercase">
+                        <span className="text-xs font-semibold text-deep-red uppercase">
                           {conf.level}
                         </span>
                       </div>

@@ -22,12 +22,12 @@ export const NewsPage = () => {
     : verifiedNews.filter((n) => n.category.toLowerCase().includes(selectedCategory.toLowerCase()));
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb items={[{ label: 'News & Updates', labelMl: 'വാർത്തകൾ' }]} />
 
       <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red mb-2 block">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-deep-red mb-2 block">
             {ml ? 'വാർത്തകളും അറിയിപ്പുകളും' : 'News & Bulletins'}
           </span>
           <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight mb-4 ${ml ? 'font-malayalam' : ''}`}>
@@ -50,7 +50,7 @@ export const NewsPage = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-colors ${
                 selectedCategory === cat.id
-                  ? 'bg-brand-red text-white shadow-sm'
+                  ? 'bg-deep-red text-white shadow-sm'
                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -68,7 +68,7 @@ export const NewsPage = () => {
             >
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 mb-3 font-medium">
-                  <span className="px-3 py-1 rounded-full bg-red-50 text-brand-red font-bold">
+                  <span className="px-3 py-1 rounded-full bg-red-50 text-deep-red font-bold">
                     {ml ? item.categoryMl : item.category}
                   </span>
                   <div className="flex items-center gap-1">
@@ -92,7 +92,7 @@ export const NewsPage = () => {
                 </span>
                 <Link
                   to={`/news/${item.slug}`}
-                  className="font-bold text-brand-red hover:text-red-700 flex items-center gap-1"
+                  className="font-bold text-deep-red hover:text-red-700 flex items-center gap-1"
                 >
                   <span>{ml ? 'പൂർണ്ണ രൂപം' : 'Read full report'}</span>
                   <ArrowRight className="w-4 h-4" />

@@ -11,7 +11,7 @@ export const LeadershipPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'About Us', labelMl: 'ഞങ്ങളെക്കുറിച്ച്', path: '/about' },
@@ -51,7 +51,7 @@ export const LeadershipPage = () => {
         {/* Child Office Bearers */}
         <div className="mb-14">
           <div className="flex items-center gap-2 mb-6">
-            <UserCheck className="w-5 h-5 text-brand-red" />
+            <UserCheck className="w-5 h-5 text-deep-red" />
             <h2 className={`text-2xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
               {ml ? 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഭാരവാഹികൾ' : 'Kannur District Committee (2024–2026)'}
             </h2>
@@ -61,17 +61,17 @@ export const LeadershipPage = () => {
             {kannurLeadership.map((leader, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-brand-red/60 transition-colors"
+                className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-deep-red/60 transition-colors"
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="w-11 h-11 rounded-full bg-red-50 text-brand-red flex items-center justify-center font-bold text-base shrink-0 border border-red-100">
+                  <div className="w-11 h-11 rounded-full bg-red-50 text-deep-red flex items-center justify-center font-bold text-base shrink-0 border border-red-100">
                     {(ml ? leader.nameMl : leader.name).charAt(0)}
                   </div>
                   <div>
                     <h3 className={`font-bold text-base text-charcoal ${ml ? 'font-malayalam' : ''}`}>
                       {ml ? leader.nameMl : leader.name}
                     </h3>
-                    <p className={`text-sm font-semibold text-brand-red ${ml ? 'font-malayalam-body' : ''}`}>
+                    <p className={`text-sm font-semibold text-deep-red ${ml ? 'font-malayalam-body' : ''}`}>
                       {ml ? leader.roleMl : leader.role}
                     </p>
                     <span className="text-[11px] text-slate-400 mt-1 block">Kannur District</span>
@@ -92,7 +92,7 @@ export const LeadershipPage = () => {
         {/* State Leadership Reference */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
           <div className="flex items-center gap-2 mb-6">
-            <Award className="w-5 h-5 text-brand-red" />
+            <Award className="w-5 h-5 text-deep-red" />
             <div>
               <h2 className={`text-xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
                 {ml ? 'സംസ്ഥാന നേതൃത്വം (റഫറൻസ്)' : 'State Leadership Reference'}
@@ -105,15 +105,15 @@ export const LeadershipPage = () => {
             {stateLeadership.map((leader, i) => (
               <div
                 key={i}
-                className="p-5 rounded-xl bg-surface-cream border border-slate-200"
+                className="p-5 rounded-xl bg-soft-cream border border-slate-200"
               >
-                <div className="w-10 h-10 rounded-full bg-red-100 text-brand-red flex items-center justify-center font-bold text-sm mb-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 text-deep-red flex items-center justify-center font-bold text-sm mb-3">
                   {(ml ? leader.nameMl : leader.name).charAt(0)}
                 </div>
                 <h3 className={`font-bold text-base text-charcoal ${ml ? 'font-malayalam' : ''}`}>
                   {ml ? leader.nameMl : leader.name}
                 </h3>
-                <p className={`text-sm font-semibold text-brand-red ${ml ? 'font-malayalam-body' : ''}`}>
+                <p className={`text-sm font-semibold text-deep-red ${ml ? 'font-malayalam-body' : ''}`}>
                   {ml ? leader.roleMl : leader.role}
                 </p>
                 <span className="text-[11px] text-slate-500 mt-1 block">Kerala State Committee</span>

@@ -13,7 +13,7 @@ export const NewsDetailPage = () => {
 
   if (!item) {
     return (
-      <div className="bg-surface-cream min-h-screen py-24 text-center px-4">
+      <div className="bg-soft-cream min-h-screen py-24 text-center px-4">
         <h1 className="text-2xl font-bold text-charcoal mb-4">
           {ml ? 'വാർത്ത കണ്ടെത്താനായില്ല' : 'News Article Not Found'}
         </h1>
@@ -22,7 +22,7 @@ export const NewsDetailPage = () => {
         </p>
         <Link
           to="/news"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-red text-white font-bold text-sm shadow hover:bg-red-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-deep-red text-white font-bold text-sm shadow hover:bg-red-700 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{ml ? 'എല്ലാ വാർത്തകളിലേക്കും' : 'Back to News'}</span>
@@ -32,7 +32,7 @@ export const NewsDetailPage = () => {
   }
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'News', labelMl: 'വാർത്തകൾ', path: '/news' },
@@ -43,7 +43,7 @@ export const NewsDetailPage = () => {
       <article className="py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           to="/news"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-red hover:text-red-700 mb-6 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-deep-red hover:text-red-700 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{ml ? 'വാർത്തകളിലേക്ക് മടങ്ങുക' : 'Back to News'}</span>
@@ -51,7 +51,7 @@ export const NewsDetailPage = () => {
 
         <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200 shadow-sm">
           <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mb-6">
-            <span className="px-3 py-1 rounded-full bg-red-50 text-brand-red font-bold uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-red-50 text-deep-red font-bold uppercase tracking-wider">
               {ml ? item.categoryMl : item.category}
             </span>
             <div className="flex items-center gap-1.5 font-medium">
@@ -66,7 +66,7 @@ export const NewsDetailPage = () => {
             {ml ? item.titleMl : item.title}
           </h1>
 
-          <div className="p-4 rounded-xl bg-surface-cream border border-slate-100 mb-8 text-sm text-slate-700 font-medium">
+          <div className="p-4 rounded-xl bg-soft-cream border border-slate-100 mb-8 text-sm text-slate-700 font-medium">
             <p className={ml ? 'font-malayalam-body' : ''}>
               {ml ? item.summaryMl : item.summary}
             </p>

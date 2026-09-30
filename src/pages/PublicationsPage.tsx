@@ -8,12 +8,12 @@ export const PublicationsPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb items={[{ label: 'Publications', labelMl: 'പ്രസിദ്ധീകരണങ്ങൾ' }]} />
 
       <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red mb-2 block">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-deep-red mb-2 block">
             {ml ? 'സാഹിത്യവും വായനയും' : 'Literature & Magazines'}
           </span>
           <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight mb-4 ${ml ? 'font-malayalam' : ''}`}>
@@ -34,13 +34,13 @@ export const PublicationsPage = () => {
               key={pub.id}
               className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col md:flex-row items-start gap-6"
             >
-              <div className="w-14 h-14 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center shrink-0 border border-red-100">
+              <div className="w-14 h-14 rounded-2xl bg-red-50 text-deep-red flex items-center justify-center shrink-0 border border-red-100">
                 <BookOpen className="w-7 h-7" />
               </div>
 
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-red-50 text-brand-red font-bold text-xs">
+                  <span className="px-2.5 py-0.5 rounded-full bg-red-50 text-deep-red font-bold text-xs">
                     {ml ? pub.typeMl : pub.type}
                   </span>
                   <span className="text-xs text-slate-500 font-medium">
@@ -60,7 +60,7 @@ export const PublicationsPage = () => {
                 </p>
 
                 <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 flex items-center gap-2">
-                  <Bookmark className="w-3.5 h-3.5 text-brand-red" />
+                  <Bookmark className="w-3.5 h-3.5 text-deep-red" />
                   <span>
                     Publisher: <strong>{ml ? pub.publisherMl : pub.publisher}</strong>
                   </span>

@@ -12,7 +12,7 @@ export const ContactPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb items={[{ label: 'Contact', labelMl: 'ബന്ധപ്പെടുക' }]} />
 
       {/* Festive Hero Banner */}
@@ -48,7 +48,7 @@ export const ContactPage = () => {
           {/* Verified Social Media Channels */}
           <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
             <h2 className={`text-xl font-bold text-charcoal mb-6 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-              <Share2 className="w-5 h-5 text-brand-red" />
+              <Share2 className="w-5 h-5 text-deep-red" />
               <span>{ml ? 'ഔദ്യോഗിക സോഷ്യൽ മീഡിയ' : 'Verified Social Media Channels'}</span>
             </h2>
 
@@ -64,10 +64,10 @@ export const ContactPage = () => {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl border border-slate-100 bg-surface-cream hover:border-brand-red hover:bg-red-50/20 transition-all group"
+                    className="flex items-center justify-between p-4 rounded-xl border border-slate-100 bg-soft-cream hover:border-deep-red hover:bg-red-50/20 transition-all group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-red-100 text-brand-red flex items-center justify-center group-hover:bg-brand-red group-hover:text-white transition-colors">
+                      <div className="w-10 h-10 rounded-lg bg-red-100 text-deep-red flex items-center justify-center group-hover:bg-deep-red group-hover:text-white transition-colors">
                         <Icon className="w-5 h-5" />
                       </div>
                       <div>
@@ -75,7 +75,7 @@ export const ContactPage = () => {
                         <span className="text-xs text-slate-500">{link.handle}</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-brand-red group-hover:translate-x-1 transition-transform">
+                    <span className="text-xs font-bold text-deep-red group-hover:translate-x-1 transition-transform">
                       Visit &rarr;
                     </span>
                   </a>
@@ -88,13 +88,13 @@ export const ContactPage = () => {
           <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <h2 className={`text-xl font-bold text-charcoal mb-6 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-                <MapPin className="w-5 h-5 text-brand-red" />
+                <MapPin className="w-5 h-5 text-deep-red" />
                 <span>{ml ? 'പ്രവർത്തന പരിധി & കേന്ദ്രം' : 'Jurisdiction & Office Location'}</span>
               </h2>
 
               <div className="space-y-4 text-sm text-slate-600">
-                <div className="p-4 rounded-xl bg-surface-cream border border-slate-100">
-                  <span className="text-xs font-bold uppercase text-brand-red block mb-1">
+                <div className="p-4 rounded-xl bg-soft-cream border border-slate-100">
+                  <span className="text-xs font-bold uppercase text-deep-red block mb-1">
                     {ml ? 'ജില്ലാ കമ്മിറ്റി' : 'District Committee'}
                   </span>
                   <p className="font-bold text-charcoal text-base">
@@ -103,8 +103,8 @@ export const ContactPage = () => {
                   <p className="text-xs text-slate-500 mt-1">Kannur District, Kerala, India</p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-surface-cream border border-slate-100">
-                  <span className="text-xs font-bold uppercase text-brand-red block mb-1">
+                <div className="p-4 rounded-xl bg-soft-cream border border-slate-100">
+                  <span className="text-xs font-bold uppercase text-deep-red block mb-1">
                     {ml ? 'ജന്മസ്ഥലം & 2026 സമ്മേളന വേദി' : 'Historic Origin & Conference Venue'}
                   </span>
                   <p className="font-bold text-charcoal text-base">

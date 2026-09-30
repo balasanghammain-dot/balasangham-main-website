@@ -9,13 +9,13 @@ export const StatsRibbon = () => {
       value: t.stats.membersCount,
       label: t.stats.membersLabel,
       icon: Users,
-      accent: 'text-berry bg-berry/10 border-berry/20',
+      accent: 'text-deep-red bg-deep-red/10 border-deep-red/20',
     },
     {
       value: t.stats.unitsCount,
       label: t.stats.unitsLabel,
       icon: Landmark,
-      accent: 'text-festival-deep bg-festival/20 border-festival/30',
+      accent: 'text-warm-orange bg-sun-primary/20 border-sun-primary/30',
     },
     {
       value: t.stats.districtsCount,
@@ -27,13 +27,13 @@ export const StatsRibbon = () => {
       value: t.stats.legacyCount,
       label: t.stats.legacyLabel,
       icon: Sparkles,
-      accent: 'text-mango bg-mango/15 border-mango/30',
+      accent: 'text-warm-orange bg-warm-orange/15 border-warm-orange/30',
     },
   ];
 
   return (
     <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 mt-8 sm:mt-12 animate-rise-in">
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-warm-lg border-2 border-festival/40 p-6 sm:p-8 relative overflow-hidden">
+      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-warm-lg border-2 border-sun-primary/40 p-6 sm:p-8 relative overflow-hidden">
         {/* Subtle festive gradient line inspired by festival colors */}
         <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#D32020] via-[#F5A623] to-[#257A3E]" />
 
@@ -52,11 +52,11 @@ export const StatsRibbon = () => {
                 >
                   <Icon className="w-5 h-5" />
                 </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-ink font-sans">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-dark-brown font-sans">
                   {stat.value}
                 </div>
                 <div
-                  className={`text-xs font-bold text-ink/75 mt-1 uppercase tracking-wider ${
+                  className={`text-xs font-bold text-dark-brown/75 mt-1 uppercase tracking-wider ${
                     language === 'ml' ? 'font-malayalam normal-case text-sm leading-[1.7]' : ''
                   }`}
                 >

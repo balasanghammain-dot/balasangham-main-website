@@ -32,10 +32,10 @@ export const KalliasseriHeritage: React.FC = () => {
   ];
 
   return (
-    <section id="heritage" className="py-16 sm:py-20 bg-surface-cream border-b border-border-subtle">
+    <section id="heritage" className="py-16 sm:py-20 bg-soft-cream border-b border-border-subtle">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-          <Landmark className="w-4 h-4 text-brand-red" aria-hidden="true" />
+        <div className="flex items-center gap-2 text-deep-red text-xs font-bold tracking-wider uppercase mb-3">
+          <Landmark className="w-4 h-4 text-deep-red" aria-hidden="true" />
           <span>{language === 'ml' ? 'ചരിത്ര സ്മരണിക' : 'Historical Heritage'}</span>
         </div>
 
@@ -47,7 +47,7 @@ export const KalliasseriHeritage: React.FC = () => {
         </h2>
 
         {/* Narrative Box */}
-        <div className="bg-white border-l-4 border-brand-red rounded-r-xl p-6 sm:p-8 shadow-sm mb-10">
+        <div className="bg-white border-l-4 border-deep-red rounded-r-xl p-6 sm:p-8 shadow-sm mb-10">
           <p
             className="text-base sm:text-lg text-charcoal/90 leading-relaxed font-ml-body"
             style={{ lineHeight: language === 'ml' ? 1.8 : 1.7 }}
@@ -70,7 +70,7 @@ export const KalliasseriHeritage: React.FC = () => {
         {/* Historic Pioneers Grid */}
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <Users className="w-5 h-5 text-brand-red" aria-hidden="true" />
+            <Users className="w-5 h-5 text-deep-red" aria-hidden="true" />
             <h3 className="text-lg sm:text-xl font-bold text-charcoal font-ml-heading">
               {language === 'ml' ? 'പ്രസ്ഥാനത്തിന്റെ വഴികാട്ടികൾ' : 'Guiding Pioneers of 1938'}
             </h3>
@@ -80,7 +80,7 @@ export const KalliasseriHeritage: React.FC = () => {
             {pioneers.map((p, idx) => (
               <div
                 key={idx}
-                className="bg-white p-4 rounded-lg border border-border-subtle hover:border-brand-red/30 transition-colors shadow-2xs flex items-start gap-3"
+                className="bg-white p-4 rounded-lg border border-border-subtle hover:border-deep-red/30 transition-colors shadow-2xs flex items-start gap-3"
               >
                 <div className="mt-1 flex-shrink-0">
                   <RedStarIcon size={16} />

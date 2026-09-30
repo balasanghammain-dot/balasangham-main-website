@@ -78,7 +78,7 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
             type="button"
             onClick={() => setIsPlaying(!isPlaying)}
             aria-label={isPlaying ? 'Pause anthem' : 'Play anthem'}
-            className="w-12 h-12 rounded-full bg-brand-red text-white flex items-center justify-center shadow-md hover:bg-[#B71C1C] transition-colors shrink-0"
+            className="w-12 h-12 rounded-full bg-deep-red text-white flex items-center justify-center shadow-md hover:bg-[#B71C1C] transition-colors shrink-0"
           >
             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
           </button>
@@ -86,7 +86,7 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
           <div className="flex-1 w-full">
             <div className="w-full bg-slate-200 rounded-full h-2 cursor-pointer overflow-hidden">
               <div
-                className="bg-brand-red h-full transition-all duration-300"
+                className="bg-deep-red h-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -107,7 +107,7 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-100">
             {/* Malayalam Original */}
             <div className="space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-red block">
+              <span className="text-xs font-bold uppercase tracking-wider text-deep-red block">
                 മലയാളം വരികൾ (Original Malayalam Anthem)
               </span>
               <div className="font-malayalam text-base sm:text-lg text-charcoal leading-loose whitespace-pre-line font-medium">

@@ -10,8 +10,8 @@ export const EventDetails: React.FC = () => {
   return (
     <section id="event-details" className="py-16 sm:py-20 bg-white border-b border-border-subtle">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-          <MapPin className="w-4 h-4 text-brand-red" aria-hidden="true" />
+        <div className="flex items-center gap-2 text-deep-red text-xs font-bold tracking-wider uppercase mb-3">
+          <MapPin className="w-4 h-4 text-deep-red" aria-hidden="true" />
           <span>{language === 'ml' ? 'വേദിയും യാത്രാമാർഗ്ഗവും' : 'Venue & Logistics'}</span>
         </div>
 
@@ -24,9 +24,9 @@ export const EventDetails: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
           {/* Venue Card */}
-          <div className="bg-surface-cream rounded-xl p-6 sm:p-8 border border-border-subtle flex flex-col justify-between">
+          <div className="bg-soft-cream rounded-xl p-6 sm:p-8 border border-border-subtle flex flex-col justify-between">
             <div>
-              <div className="flex items-center gap-3 text-brand-red mb-4">
+              <div className="flex items-center gap-3 text-deep-red mb-4">
                 <MapPin className="w-6 h-6 flex-shrink-0" aria-hidden="true" />
                 <h3 className="text-xl font-bold text-charcoal font-ml-heading">
                   {language === 'ml' ? 'ഔദ്യോഗിക വേദി' : 'Official Venue'}
@@ -34,7 +34,7 @@ export const EventDetails: React.FC = () => {
               </div>
 
               <div className="space-y-3 text-charcoal/90 font-ml-body text-base">
-                <p className="font-bold text-lg text-brand-red font-ml-heading">
+                <p className="font-bold text-lg text-deep-red font-ml-heading">
                   {d.venueAuditorium[language]}
                 </p>
                 <p className="text-slate-muted">
@@ -55,9 +55,9 @@ export const EventDetails: React.FC = () => {
           </div>
 
           {/* Transit Card */}
-          <div className="bg-surface-cream rounded-xl p-6 sm:p-8 border border-border-subtle flex flex-col justify-between">
+          <div className="bg-soft-cream rounded-xl p-6 sm:p-8 border border-border-subtle flex flex-col justify-between">
             <div>
-              <div className="flex items-center gap-3 text-brand-red mb-4">
+              <div className="flex items-center gap-3 text-deep-red mb-4">
                 <Bus className="w-6 h-6 flex-shrink-0" aria-hidden="true" />
                 <h3 className="text-xl font-bold text-charcoal font-ml-heading">
                   {language === 'ml' ? 'യാത്രാ സൗകര്യങ്ങൾ' : 'Transit Directions'}
@@ -92,7 +92,7 @@ export const EventDetails: React.FC = () => {
             </div>
 
             <div className="mt-6 pt-4 border-t border-border-subtle text-xs text-slate-muted flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-brand-red flex-shrink-0" aria-hidden="true" />
+              <Info className="w-4 h-4 text-deep-red flex-shrink-0" aria-hidden="true" />
               <span>
                 {language === 'ml'
                   ? 'ദേശീയപാത 66-ലൂടെ എളുപ്പത്തിൽ എത്തിച്ചേരാവുന്നതാണ്.'

@@ -11,8 +11,8 @@ export const VisualArchive: React.FC = () => {
   return (
     <section id="visual-archive" className="py-16 sm:py-20 bg-surface-muted border-b border-border-subtle">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-          <ImageIcon className="w-4 h-4 text-brand-red" aria-hidden="true" />
+        <div className="flex items-center gap-2 text-deep-red text-xs font-bold tracking-wider uppercase mb-3">
+          <ImageIcon className="w-4 h-4 text-deep-red" aria-hidden="true" />
           <span>{language === 'ml' ? 'ദൃശ്യ രേഖകൾ' : 'Visual Archive'}</span>
         </div>
 
@@ -30,7 +30,7 @@ export const VisualArchive: React.FC = () => {
                 : 'Authentic campaign posters and stage backdrops designed for the Kannur District Conference.'}
             </p>
           </div>
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-brand-red/10 text-brand-red self-start sm:self-auto">
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-deep-red/10 text-deep-red self-start sm:self-auto">
             {archiveImages.length} {language === 'ml' ? 'ചിത്രരേഖകൾ' : 'Artifacts'}
           </span>
         </div>
@@ -60,7 +60,7 @@ export const VisualArchive: React.FC = () => {
                   aria-hidden="true"
                 >
                   <span className="px-3 py-1.5 rounded-full bg-white/90 text-charcoal font-bold text-xs flex items-center gap-1.5 shadow-sm">
-                    <ZoomIn className="w-3.5 h-3.5 text-brand-red" />
+                    <ZoomIn className="w-3.5 h-3.5 text-deep-red" />
                     <span>{language === 'ml' ? 'വലുതായി കാണുക' : 'Expand'}</span>
                   </span>
                 </div>
@@ -68,7 +68,7 @@ export const VisualArchive: React.FC = () => {
 
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="inline-block text-[11px] font-bold text-brand-red uppercase tracking-wider mb-1">
+                  <span className="inline-block text-[11px] font-bold text-deep-red uppercase tracking-wider mb-1">
                     {img.category === 'poster'
                       ? (language === 'ml' ? 'പോസ്റ്റർ' : 'Campaign Poster')
                       : (language === 'ml' ? 'വേദി രൂപകൽപ്പന' : 'Stage Backdrop')}
@@ -83,7 +83,7 @@ export const VisualArchive: React.FC = () => {
 
                 <div className="mt-3 pt-3 border-t border-border-subtle/80 flex items-center justify-between text-[11px] text-slate-400">
                   <span>{img.dimensions.width} × {img.dimensions.height} px</span>
-                  <span className="text-brand-red font-medium">
+                  <span className="text-deep-red font-medium">
                     {language === 'ml' ? 'ആർക്കൈവ് രേഖ' : 'Archive Asset'}
                   </span>
                 </div>

@@ -42,7 +42,7 @@ export const StructurePage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'About Us', labelMl: 'ഞങ്ങളെക്കുറിച്ച്', path: '/about' },
@@ -97,7 +97,7 @@ export const StructurePage = () => {
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-brand-red">
+                    <span className="text-xs font-bold uppercase tracking-wider text-deep-red">
                       {tier.tier}
                     </span>
                     <span className="text-xs text-slate-400 font-medium">Level 0{idx + 1}</span>
@@ -120,7 +120,7 @@ export const StructurePage = () => {
         {/* Child Agency & Adult Support Principles */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
-            <Shield className="w-5 h-5 text-brand-red" />
+            <Shield className="w-5 h-5 text-deep-red" />
             <h2 className={`text-xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
               {ml ? 'കുട്ടികളുടെ സ്വയംഭരണവും മുതിർന്നവരുടെ പങ്കും' : 'Child Self-Governance & Adult Mentorship'}
             </h2>

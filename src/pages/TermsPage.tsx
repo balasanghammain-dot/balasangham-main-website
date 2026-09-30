@@ -6,12 +6,12 @@ export const TermsPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb items={[{ label: 'Terms of Use', labelMl: 'ഉപയോഗ നിബന്ധനകൾ' }]} />
 
       <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red mb-2 block">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-deep-red mb-2 block">
             {ml ? 'നിബന്ധനകൾ' : 'Terms & Conditions'}
           </span>
           <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight mb-4 ${ml ? 'font-malayalam' : ''}`}>

@@ -109,7 +109,7 @@ export const ConferenceHero: React.FC = () => {
         <div className="flex flex-wrap justify-center sm:justify-start gap-3">
           <a
             href="#visual-archive"
-            className="px-6 py-3 rounded-full bg-white text-brand-red font-bold text-sm transition-all shadow-md hover:bg-amber-50 hover:shadow-lg focus:outline-hidden focus:ring-2 focus:ring-white"
+            className="px-6 py-3 rounded-full bg-white text-deep-red font-bold text-sm transition-all shadow-md hover:bg-amber-50 hover:shadow-lg focus:outline-hidden focus:ring-2 focus:ring-white"
           >
             {ml ? 'പോസ്റ്റർ ആർക്കൈവ് കാണുക' : 'View Visual Archive'}
           </a>

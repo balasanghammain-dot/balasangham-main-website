@@ -8,7 +8,7 @@ export const AlumniPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'About Us', labelMl: 'ഞങ്ങളെക്കുറിച്ച്', path: '/about' },
@@ -18,7 +18,7 @@ export const AlumniPage = () => {
 
       <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-red mb-2 block">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-deep-red mb-2 block">
             {ml ? 'പൂർവകാല പ്രവർത്തകർ' : 'Legacy of Public Service'}
           </span>
           <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight mb-4 ${ml ? 'font-malayalam' : ''}`}>
@@ -41,14 +41,14 @@ export const AlumniPage = () => {
             >
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-red-50 text-brand-red flex items-center justify-center font-bold text-lg border border-red-100">
+                  <div className="w-12 h-12 rounded-xl bg-red-50 text-deep-red flex items-center justify-center font-bold text-lg border border-red-100">
                     <GraduationCap className="w-6 h-6" />
                   </div>
                   <div>
                     <h2 className={`text-xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
                       {ml ? alum.nameMl : alum.name}
                     </h2>
-                    <span className="text-xs text-brand-red font-semibold block">
+                    <span className="text-xs text-deep-red font-semibold block">
                       {ml ? alum.roleMl : alum.role}
                     </span>
                   </div>

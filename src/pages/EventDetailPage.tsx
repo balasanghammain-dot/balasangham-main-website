@@ -18,7 +18,7 @@ export const EventDetailPage = () => {
 
   if (!isConference2026) {
     return (
-      <div className="bg-surface-cream min-h-screen py-24 text-center px-4">
+      <div className="bg-soft-cream min-h-screen py-24 text-center px-4">
         <h1 className="text-2xl font-bold text-charcoal mb-4">
           {ml ? 'പരിപാടി കണ്ടെത്താനായില്ല' : 'Event Not Found'}
         </h1>
@@ -27,7 +27,7 @@ export const EventDetailPage = () => {
         </p>
         <Link
           to="/events"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-red text-white font-bold text-sm shadow hover:bg-red-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-deep-red text-white font-bold text-sm shadow hover:bg-red-700 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{ml ? 'എല്ലാ പരിപാടികളിലേക്കും' : 'Back to Events'}</span>
@@ -37,7 +37,7 @@ export const EventDetailPage = () => {
   }
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'Events', labelMl: 'പരിപാടികൾ', path: '/events' },

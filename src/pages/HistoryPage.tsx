@@ -85,7 +85,7 @@ export const HistoryPage = () => {
   const ml = language === 'ml';
 
   return (
-    <div className="bg-surface-cream min-h-screen">
+    <div className="bg-soft-cream min-h-screen">
       <Breadcrumb
         items={[
           { label: 'About Us', labelMl: 'ഞങ്ങളെക്കുറിച്ച്', path: '/about' },
@@ -124,21 +124,21 @@ export const HistoryPage = () => {
       {/* Detailed Chronological Timeline */}
       <section className="py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 mb-10 pb-4 border-b border-slate-200">
-          <Calendar className="w-5 h-5 text-brand-red" />
+          <Calendar className="w-5 h-5 text-deep-red" />
           <h2 className={`text-2xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
             {ml ? 'പ്രധാന നാഴികക്കല്ലുകൾ' : 'Chronological Milestones'}
           </h2>
         </div>
 
-        <div className="relative pl-6 sm:pl-8 border-l-2 border-brand-red/30 space-y-10">
+        <div className="relative pl-6 sm:pl-8 border-l-2 border-deep-red/30 space-y-10">
           {fullMilestones.map((m, idx) => (
             <div key={idx} className="relative group">
               {/* Node dot */}
-              <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-white border-4 border-brand-red shadow-sm group-hover:scale-125 transition-transform" />
+              <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-white border-4 border-deep-red shadow-sm group-hover:scale-125 transition-transform" />
 
               <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                  <span className="px-3 py-1 rounded-full bg-red-50 text-brand-red font-extrabold text-sm tracking-wide">
+                  <span className="px-3 py-1 rounded-full bg-red-50 text-deep-red font-extrabold text-sm tracking-wide">
                     {m.year}
                   </span>
                   <span className="text-xs text-slate-400 font-medium">Verified Historical Record</span>
