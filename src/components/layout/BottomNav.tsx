@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { Home, Sparkles, Camera, Newspaper, UserPlus } from 'lucide-react';
+import { Home, Info, Calendar, Camera, UserPlus } from 'lucide-react';
 
 export const BottomNav = () => {
   const { language } = useLanguage();
@@ -8,9 +8,9 @@ export const BottomNav = () => {
 
   const navItems = [
     { to: '/', label: 'Home', labelMl: 'ഹോം', icon: Home },
-    { to: '/programs', label: 'Programs', labelMl: 'പരിപാടികൾ', icon: Sparkles },
+    { to: '/about', label: 'About', labelMl: 'വിവരം', icon: Info },
+    { to: '/events', label: 'Events', labelMl: 'പരിപാടികൾ', icon: Calendar },
     { to: '/media', label: 'Photos', labelMl: 'ഫോട്ടോകൾ', icon: Camera },
-    { to: '/news', label: 'News', labelMl: 'വാർത്തകൾ', icon: Newspaper },
     { to: '/join', label: 'Join', labelMl: 'അംഗത്വം', icon: UserPlus, highlight: true },
   ];
 

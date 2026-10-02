@@ -15,9 +15,11 @@ describe('BottomNav', () => {
     );
 
     expect(screen.getByRole('link', { name: /home|ഹോം/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /programs|പരിപാടികൾ/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /about|വിവരം/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /events|പരിപാടികൾ/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /photos|ഫോട്ടോകൾ/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /news|വാർത്തകൾ/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /join|അംഗത്വം/i })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /programs/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /news|വാർത്തകൾ/i })).not.toBeInTheDocument();
   });
 });

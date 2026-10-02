@@ -77,10 +77,14 @@ export default {
         "deep-red": "#D71920",
         "bright-red": "#E52B2F",
 
+        // Greens — Poster inspired & Kerala environment
+        "deep-green": "#087A3D",
+        "poster-green": "#0A9B4A",
+        "kerala-green": "#2E9E5B",
+
         // Secondary accents — sparingly
         "kerala-blue": "#168BD4",
         "kerala-purple": "#7B2CBF",
-        "kerala-green": "#2E9E5B",
 
         // Neutrals
         "dark-brown": "#321A12",

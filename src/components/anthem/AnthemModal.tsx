@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { translations } from '../../i18n/translations';
-import { BalasanghamFlag } from '../motifs/BalasanghamFlag';
+import { BalasanghamLogo } from '../motifs/BalasanghamLogo';
 import { Play, Pause, Volume2, X } from 'lucide-react';
 
 interface AnthemModalProps {
@@ -13,6 +13,9 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
   const { t, language } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentTimeStr, setCurrentTimeStr] = useState('0:00');
+  const [durationStr, setDurationStr] = useState('0:45');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Close on Escape key
   useEffect(() => {
@@ -25,16 +28,55 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Audio simulation timer
+  // Pause audio when modal is closed
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setProgress((prev) => (prev >= 100 ? 0 : prev + 1));
-      }, 500);
+    if (!isOpen && audioRef.current) {
+      audioRef.current.pause?.();
+      setIsPlaying(false);
     }
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isOpen]);
+
+  const togglePlay = () => {
+    const nextState = !isPlaying;
+    setIsPlaying(nextState);
+    if (audioRef.current) {
+      if (nextState) {
+        try {
+          const playPromise = audioRef.current.play?.();
+          if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {});
+          }
+        } catch {
+          // ignore playback errors in environments without media codecs
+        }
+      } else {
+        audioRef.current.pause?.();
+      }
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return;
+    const cur = audioRef.current.currentTime || 0;
+    const dur = audioRef.current.duration || 45;
+    setProgress(Math.min(100, (cur / dur) * 100));
+
+    const curMins = Math.floor(cur / 60);
+    const curSecs = Math.floor(cur % 60);
+    setCurrentTimeStr(`${curMins}:${curSecs < 10 ? '0' : ''}${curSecs}`);
+
+    if (audioRef.current.duration && !isNaN(audioRef.current.duration)) {
+      const durMins = Math.floor(dur / 60);
+      const durSecs = Math.floor(dur % 60);
+      setDurationStr(`${durMins}:${durSecs < 10 ? '0' : ''}${durSecs}`);
+    }
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setProgress(0);
+    setCurrentTimeStr('0:00');
+  };
 
   if (!isOpen) return null;
 
@@ -52,7 +94,9 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-brand-red to-[#B71C1C] text-white p-6 sm:p-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <BalasanghamFlag className="w-12 h-7" />
+            <div className="p-1 rounded-2xl bg-white shadow-xs flex items-center justify-center shrink-0">
+              <BalasanghamLogo className="w-10 h-10 sm:w-12 sm:h-12" alt="Balasangham Logo" />
+            </div>
             <div>
               <h2 className="text-xl sm:text-2xl font-bold font-malayalam">
                 {language === 'ml' ? t.anthem.title : 'ബാലസംഘം പതാകഗാനം (Flag Song)'}
@@ -72,11 +116,18 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
           </button>
         </div>
 
-        {/* Audio Player Controls */}
+        {/* Audio Player Controls & HTML5 Audio Element */}
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row items-center gap-4">
+          <audio
+            ref={audioRef}
+            src="/audio/flagsong.mp3"
+            preload="metadata"
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={handleEnded}
+          />
           <button
             type="button"
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={togglePlay}
             aria-label={isPlaying ? 'Pause anthem' : 'Play anthem'}
             className="w-12 h-12 rounded-full bg-deep-red text-white flex items-center justify-center shadow-md hover:bg-[#B71C1C] transition-colors shrink-0"
           >
@@ -84,21 +135,29 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
           </button>
 
           <div className="flex-1 w-full">
-            <div className="w-full bg-slate-200 rounded-full h-2 cursor-pointer overflow-hidden">
+            <div
+              className="w-full bg-slate-200 rounded-full h-2 cursor-pointer overflow-hidden"
+              onClick={(e) => {
+                if (!audioRef.current || !audioRef.current.duration) return;
+                const rect = e.currentTarget.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audioRef.current.currentTime = pos * audioRef.current.duration;
+              }}
+            >
               <div
-                className="bg-deep-red h-full transition-all duration-300"
+                className="bg-deep-red h-full transition-all duration-150"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-slate-500 mt-1 font-medium">
-              <span>{isPlaying ? '0:45' : '0:00'}</span>
-              <span>{t.anthem.durationLabel}</span>
+            <div className="flex justify-between text-xs text-slate-500 mt-1 font-medium font-mono">
+              <span>{currentTimeStr}</span>
+              <span>{durationStr}</span>
             </div>
           </div>
 
           <div className="hidden sm:flex items-center gap-2 text-slate-400">
             <Volume2 className="w-4 h-4" />
-            <span className="text-xs">Anthem Audio</span>
+            <span className="text-xs font-mono">Official Audio</span>
           </div>
         </div>
 

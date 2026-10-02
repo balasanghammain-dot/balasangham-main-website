@@ -30,7 +30,7 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
     about: {
       sectionTag: 'Pillar 1 • Core Identity',
       heading: 'What is Balasangham?',
-      intro: 'Balasangham (ബാലസംഘം) is the world’s largest democratic, progressive, and secular children’s movement. Bringing together over one million children aged 5 to 16 across 20,000 neighborhood units in Kerala, it empowers children to lead, create, and uphold humanitarian values.',
+      intro: 'Balasangham (ബാലസംഘം) is the world’s largest democratic, progressive, and secular children’s movement. Bringing together over one million children aged 6 to 18 across 20,000 neighborhood units in Kerala, it empowers children to lead, create, and uphold humanitarian values.',
       values: [
         {
           id: 'val-1',

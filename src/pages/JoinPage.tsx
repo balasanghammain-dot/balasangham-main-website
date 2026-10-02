@@ -39,8 +39,8 @@ export const JoinPage = () => {
 
           <p className={`text-base sm:text-xl text-amber-100 leading-relaxed max-w-3xl mx-auto mb-8 drop-shadow-xs ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
             {ml
-              ? '5 മുതൽ 16 വയസ്സുവരെയുള്ള എല്ലാ കുട്ടികൾക്കും സൗജന്യമായി ബാലസംഘം പ്രാദേശിക യൂണിറ്റുകളിൽ അംഗമാകാം. സ്നേഹത്തിന്റെയും സർഗ്ഗാത്മകതയുടെയും ലോകത്തേക്ക് സ്വാഗതം!'
-              : 'Balasangham warmly welcomes every child between ages 5 and 16 across Kerala. Open, free, and democratic participation in neighborhood units.'}
+              ? '6 മുതൽ 18 വയസ്സുവരെയുള്ള എല്ലാ കുട്ടികൾക്കും സൗജന്യമായി ബാലസംഘം പ്രാദേശിക യൂണിറ്റുകളിൽ അംഗമാകാം. സ്നേഹത്തിന്റെയും സർഗ്ഗാത്മകതയുടെയും ലോകത്തേക്ക് സ്വാഗതം!'
+              : 'Balasangham warmly welcomes every child between ages 6 and 18 across Kerala. Open, free, and democratic participation in neighborhood units.'}
           </p>
 
           {/* Joyful Children graphic */}
@@ -80,10 +80,10 @@ export const JoinPage = () => {
               {
                 step: '02',
                 icon: Users,
-                title: 'Age Eligibility (5 to 16 Years)',
-                titleMl: 'പ്രായപരിധി (5 മുതൽ 16 വയസ്സ് വരെ)',
+                title: 'Age Eligibility (6 to 18 Years)',
+                titleMl: 'പ്രായപരിധി (6 മുതൽ 18 വയസ്സ് വരെ)',
                 desc: 'Open to all children regardless of caste, creed, religion, or gender. No admission or commercial subscription fee is required for participation in basic unit activities.',
-                descMl: 'ജാതി-മത-സാമ്പത്തിക അതിർവരമ്പുകളില്ലാതെ 5 മുതൽ 16 വയസ്സുവരെയുള്ള ഏത് കുട്ടിക്കും ഇതിൽ പങ്കാളിയാകാം. യാതൊരുവിധ വാണിജ്യ ഫീസുകളുമില്ല.',
+                descMl: 'ജാതി-മത-സാമ്പത്തിക അതിർവരമ്പുകളില്ലാതെ 6 മുതൽ 18 വയസ്സുവരെയുള്ള ഏത് കുട്ടിക്കും ഇതിൽ പങ്കാളിയാകാം. യാതൊരുവിധ വാണിജ്യ ഫീസുകളുമില്ല.',
               },
               {
                 step: '03',

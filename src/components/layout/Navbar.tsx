@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { BalasanghamFlag } from '../motifs/BalasanghamFlag';
+import { BalasanghamLogo } from '../motifs/BalasanghamLogo';
 import { LanguageToggle } from '../common/LanguageToggle';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '../ui/sheet';
 import { Button } from '../ui/button';
@@ -34,11 +34,8 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
   const navLinks = [
     { to: '/', label: 'Home', labelMl: 'ഹോം' },
     { to: '/about', label: 'About', labelMl: 'ഞങ്ങളെക്കുറിച്ച്' },
-    { to: '/programs', label: 'Programs', labelMl: 'പരിപാടികൾ' },
     { to: '/events', label: 'Events', labelMl: 'സമ്മേളനങ്ങൾ' },
-    { to: '/news', label: 'News', labelMl: 'വാർത്തകൾ' },
     { to: '/media', label: 'Media', labelMl: 'മീഡിയ' },
-    { to: '/publications', label: 'Publications', labelMl: 'പ്രസിദ്ധീകരണങ്ങൾ' },
     { to: '/contact', label: 'Contact', labelMl: 'സമ്പർക്കം' },
   ];
 
@@ -61,23 +58,31 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           : 'bg-soft-cream'
       }`}
     >
+      {/* Skip to main content for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-deep-red focus:text-white focus:font-bold focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        {ml ? 'പ്രധാന ഉള്ളടക്കത്തിലേക്ക് പോകുക' : 'Skip to main content'}
+      </a>
+
       {/* Top accent line */}
       <div className="h-0.5 bg-deep-red" />
 
-      <div className="editorial-container">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-200 ${
           isScrolled ? 'h-14' : 'h-16 sm:h-20'
         }`}>
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red rounded-full p-1 shrink-0 active:scale-[0.98] transition-transform"
+            className="flex items-center gap-2 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red rounded-full p-1 shrink-0 active:scale-[0.98] transition-transform"
           >
-            <div className="p-1 rounded-xl bg-white shadow-sm border border-sun-primary/30 group-hover:rotate-3 transition-transform">
-              <BalasanghamFlag className="w-9 h-5.5 sm:w-10 sm:h-6" />
+            <div className="p-1 rounded-xl bg-white shadow-xs border border-sun-primary/30 group-hover:rotate-3 transition-transform flex items-center justify-center shrink-0">
+              <BalasanghamLogo className="w-8 h-8 sm:w-9 sm:h-9" alt="Balasangham Logo" />
             </div>
-            <div className="flex flex-col">
-              <span className={`text-lg sm:text-xl font-black tracking-tight text-dark-brown group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
+            <div className="flex flex-col shrink-0">
+              <span className={`text-base sm:text-xl font-black tracking-tight text-dark-brown group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
                 {ml ? 'ബാലസംഘം' : 'Balasangham'}
               </span>
               <span className="text-[10px] font-bold text-dark-brown/60 uppercase tracking-widest -mt-0.5 hidden sm:block">
@@ -87,7 +92,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1.5 xl:gap-3 2xl:gap-4">
             {navLinks.map((link) => {
               if (link.to === '/about') {
                 return (
@@ -95,25 +100,25 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
                     <NavLink
                       to="/about"
                       className={({ isActive }) =>
-                        `inline-flex items-center gap-1 px-3 py-2 text-[13px] font-bold tracking-wide transition-colors rounded-lg ${
+                        `inline-flex items-center gap-1 px-3 py-2 text-sm font-bold tracking-normal transition-colors rounded-lg ${
                           isActive || isAboutActive
-                            ? 'text-deep-red'
-                            : 'text-dark-brown/70 hover:text-deep-red hover:bg-deep-red/5'
+                            ? 'text-deep-red font-black'
+                            : 'text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5'
                         }`
                       }
                     >
                       <span className={ml ? 'font-malayalam text-sm' : ''}>{ml ? link.labelMl : link.label}</span>
-                      <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform" />
+                      <ChevronDown className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform text-dark-brown/50 group-hover:text-deep-red" />
                     </NavLink>
                     {/* Dropdown */}
-                    <div className="absolute top-full left-0 w-56 pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                      <div className="bg-white rounded-xl shadow-warm-lg border border-dark-brown/10 py-1 overflow-hidden">
+                    <div className="absolute top-full left-0 w-60 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none group-hover:pointer-events-auto">
+                      <div className="bg-white rounded-xl shadow-warm-lg border border-dark-brown/10 py-1.5 overflow-hidden">
                         {aboutSublinks.map((sub) => (
                           <Link
                             key={sub.to}
                             to={sub.to}
                             className={`block px-4 py-2.5 text-sm font-medium text-dark-brown/80 hover:bg-sun-primary/10 hover:text-deep-red transition-colors ${
-                              location.pathname === sub.to ? 'text-deep-red bg-sun-primary/5 font-bold' : ''
+                              location.pathname === sub.to ? 'text-deep-red bg-sun-primary/10 font-bold' : ''
                             } ${ml ? 'font-malayalam-body' : ''}`}
                           >
                             {ml ? sub.labelMl : sub.label}
@@ -129,10 +134,10 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) =>
-                    `px-3 py-2 text-[13px] font-bold tracking-wide transition-colors rounded-lg ${
+                    `px-3 py-2 text-sm font-bold tracking-normal transition-colors rounded-lg ${
                       isActive
-                        ? 'text-deep-red'
-                        : 'text-dark-brown/70 hover:text-deep-red hover:bg-deep-red/5'
+                        ? 'text-deep-red font-black'
+                        : 'text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5'
                     } ${ml ? 'font-malayalam text-sm' : ''}`
                   }
                 >
@@ -142,19 +147,20 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             })}
           </nav>
 
-          {/* Desktop Actions */}
-          <div className="hidden xl:flex items-center gap-2 shrink-0">
+          {/* Desktop Actions: Flag Song | EN/മലയാളം | Join */}
+          <div className="hidden lg:flex items-center gap-2.5 xl:gap-3.5 shrink-0">
             <button
               type="button"
               onClick={onOpenAnthem}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-dark-brown/70 hover:text-deep-red hover:bg-deep-red/5 transition-colors border border-dark-brown/10 min-h-[36px]"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5 transition-colors border border-dark-brown/15 min-h-[36px]"
               aria-label="Flag Song"
+              title={ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}
             >
               <Music className="w-3.5 h-3.5 text-deep-red" />
               <span className={ml ? 'font-malayalam normal-case' : ''}>{ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}</span>
             </button>
             <LanguageToggle />
-            <Button variant="default" size="sm" asChild>
+            <Button variant="default" size="sm" className="px-4 shadow-sm" asChild>
               <Link to="/join">
                 <span className={ml ? 'font-malayalam normal-case text-sm' : ''}>{ml ? 'അംഗത്വം' : 'Join'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -163,12 +169,12 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           </div>
 
           {/* Mobile: Language + Menu */}
-          <div className="flex xl:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-1 sm:gap-2 shrink-0">
             <LanguageToggle />
             <button
               type="button"
               onClick={() => setSheetOpen(true)}
-              className="flex items-center justify-center min-h-[48px] min-w-[48px] rounded-full text-dark-brown hover:bg-dark-brown/5 transition-colors"
+              className="flex items-center justify-center min-h-[44px] min-w-[44px] h-11 w-11 rounded-full text-dark-brown hover:bg-dark-brown/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red"
               aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5" />
@@ -189,6 +195,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             </SheetDescription>
           </SheetHeader>
 
+          {/* Mobile Nav Links */}
           <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
             {navLinks.map((link) => {
               if (link.to === '/about') {

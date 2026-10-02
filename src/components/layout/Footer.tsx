@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { BalasanghamFlag } from '../motifs/BalasanghamFlag';
+import { BalasanghamLogo } from '../motifs/BalasanghamLogo';
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '../common/SocialIcons';
 import { Separator } from '../ui/separator';
+import { Phone } from 'lucide-react';
+import { organizationInfo } from '../../data/organizationData';
 
 export const Footer = () => {
   const { language } = useLanguage();
@@ -10,11 +12,10 @@ export const Footer = () => {
 
   const quickLinks = [
     { to: '/about', label: 'About', labelMl: 'ഞങ്ങളെക്കുറിച്ച്' },
-    { to: '/programs', label: 'Programs', labelMl: 'പരിപാടികൾ' },
     { to: '/events', label: 'Events', labelMl: 'സമ്മേളനങ്ങൾ' },
-    { to: '/news', label: 'News', labelMl: 'വാർത്തകൾ' },
     { to: '/media', label: 'Media', labelMl: 'മീഡിയ' },
     { to: '/contact', label: 'Contact', labelMl: 'സമ്പർക്കം' },
+    { to: '/join', label: 'Join', labelMl: 'അംഗത്വം' },
   ];
 
   return (
@@ -24,8 +25,8 @@ export const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-5 space-y-4">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="p-1 rounded-xl bg-white/10 border border-white/10">
-                <BalasanghamFlag className="w-9 h-5.5" />
+              <div className="p-1 rounded-xl bg-white shadow-xs border border-white/10 flex items-center justify-center">
+                <BalasanghamLogo className="w-8 h-8" alt="Balasangham Logo" />
               </div>
               <div>
                 <span className={`text-xl font-black text-white ${ml ? 'font-malayalam' : ''}`}>
@@ -73,16 +74,45 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact & Jurisdiction */}
           <div className="md:col-span-4">
             <h4 className="text-xs font-bold uppercase tracking-widest text-sun-primary mb-4">
-              {ml ? 'ആസ്ഥാനം' : 'Headquarters'}
+              {ml ? 'ജില്ലാ കമ്മിറ്റി ഓഫീസ്' : 'District Committee Office'}
             </h4>
-            <div className="space-y-2 text-sm text-white/60">
-              <p>{ml ? 'ബാലസംഘം ജില്ലാ കമ്മിറ്റി' : 'Balasangham District Committee'}</p>
-              <p>{ml ? 'എ.കെ.ജി ഭവൻ, കണ്ണൂർ - 670001' : 'AKG Bhavan, Kannur 670001, Kerala'}</p>
-              <p className="text-sun-primary font-bold pt-1">+91 497 270 0000</p>
-              <p className="text-white/50">balasanghamkannur@gmail.com</p>
+            <div className="space-y-3 text-sm text-white/70">
+              <address className="not-italic space-y-1 font-malayalam leading-relaxed">
+                <p className="font-bold text-white">
+                  {organizationInfo.contact.addressLines[0]}
+                </p>
+                <p className="text-white/80">
+                  {organizationInfo.contact.addressLines[1]}
+                </p>
+                <p className="text-white/80">
+                  {organizationInfo.contact.addressLines[2]}
+                </p>
+              </address>
+
+              <div className="pt-1">
+                <a
+                  href={organizationInfo.contact.phoneTel}
+                  className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-sun-primary transition-colors min-h-[44px] py-1 group"
+                  aria-label={`Call Balasangham Kannur District Committee at ${organizationInfo.contact.phone}`}
+                >
+                  <Phone className="w-4 h-4 text-sun-primary shrink-0" />
+                  <span>
+                    Phone: <strong className="text-white group-hover:text-sun-primary underline decoration-white/30 group-hover:decoration-sun-primary">{organizationInfo.contact.phone}</strong>
+                  </span>
+                </a>
+              </div>
+
+              <div className="pt-1">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center text-xs font-bold text-sun-primary hover:text-white transition-colors"
+                >
+                  <span>{ml ? 'സമ്പർക്ക വിവരങ്ങൾ കാണുക →' : 'View Contact Information →'}</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

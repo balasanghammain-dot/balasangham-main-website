@@ -84,7 +84,7 @@ export const AboutPage = () => {
           <p className={`text-base sm:text-xl text-amber-100 max-w-3xl mx-auto leading-relaxed mb-6 drop-shadow-xs ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
             {ml
               ? 'കുട്ടികളിൽ ജനാധിപത്യ ബോധവും ശാസ്ത്രചിന്തയും മാനവികതയും വളർത്തുന്ന കേരളത്തിലെ ഏറ്റവും വലിയ കുട്ടികളുടെ സാംസ്കാരിക കൂട്ടായ്മ.'
-              : 'Kerala\'s largest children\'s cultural movement, fostering democratic awareness, scientific inquiry, secular fraternity, and creative expression among children aged 5 to 16.'}
+              : 'Kerala\'s largest children\'s cultural movement, fostering democratic awareness, scientific inquiry, secular fraternity, and creative expression among children aged 6 to 18.'}
           </p>
 
           <div className="flex justify-center -mb-8 sm:-mb-10">

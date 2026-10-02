@@ -9,11 +9,15 @@ describe('Balasangham Main Website Integration', () => {
     // About section
     expect(screen.getByRole('heading', { level: 2, name: /Democratic Movement|ജനാധിപത്യ പ്രസ്ഥാനം/i })).toBeInTheDocument();
 
-    // Programs section
-    expect(screen.getByRole('heading', { level: 2, name: /What We Do|ഞങ്ങൾ എന്താണ്/i })).toBeInTheDocument();
+    // Featured Event section
+    expect(screen.getByRole('heading', { level: 2, name: /Balasangham Kannur District Conference|കണ്ണൂർ ജില്ലാ സമ്മേളനം/i })).toBeInTheDocument();
 
-    // News section
-    expect(screen.getByRole('heading', { level: 2, name: /Latest Stories|പുതിയ വാർത്തകൾ/i })).toBeInTheDocument();
+    // Media section
+    expect(screen.getByRole('heading', { level: 2, name: /From the Archive|ചിത്രശാലയിൽ നിന്ന്/i })).toBeInTheDocument();
+
+    // Confirm removed sections are absent
+    expect(screen.queryByRole('heading', { level: 2, name: /What We Do|ഞങ്ങൾ എന്താണ്/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 2, name: /Latest Stories|പുതിയ വാർത്തകൾ/i })).not.toBeInTheDocument();
   });
 
   it('switches between English and Malayalam', () => {

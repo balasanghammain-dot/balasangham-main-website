@@ -7,16 +7,18 @@ export const LanguageToggle = ({ className = '' }: { className?: string }) => {
     <div
       role="group"
       aria-label="Language selection"
-      className={`inline-flex items-center rounded-full bg-dark-brown/5 p-0.5 border border-dark-brown/10 ${className}`}
+      className={`inline-flex items-center shrink-0 rounded-full bg-paper p-1 border border-dark-brown/15 select-none ${className}`}
     >
       <button
         type="button"
         onClick={() => setLanguage('en')}
         aria-pressed={language === 'en'}
-        className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-150 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 ${
+        aria-label="EN"
+        title="Switch to English"
+        className={`shrink-0 min-h-[44px] min-w-[44px] px-3 py-1.5 text-xs font-bold rounded-full transition-colors duration-150 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red focus-visible:ring-offset-2 focus-visible:ring-offset-paper active:scale-95 ${
           language === 'en'
-            ? 'bg-deep-red text-white shadow-sm'
-            : 'text-dark-brown/70 hover:text-deep-red'
+            ? 'bg-deep-red text-white font-extrabold shadow-xs'
+            : 'text-dark-brown/70 hover:text-dark-brown hover:bg-dark-brown/5'
         }`}
       >
         EN
@@ -25,10 +27,12 @@ export const LanguageToggle = ({ className = '' }: { className?: string }) => {
         type="button"
         onClick={() => setLanguage('ml')}
         aria-pressed={language === 'ml'}
-        className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-150 font-malayalam min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 ${
+        aria-label="മലയാളം"
+        title="മലയാളത്തിലേക്ക് മാറ്റുക"
+        className={`shrink-0 min-h-[44px] min-w-[44px] px-3 py-1.5 text-xs font-bold font-malayalam whitespace-nowrap rounded-full transition-colors duration-150 flex items-center justify-center leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red focus-visible:ring-offset-2 focus-visible:ring-offset-paper active:scale-95 ${
           language === 'ml'
-            ? 'bg-deep-red text-white shadow-sm'
-            : 'text-dark-brown/70 hover:text-deep-red'
+            ? 'bg-deep-red text-white font-extrabold shadow-xs'
+            : 'text-dark-brown/70 hover:text-dark-brown hover:bg-dark-brown/5'
         }`}
       >
         മലയാളം

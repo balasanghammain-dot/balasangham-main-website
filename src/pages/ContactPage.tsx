@@ -4,7 +4,7 @@ import { organizationInfo } from '../data/organizationData';
 import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
 import { RedStarIcon } from '../components/motifs/RedStarIcon';
 import { PeaceDove } from '../components/motifs/PeaceDove';
-import { Share2, MapPin, ShieldAlert, Sparkles } from 'lucide-react';
+import { Share2, MapPin, ShieldAlert, Sparkles, Phone } from 'lucide-react';
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '../components/common/SocialIcons';
 
 export const ContactPage = () => {
@@ -84,27 +84,50 @@ export const ContactPage = () => {
             </div>
           </div>
 
-          {/* Regional Committee Location */}
+          {/* District Committee Office */}
           <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <h2 className={`text-xl font-bold text-charcoal mb-6 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
                 <MapPin className="w-5 h-5 text-deep-red" />
-                <span>{ml ? 'പ്രവർത്തന പരിധി & കേന്ദ്രം' : 'Jurisdiction & Office Location'}</span>
+                <span>{ml ? 'ജില്ലാ കമ്മിറ്റി ഓഫീസ്' : 'District Committee Office'}</span>
               </h2>
 
-              <div className="space-y-4 text-sm text-slate-600">
-                <div className="p-4 rounded-xl bg-soft-cream border border-slate-100">
-                  <span className="text-xs font-bold uppercase text-deep-red block mb-1">
-                    {ml ? 'ജില്ലാ കമ്മിറ്റി' : 'District Committee'}
+              <div className="space-y-4 text-sm">
+                <div className="p-5 rounded-xl bg-soft-cream border border-slate-100">
+                  <span className="text-xs font-bold uppercase tracking-wider text-deep-red block mb-2">
+                    {ml ? 'ഔദ്യോഗിക വിലാസം' : 'Official Office Address'}
                   </span>
-                  <p className="font-bold text-charcoal text-base">
-                    {ml ? 'ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി' : 'Balasangham Kannur District Committee'}
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">Kannur District, Kerala, India</p>
+
+                  <div className="space-y-1 font-malayalam leading-relaxed">
+                    <p className="font-bold text-charcoal text-base">
+                      {organizationInfo.contact.addressLines[0]}
+                    </p>
+                    <p className="text-slate-700">
+                      {organizationInfo.contact.addressLines[1]}
+                    </p>
+                    <p className="text-slate-700">
+                      {organizationInfo.contact.addressLines[2]}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-200/80">
+                    <a
+                      href={organizationInfo.contact.phoneTel}
+                      className="inline-flex items-center gap-2.5 text-base font-bold text-charcoal hover:text-deep-red transition-colors py-2 min-h-[44px] group"
+                      aria-label={`Call Balasangham Kannur District Committee at ${organizationInfo.contact.phone}`}
+                    >
+                      <span className="w-9 h-9 rounded-lg bg-red-100 text-deep-red flex items-center justify-center group-hover:bg-deep-red group-hover:text-white transition-colors shrink-0">
+                        <Phone className="w-4 h-4" />
+                      </span>
+                      <span>
+                        Phone: <span className="text-deep-red underline decoration-deep-red/40 group-hover:decoration-deep-red">{organizationInfo.contact.phone}</span>
+                      </span>
+                    </a>
+                  </div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-soft-cream border border-slate-100">
-                  <span className="text-xs font-bold uppercase text-deep-red block mb-1">
+                  <span className="text-xs font-bold uppercase text-slate-500 block mb-1">
                     {ml ? 'ജന്മസ്ഥലം & 2026 സമ്മേളന വേദി' : 'Historic Origin & Conference Venue'}
                   </span>
                   <p className="font-bold text-charcoal text-base">

@@ -36,6 +36,8 @@
     background-color: #FFF9E8;
     color: #321A12;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
@@ -44,6 +46,8 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   /* Safe Area */

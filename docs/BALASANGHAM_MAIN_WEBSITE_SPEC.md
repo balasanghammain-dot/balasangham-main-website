@@ -12,7 +12,7 @@
 ### 1.1 Organizational Identity & Purpose (What is Balasangham?)
 - **Name**: Balasangham (Malayalam: ബാലസംഘം)
 - **Status**: The world's largest democratic, secular, and progressive children's cultural and social movement.
-- **Membership Base**: Over **1 million children** (10 to 12 lakh members) aged 5 to 16 years across all 14 districts of Kerala.
+- **Membership Base**: Over **1 million children** (10 to 12 lakh members) aged 6 to 18 years across all 14 districts of Kerala.
 - **Grassroots Units**: Over **20,000 neighborhood and school units** (യൂണിറ്റുകൾ).
 - **Core Mottos**:
   - *Primary Philosophical Motto*: **പഠനം, മനനം, ചലനം** (*Study, Contemplate, Act / Move Forward*)

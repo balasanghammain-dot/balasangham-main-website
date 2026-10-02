@@ -16,9 +16,14 @@ describe('Navbar Component', () => {
 
     expect(screen.getByText('Balasangham')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /home/i })).toHaveAttribute('href', '/');
-    expect(screen.getByRole('link', { name: /programs/i })).toHaveAttribute('href', '/programs');
     expect(screen.getByRole('link', { name: /events/i })).toHaveAttribute('href', '/events');
-    expect(screen.getByRole('link', { name: /news/i })).toHaveAttribute('href', '/news');
+    expect(screen.getByRole('link', { name: /media/i })).toHaveAttribute('href', '/media');
+    expect(screen.getByRole('link', { name: /contact/i })).toHaveAttribute('href', '/contact');
+
+    // Confirm removed sections are not in navigation
+    expect(screen.queryByRole('link', { name: /^programs$/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /^news$/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /^publications$/i })).not.toBeInTheDocument();
   });
 
   it('renders mobile menu trigger button', () => {

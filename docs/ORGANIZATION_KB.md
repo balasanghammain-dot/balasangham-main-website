@@ -8,7 +8,7 @@ This document serves as the single source of truth (SSOT) regarding Balasangham,
 - **Name**: Balasangham (Malayalam: ബാലസംഘം)
 - **Unit**: Kannur District Committee (ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി)
 - **Nature of Organization**: One of the largest secular, democratic, progressive children's cultural and social movements in Kerala and Asia.
-- **Target Age Group**: School-going children (primary to high school, ages 5–16).
+- **Target Age Group**: School-going children (primary to higher secondary, ages 6–18).
 - **Core Motto**: 
   - Malayalam: **പഠനം, മനനം, ചലനം**
   - English: **Study, Contemplate, Act** (or *Study, Reflect, Move forward*)
