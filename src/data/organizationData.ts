@@ -1,8 +1,21 @@
+export interface CloudinaryPhoto {
+  publicId: string;
+  secureUrl: string;
+  width?: number;
+  height?: number;
+  format?: string;
+}
+
 export interface Leader {
   name: string;
   nameMl: string;
   role: string;
   roleMl: string;
+  designation?: string;
+  designationMl?: string;
+  district?: string;
+  districtMl?: string;
+  photo?: CloudinaryPhoto;
 }
 
 export interface Alumni {
@@ -37,8 +50,6 @@ export const organizationInfo = {
   districtMl: 'കണ്ണൂർ',
   tagline: 'Kerala\'s Largest Children\'s Organization',
   taglineMl: 'കേരളത്തിലെ ഏറ്റവും വലിയ കുട്ടികളുടെ പ്രസ്ഥാനം',
-  motto: 'Study, Contemplate, Act',
-  mottoMl: 'പഠനം, മനനം, ചലനം',
   slogan: 'Study, Struggle, Grow',
   sloganMl: 'പഠിക്കുക, പോരാടുക, വളരുക',
   foundingYear: 1938,
@@ -73,8 +84,8 @@ export const organizationInfo = {
     },
     {
       platform: 'Instagram',
-      url: 'https://www.instagram.com/balasanghamkeralam/',
-      handle: '@balasanghamkeralam',
+      url: 'https://www.instagram.com/balasanghamkannur_dc/',
+      handle: '@balasanghamkannur_dc',
     },
     {
       platform: 'YouTube',
@@ -114,23 +125,165 @@ export const organizationInfo = {
 export const officialContact: OfficialContact = organizationInfo.contact;
 
 export const kannurLeadership: Leader[] = [
-  { name: 'K. Surya', nameMl: 'കെ. സൂര്യ', role: 'District President', roleMl: 'ജില്ലാ പ്രസിഡന്റ്' },
-  { name: 'M.P. Gokul', nameMl: 'എം. പി. ഗോകുൽ', role: 'District Secretary', roleMl: 'ജില്ലാ സെക്രട്ടറി' },
-  { name: 'P. Sumeshan', nameMl: 'പി. സുമേശൻ', role: 'District Convener', roleMl: 'ജില്ലാ കൺവീനർ' },
-  { name: 'Vishnu Jayan', nameMl: 'വിഷ്ണുജയൻ', role: 'District Coordinator', roleMl: 'ജില്ലാ കോഓർഡിനേറ്റർ' },
-  { name: 'Darshana Sanoj', nameMl: 'ദർശന സനോജ്', role: 'Vice President', roleMl: 'വൈസ് പ്രസിഡന്റ്' },
-  { name: 'Amal Prem', nameMl: 'അമൽ പ്രേം', role: 'Vice President', roleMl: 'വൈസ് പ്രസിഡന്റ്' },
-  { name: 'K.V. Aadith', nameMl: 'കെ. വി. ആദിത്ത്', role: 'Joint Secretary', roleMl: 'ജോയിന്റ് സെക്രട്ടറി' },
-  { name: 'Devika S. Dev', nameMl: 'ദേവിക എസ്. ദേവ്', role: 'Joint Secretary', roleMl: 'ജോയിന്റ് സെക്രട്ടറി' },
-  { name: 'T. Satheesh Kumar', nameMl: 'ടി. സതീഷ് കുമാർ', role: 'Joint Convener', roleMl: 'ജോയിന്റ് കൺവീനർ' },
-  { name: 'P.K. Sheela', nameMl: 'പി. കെ. ഷീല', role: 'Joint Convener', roleMl: 'ജോയിന്റ് കൺവീനർ' },
+  {
+    name: 'K. Surya',
+    nameMl: 'കെ. സൂര്യ',
+    role: 'District President',
+    roleMl: 'ജില്ലാ പ്രസിഡന്റ്',
+    designation: 'District President',
+    designationMl: 'ജില്ലാ പ്രസിഡന്റ്',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_k_surya',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975752/balasangham/leadership/kannur_k_surya.jpg',
+      width: 960,
+      height: 1280,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'M.P. Gokul',
+    nameMl: 'എം. പി. ഗോകുൽ',
+    role: 'District Secretary',
+    roleMl: 'ജില്ലാ സെക്രട്ടറി',
+    designation: 'District Secretary',
+    designationMl: 'ജില്ലാ സെക്രട്ടറി',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_gokul_mp',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975745/balasangham/leadership/kannur_gokul_mp.jpg',
+      width: 1200,
+      height: 1600,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'P. Sumeshan Master',
+    nameMl: 'പി. സുമേശൻ മാസ്റ്റർ',
+    role: 'District Convener',
+    roleMl: 'ജില്ലാ കൺവീനർ',
+    designation: 'District Convener',
+    designationMl: 'ജില്ലാ കൺവീനർ',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_p_sumeshan',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975755/balasangham/leadership/kannur_p_sumeshan.jpg',
+      width: 778,
+      height: 1280,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'Anuvind Ayithara',
+    nameMl: 'അനുവിന്ദ് ആയിത്തര',
+    role: 'District Coordinator',
+    roleMl: 'ജില്ലാ കോഓർഡിനേറ്റർ',
+    designation: 'District Coordinator',
+    designationMl: 'ജില്ലാ കോഓർഡിനേറ്റർ',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_anuvind_ayithara',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975754/balasangham/leadership/kannur_anuvind_ayithara.jpg',
+      width: 960,
+      height: 1280,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'Darshana Sanoj',
+    nameMl: 'ദർശന സനോജ്',
+    role: 'Vice President',
+    roleMl: 'വൈസ് പ്രസിഡന്റ്',
+    designation: 'Vice President',
+    designationMl: 'വൈസ് പ്രസിഡന്റ്',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_darshana_sanoj',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975747/balasangham/leadership/kannur_darshana_sanoj.jpg',
+      width: 1080,
+      height: 1440,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'Amal Prem',
+    nameMl: 'അമൽ പ്രേം',
+    role: 'Vice President',
+    roleMl: 'വൈസ് പ്രസിഡന്റ്',
+    designation: 'Vice President',
+    designationMl: 'വൈസ് പ്രസിഡന്റ്',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_amal_prem',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975751/balasangham/leadership/kannur_amal_prem.jpg',
+      width: 960,
+      height: 1280,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'K.V. Aadith',
+    nameMl: 'കെ. വി. ആദിത്ത്',
+    role: 'Joint Secretary',
+    roleMl: 'ജോയിന്റ് സെക്രട്ടറി',
+    designation: 'Joint Secretary',
+    designationMl: 'ജോയിന്റ് സെക്രട്ടറി',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_kv_aadith',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975750/balasangham/leadership/kannur_kv_aadith.jpg',
+      width: 1500,
+      height: 1500,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'Devika S. Dev',
+    nameMl: 'ദേവിക എസ്. ദേവ്',
+    role: 'Joint Secretary',
+    roleMl: 'ജോയിന്റ് സെക്രട്ടറി',
+    designation: 'Joint Secretary',
+    designationMl: 'ജോയിന്റ് സെക്രട്ടറി',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+    photo: {
+      publicId: 'balasangham/leadership/kannur_devika_s_dev',
+      secureUrl: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1790975757/balasangham/leadership/kannur_devika_s_dev.jpg',
+      width: 900,
+      height: 1600,
+      format: 'jpg',
+    },
+  },
+  {
+    name: 'T. Satheesh Kumar',
+    nameMl: 'ടി. സതീഷ് കുമാർ',
+    role: 'Joint Convener',
+    roleMl: 'ജോയിന്റ് കൺവീനർ',
+    designation: 'Joint Convener',
+    designationMl: 'ജോയിന്റ് കൺവീനർ',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+  },
+  {
+    name: 'P.K. Sheela',
+    nameMl: 'പി. കെ. ഷീല',
+    role: 'Joint Convener',
+    roleMl: 'ജോയിന്റ് കൺവീനർ',
+    designation: 'Joint Convener',
+    designationMl: 'ജോയിന്റ് കൺവീനർ',
+    district: 'Kannur District',
+    districtMl: 'കണ്ണൂർ ജില്ല',
+  },
 ];
 
-export const stateLeadership: Leader[] = [
-  { name: 'Pravisha Pramod', nameMl: 'പ്രവിഷ പ്രമോദ്', role: 'State President', roleMl: 'സംസ്ഥാന പ്രസിഡന്റ്' },
-  { name: 'N. Aadil', nameMl: 'എൻ. ആദിൽ', role: 'State Secretary', roleMl: 'സംസ്ഥാന സെക്രട്ടറി' },
-  { name: 'M. Prakashan Master', nameMl: 'എം. പ്രകാശൻ മാസ്റ്റർ', role: 'State Convener', roleMl: 'സംസ്ഥാന കൺവീനർ' },
-];
+
 
 export const notableAlumni: Alumni[] = [
   {

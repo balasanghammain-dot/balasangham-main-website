@@ -5,7 +5,7 @@
 - **Organization**: Balasangham (Malayalam: ബാലസംഘം)
 - **District Entity**: Balasangham Kannur District Committee (ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി)
 - **Foundation**: December 28, 1938 at Kalliasseri, Chirakkal Taluk, Malabar (present-day Kannur District, Kerala).
-- **Scale**: 1,000,000+ child members (ages 5–16), 20,000+ local units across Kerala.
+- **Scale**: 1,000,000+ child members (ages 6–18), 20,000+ local units across Kerala.
 - **Core Mottos**:
   - *"പഠനം, മനനം, ചലനം"* (Study, Contemplate, Act)
   - *"പഠിക്കുക, പോരാടുക, വളരുക"* (Study, Struggle, Grow)

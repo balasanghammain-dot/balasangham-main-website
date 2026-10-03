@@ -139,8 +139,8 @@ export const FlagSongEditorial: React.FC = () => {
         <div className="mt-10 text-center text-xs text-slate-muted">
           <p>
             {language === 'ml'
-              ? 'പഠനം, മനനം, ചലനം എന്ന ആപ്തവാക്യം നെഞ്ചിലേറ്റുന്ന ലക്ഷക്കണക്കിന് കുട്ടികളുടെ സ്വാതന്ത്ര്യഗാനം.'
-              : 'The anthem of children’s freedom, embodying the eternal motto: Study, Contemplate, Act.'}
+              ? 'ലക്ഷക്കണക്കിന് കുട്ടികളുടെ വിമോചന ഗാനം.'
+              : 'The anthem of children’s freedom and democratic fraternity.'}
           </p>
         </div>
       </div>

@@ -6,14 +6,15 @@ export interface BreadcrumbItem {
   label: string;
   labelMl?: string;
   path?: string;
+  href?: string;
 }
 
-export const Breadcrumb = ({ items }: { items: BreadcrumbItem[] }) => {
+export const Breadcrumb = ({ items, className = '' }: { items: BreadcrumbItem[]; className?: string }) => {
   const { language } = useLanguage();
   const ml = language === 'ml';
 
   return (
-    <nav aria-label="Breadcrumb" className="py-3 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <nav aria-label="Breadcrumb" className={`py-3 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto ${className}`}>
       <ol className="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 overflow-x-auto whitespace-nowrap">
         <li>
           <Link
@@ -27,17 +28,18 @@ export const Breadcrumb = ({ items }: { items: BreadcrumbItem[] }) => {
         {items.map((item, idx) => {
           const isLast = idx === items.length - 1;
           const text = (ml && item.labelMl) ? item.labelMl : item.label;
+          const targetPath = item.path || item.href;
 
           return (
             <li key={idx} className="flex items-center space-x-2">
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              {isLast || !item.path ? (
+              {isLast || !targetPath ? (
                 <span className="font-semibold text-charcoal truncate max-w-xs sm:max-w-md" aria-current="page">
                   {text}
                 </span>
               ) : (
                 <Link
-                  to={item.path}
+                  to={targetPath}
                   className="hover:text-deep-red transition-colors text-slate-600 truncate max-w-xs"
                 >
                   {text}

@@ -1,16 +1,18 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import App from './App';
 
 describe('Balasangham Main Website Integration', () => {
-  it('renders homepage editorial sections', () => {
+  it('renders homepage editorial sections', async () => {
     render(<App />);
 
     // About section
     expect(screen.getByRole('heading', { level: 2, name: /Democratic Movement|ജനാധിപത്യ പ്രസ്ഥാനം/i })).toBeInTheDocument();
 
     // Featured Event section
-    expect(screen.getByRole('heading', { level: 2, name: /Balasangham Kannur District Conference|കണ്ണൂർ ജില്ലാ സമ്മേളനം/i })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 2, name: /Balasangham Kannur District Conference|കണ്ണൂർ ജില്ലാ സമ്മേളനം/i })).toBeInTheDocument();
+    });
 
     // Media section
     expect(screen.getByRole('heading', { level: 2, name: /From the Archive|ചിത്രശാലയിൽ നിന്ന്/i })).toBeInTheDocument();

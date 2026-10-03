@@ -160,8 +160,6 @@ export interface TranslationDictionary {
     durationLabel: string;
   };
   footer: {
-    mottoMalayalam: string;
-    mottoEnglish: string;
     solidarityNote: string;
     copyright: string;
   };

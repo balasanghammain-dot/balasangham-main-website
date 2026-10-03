@@ -15,10 +15,10 @@ describe('HeroSection Component', () => {
     );
 
     expect(screen.getByText(/Balasangham/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /JOIN|ചേരുക/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /JOIN|ചേരുക/i }).length).toBeGreaterThan(0);
   });
 
-  it('displays motto text in hero image overlay', () => {
+  it('does not display removed core motto', () => {
     render(
       <BrowserRouter>
         <LanguageProvider>
@@ -27,7 +27,11 @@ describe('HeroSection Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/പഠനം, മനനം, ചലനം/)).toBeInTheDocument();
-    expect(screen.getByText(/Study · Contemplate · Act/)).toBeInTheDocument();
+    expect(screen.queryByText(/പഠനം, മനനം, ചലനം/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Study · Contemplate · Act/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Core Motto/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Teacher’s Story Beneath the Tree/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/മരച്ചുവട്ടിലെ മാഷിന്റെ കഥ/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Kalliasseri · 1938/i)).not.toBeInTheDocument();
   });
 });

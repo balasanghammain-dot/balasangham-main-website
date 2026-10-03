@@ -4,8 +4,6 @@
     "malayalamName": "ബാലസംഘം",
     "districtUnit": "Balasangham Kannur District Committee",
     "districtUnitMalayalam": "ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി",
-    "philosophicalMotto": "പഠനം, മനനം, ചലനം",
-    "philosophicalMottoEnglish": "Study, Contemplate, Act",
     "actionSlogan": "പഠിക്കുക, പോരാടുക, വളരുക",
     "actionSloganEnglish": "Study, Struggle, Grow",
     "foundingDate": "1938-12-28",
@@ -25,6 +23,7 @@
       "executiveStrength": 17
     },
     "verifiedFacebook": "https://www.facebook.com/balasangham.kannur/",
+    "verifiedInstagram": "https://www.instagram.com/balasanghamkannur_dc/",
     "domainAudit": {
       "domain": "balasangham.com",
       "status": "expired",
@@ -62,7 +61,7 @@
       "date": "1980-12-28",
       "title": "Statewide Democratic Reconstitution",
       "location": "Kerala",
-      "description": "Unified statewide children's federation established with its child-led democratic constitution, white flag with red star, and motto 'Study, Contemplate, Act'.",
+      "description": "Unified statewide children's federation established with its child-led democratic constitution and white flag with red star.",
       "scope": "state",
       "verified": true
     },

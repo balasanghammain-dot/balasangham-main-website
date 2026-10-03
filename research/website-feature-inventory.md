@@ -114,7 +114,7 @@ Complete inventory of website features discovered through benchmarking 8 organiz
 
 | Feature | Common Pattern | Balasangham Relevance | Priority |
 |---|---|---|---|
-| Membership info | Common | Yes — age 5-16, unit-based joining | RECOMMENDED |
+| Membership info | Common | Yes — age 6-18, unit-based joining | RECOMMENDED |
 | How to join | Common (WOSM, BGCA) | Yes — informational only (join through local unit) | RECOMMENDED |
 | Online registration | Common (BSG) | NOT available — no online system | FUTURE |
 | Volunteer page | Common (BGCA, WOSM) | Not typical for this org type | NOT APPROPRIATE |

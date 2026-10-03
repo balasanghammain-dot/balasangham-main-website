@@ -18,7 +18,7 @@
 ### Social Media (Verified Accounts)
 - **Kannur Facebook**: https://www.facebook.com/balasangham.kannur/ (16,400+ followers)
 - **Kerala State Facebook**: https://www.facebook.com/balasangham.kerala/
-- **Instagram**: https://www.instagram.com/balasanghamkeralam/
+- **Instagram (Kannur)**: https://www.instagram.com/balasanghamkannur_dc/
 - **YouTube**: https://www.youtube.com/@balasanghamkerala2817
 
 ### Domain Audit

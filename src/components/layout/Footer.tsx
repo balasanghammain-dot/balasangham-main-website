@@ -46,7 +46,7 @@ export const Footer = () => {
               <a href="https://www.facebook.com/balasangham.kannur/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-deep-red flex items-center justify-center text-white/60 hover:text-white transition-all" aria-label="Facebook">
                 <FacebookIcon className="w-4 h-4" />
               </a>
-              <a href="https://www.instagram.com/balasanghamkeralam/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-deep-red flex items-center justify-center text-white/60 hover:text-white transition-all" aria-label="Instagram">
+              <a href="https://www.instagram.com/balasanghamkannur_dc/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-deep-red flex items-center justify-center text-white/60 hover:text-white transition-all" aria-label="Instagram">
                 <InstagramIcon className="w-4 h-4" />
               </a>
               <a href="https://www.youtube.com/@balasanghamkerala2817" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-deep-red flex items-center justify-center text-white/60 hover:text-white transition-all" aria-label="YouTube">

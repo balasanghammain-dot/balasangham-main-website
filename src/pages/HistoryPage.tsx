@@ -33,8 +33,8 @@ const fullMilestones = [
     year: '1980',
     title: 'Statewide Reconstitution',
     titleMl: 'സംസ്ഥാന വ്യാപക വിപുലീകരണം',
-    desc: 'Adopted the modern constitution, official white flag with red star, and the timeless motto "Study, Contemplate, Act" (പഠനം, മനനം, ചലനം).',
-    descMl: 'ആധുനിക സംഘടനാ ഭരണഘടനയും ചുവന്ന നക്ഷത്രാങ്കിതമായ വെള്ളക്കൊടിയും "പഠനം, മനനം, ചലനം" എന്ന മുദ്രാവാക്യവും ഔദ്യോഗികമായി അംഗീകരിച്ചു.',
+    desc: 'Adopted the modern child-led democratic constitution and the official white flag with red star.',
+    descMl: 'ആധുനിക സംഘടനാ ഭരണഘടനയും ചുവന്ന നക്ഷത്രാങ്കിതമായ വെള്ളക്കൊടിയും ഔദ്യോഗികമായി അംഗീകരിച്ചു.',
   },
   {
     year: '1990',

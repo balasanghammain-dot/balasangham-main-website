@@ -46,9 +46,9 @@ export const AboutSection = () => {
           <div className="lg:col-span-7 reveal" style={{ transitionDelay: '150ms' }}>
             <div className="relative rounded-2xl overflow-hidden shadow-warm aspect-[16/10] group">
               <img
-                src="/images/children-troupe-singing.png"
-                alt="Children performing together in a Balasangham cultural troupe"
-                className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
+                src="/images/about-balasangham-children.jpg"
+                alt="Children performing and participating together in Balasangham cultural troupe"
+                className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700"
                 loading="lazy"
               />
             </div>

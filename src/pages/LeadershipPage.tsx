@@ -1,10 +1,62 @@
+import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
-import { kannurLeadership, stateLeadership } from '../data/organizationData';
-import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
-import { RedStarIcon } from '../components/motifs/RedStarIcon';
-import { PeaceDove } from '../components/motifs/PeaceDove';
-import { ShieldCheck, UserCheck, Award, Sparkles } from 'lucide-react';
+import { kannurLeadership, Leader } from '../data/organizationData';
+
+const LeaderProfile = ({ leader, ml, index }: { leader: Leader; ml: boolean; index: number }) => {
+  const [imgError, setImgError] = useState(false);
+  const displayName = ml ? leader.nameMl : leader.name;
+  const displayRole = ml ? leader.roleMl : leader.role;
+  const hasPhoto = Boolean(leader.photo?.secureUrl && !imgError);
+
+  // Responsive center-balancing for 10 items across 3-col and 4-col grids
+  let placementClass = '';
+  if (index === 8) {
+    placementClass = 'lg:col-start-2 xl:col-start-auto';
+  } else if (index === 9) {
+    placementClass = 'md:max-lg:col-start-2';
+  }
+
+  const altText = ml
+    ? `${displayName}, ${displayRole}, ബാലസംഘം കണ്ണൂർ`
+    : `${displayName}, ${displayRole}, Balasangham Kannur`;
+
+  return (
+    <article className={`flex flex-col items-center text-center group ${placementClass}`}>
+      {/* Circular Portrait */}
+      <div className="w-28 h-28 min-[390px]:w-32 min-[390px]:h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full overflow-hidden shrink-0 mx-auto shadow-xs bg-[#EDE7DB] flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.03]">
+        {hasPhoto && leader.photo ? (
+          <img
+            src={leader.photo.secureUrl}
+            alt={altText}
+            className="w-full h-full object-cover object-top"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <svg
+            className="w-full h-full text-stone-400/80 bg-[#EDE7DB] p-4 sm:p-5"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+          </svg>
+        )}
+      </div>
+
+      {/* Name */}
+      <h3 className={`mt-4 sm:mt-5 text-base sm:text-lg font-bold text-charcoal tracking-tight leading-snug group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
+        {displayName}
+      </h3>
+
+      {/* Designation */}
+      <p className={`mt-1 text-xs sm:text-sm text-dark-brown/70 font-normal leading-normal ${ml ? 'font-malayalam-body' : ''}`}>
+        {displayRole}
+      </p>
+    </article>
+  );
+};
 
 export const LeadershipPage = () => {
   const { language } = useLanguage();
@@ -19,105 +71,19 @@ export const LeadershipPage = () => {
         ]}
       />
 
-      {/* Festive Hero Banner */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#FBC02D] via-[#F57F17] to-[#D32F2F] text-white py-14 sm:py-18">
-        <BackdropSunburst className="opacity-45" />
-
-        <div className="absolute top-8 left-8 text-white/70 pointer-events-none hidden md:block">
-          <PeaceDove filled className="w-14 h-10" />
-        </div>
-        <div className="absolute top-8 right-8 text-white/70 pointer-events-none hidden md:block scale-x-[-1]">
-          <PeaceDove filled className="w-14 h-10" />
-        </div>
-
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 shadow-sm">
-            <RedStarIcon className="w-3.5 h-3.5 text-white" />
-            <span className={ml ? 'font-malayalam' : ''}>{ml ? 'ജില്ലാ നേതൃത്വം' : 'Kannur District Leadership'}</span>
-            <Sparkles className="w-3.5 h-3.5 text-sun-yellow" />
-          </div>
-          <h1 className={`text-3xl sm:text-5xl font-black text-white tracking-tight mb-4 drop-shadow-md ${ml ? 'font-malayalam' : ''}`}>
-            {ml ? 'ഭാരവാഹികൾ (2024–2026)' : 'District Committee Office Bearers'}
-          </h1>
-          <p className={`text-base sm:text-xl text-amber-100 max-w-2xl mx-auto leading-relaxed drop-shadow-xs ${ml ? 'font-malayalam-body leading-[1.8]' : ''}`}>
-            {ml
-              ? '2024 ഒക്ടോബറിൽ പിലാത്തറയിൽ ചേർന്ന ജില്ലാ സമ്മേളനം തിരഞ്ഞെടുത്ത ഭാരവാഹികൾ.'
-              : 'Elected democratically at the Kannur District Conference held at Pilathara in October 2024 for the 2024–2026 tenure.'}
-          </p>
-        </div>
-      </section>
-
-      <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Child Office Bearers */}
-        <div className="mb-14">
-          <div className="flex items-center gap-2 mb-6">
-            <UserCheck className="w-5 h-5 text-deep-red" />
-            <h2 className={`text-2xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
-              {ml ? 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഭാരവാഹികൾ' : 'Kannur District Committee (2024–2026)'}
-            </h2>
+      <section className="pt-10 sm:pt-14 md:pt-16 lg:pt-20 pb-16 sm:pb-20 md:pb-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Simple Centered Heading with Generous Whitespace */}
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+            <h1 className={`text-3xl sm:text-4xl md:text-5xl font-black text-charcoal tracking-tight ${ml ? 'font-malayalam' : ''}`}>
+              {ml ? 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി' : 'Kannur District Committee'}
+            </h1>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Minimal Editorial Leadership Directory Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-10 md:gap-x-12 lg:gap-x-10 xl:gap-x-12 gap-y-12 sm:gap-y-14 md:gap-y-16 justify-center items-start">
             {kannurLeadership.map((leader, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-deep-red/60 transition-colors"
-              >
-                <div className="flex items-start gap-3.5">
-                  <div className="w-11 h-11 rounded-full bg-red-50 text-deep-red flex items-center justify-center font-bold text-base shrink-0 border border-red-100">
-                    {(ml ? leader.nameMl : leader.name).charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className={`font-bold text-base text-charcoal ${ml ? 'font-malayalam' : ''}`}>
-                      {ml ? leader.nameMl : leader.name}
-                    </h3>
-                    <p className={`text-sm font-semibold text-deep-red ${ml ? 'font-malayalam-body' : ''}`}>
-                      {ml ? leader.roleMl : leader.role}
-                    </p>
-                    <span className="text-[11px] text-slate-400 mt-1 block">Kannur District</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 p-3 bg-slate-100/70 rounded-lg text-xs text-slate-500 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>
-              <strong>Verified source:</strong> Deshabhimani Daily (October 7, 2024, Pilathara Conference coverage).
-            </span>
-          </div>
-        </div>
-
-        {/* State Leadership Reference */}
-        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
-          <div className="flex items-center gap-2 mb-6">
-            <Award className="w-5 h-5 text-deep-red" />
-            <div>
-              <h2 className={`text-xl font-bold text-charcoal ${ml ? 'font-malayalam' : ''}`}>
-                {ml ? 'സംസ്ഥാന നേതൃത്വം (റഫറൻസ്)' : 'State Leadership Reference'}
-              </h2>
-              <p className="text-xs text-slate-500">Balasangham Kerala State Committee</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {stateLeadership.map((leader, i) => (
-              <div
-                key={i}
-                className="p-5 rounded-xl bg-soft-cream border border-slate-200"
-              >
-                <div className="w-10 h-10 rounded-full bg-red-100 text-deep-red flex items-center justify-center font-bold text-sm mb-3">
-                  {(ml ? leader.nameMl : leader.name).charAt(0)}
-                </div>
-                <h3 className={`font-bold text-base text-charcoal ${ml ? 'font-malayalam' : ''}`}>
-                  {ml ? leader.nameMl : leader.name}
-                </h3>
-                <p className={`text-sm font-semibold text-deep-red ${ml ? 'font-malayalam-body' : ''}`}>
-                  {ml ? leader.roleMl : leader.role}
-                </p>
-                <span className="text-[11px] text-slate-500 mt-1 block">Kerala State Committee</span>
-              </div>
+              <LeaderProfile key={i} index={i} leader={leader} ml={ml} />
             ))}
           </div>
         </div>

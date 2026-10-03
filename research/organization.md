@@ -37,5 +37,6 @@
 - **Domain `balasangham.com` Status**: Inactive / Expired. Verified on September 28, 2026: HTTP 301 redirects to domain registrar marketplace (`expireddomains.com`). It must NOT be represented as an active website.
 - **Verified Digital Presence**:
   - Official Kannur Facebook: `https://www.facebook.com/balasangham.kannur/` (16,400+ followers).
-  - Statewide Social: `https://www.facebook.com/balasangham.kerala/`, `https://www.instagram.com/balasanghamkeralam/`.
+  - Instagram: `https://www.instagram.com/balasanghamkannur_dc/`.
+  - Statewide Facebook: `https://www.facebook.com/balasangham.kerala/`.
   - YouTube Channel: `https://www.youtube.com/@balasanghamkerala2817`.

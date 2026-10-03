@@ -25,7 +25,7 @@
 ### Official Social & Video Channels
 - **Kannur District Facebook Page**: `https://www.facebook.com/balasangham.kannur/` (16,400+ followers).
 - **Kerala State Facebook Page**: `https://www.facebook.com/balasangham.kerala/` (Official statewide updates).
-- **Instagram Handle**: `https://www.instagram.com/balasanghamkeralam/` (Visual campaigns, event artwork).
+- **Instagram Handle**: `https://www.instagram.com/balasanghamkannur_dc/` (Visual campaigns, event artwork).
 - **YouTube Channel**: `https://www.youtube.com/@balasanghamkerala2817` (Cultural songs, play recordings, jatha clips).
 
 ## 3. Auditory Heritage: The Official Flag Song

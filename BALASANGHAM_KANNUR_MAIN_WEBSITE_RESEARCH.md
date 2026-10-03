@@ -33,7 +33,7 @@ The website is emphatically **not** an event landing page; the 2026 Kannur Distr
 - **District Entity:** Balasangham Kannur District Committee (ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി)
 - **State Entity:** Balasangham Kerala State Committee (ബാലസംഘം കേരള സംസ്ഥാന കമ്മിറ്റി)
 - **Nature of Organization:** Democratic, secular, progressive parallel educational, cultural, and child-rights movement.
-- **Membership Scale:** Over 1,000,000 children aged 5 to 16 years.
+- **Membership Scale:** Over 1,000,000 children aged 6 to 18 years.
 - **Grassroots Footprint:** 20,000+ local neighborhood and school units across Kerala.
 - **Core Philosophical Motto:** *"പഠനം, മനനം, ചലനം"* (*Study, Contemplate, Act / Move Forward*).
 - **Core Action Slogan:** *"പഠിക്കുക, പോരാടുക, വളരുക"* (*Study, Struggle, Grow*).
@@ -50,7 +50,7 @@ The website is emphatically **not** an event landing page; the 2026 Kannur Distr
   - The previously cited domain `balasangham.com` was audited on September 28, 2026. It returns an HTTP 301 redirect to a domain reseller (`expireddomains.com`). It is **inactive/expired** and must **not** be presented as an active official site.
   - Active verified digital presences:
     - Balasangham Kannur Facebook: `https://www.facebook.com/balasangham.kannur/` (16,400+ followers).
-    - Balasangham Keralam Instagram: `https://www.instagram.com/balasanghamkeralam/`.
+    - Balasangham Kannur Instagram: `https://www.instagram.com/balasanghamkannur_dc/`.
     - Balasangham Kerala YouTube: `https://www.youtube.com/@balasanghamkerala2817`.
 
 ---
@@ -168,7 +168,7 @@ Balasangham operates through an inverted, child-led pyramid:
 - **Official Social Channels:**
   - Facebook (Kannur): `https://www.facebook.com/balasangham.kannur/`
   - Facebook (Kerala): `https://www.facebook.com/balasangham.kerala/`
-  - Instagram (Kerala): `https://www.instagram.com/balasanghamkeralam/`
+  - Instagram (Kannur): `https://www.instagram.com/balasanghamkannur_dc/`
   - YouTube (Kerala): `https://www.youtube.com/@balasanghamkerala2817`
 
 ---

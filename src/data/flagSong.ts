@@ -53,7 +53,7 @@ export const flagSongStanzas: FlagSongStanza[] = [
     poeticTranslationLines: [
       'Woven with the radiant grace of dawn’s first rays,',
       'Carrying the clarion message of our philosophy,',
-      'Bearing the sacred motto of Study, Contemplate, Act',
+      'Bearing the sacred message of noble ideals,',
       'Emblazoned upon your luminous identity,',
       'Soar high and flutter freely across',
       'The vast, infinite firmament!'

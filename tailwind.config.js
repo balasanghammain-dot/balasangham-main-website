@@ -76,6 +76,17 @@ export default {
         // Reds — Balasangham accent
         "deep-red": "#D71920",
         "bright-red": "#E52B2F",
+        "brand-red": "#D71920",
+
+        // Secondary & helper aliases
+        "sun-yellow": "#FFC928",
+        "border-subtle": "#EAD9C0",
+        "surface-muted": "#FFF9E8",
+        "slate-muted": "#64748B",
+        "amber-gold": "#D97706",
+        "sky-blue": "#0284C7",
+        "berry": "#991B1B",
+        "ink": "#1C1613",
 
         // Greens — Poster inspired & Kerala environment
         "deep-green": "#087A3D",
@@ -92,18 +103,20 @@ export default {
         "white": "#FFFFFF",
       },
       fontFamily: {
-        malayalam: ['"Anek Malayalam"', "Gayathri", "Manjari", "sans-serif"],
-        "malayalam-body": ['"Anek Malayalam"', "Manjari", "sans-serif"],
-        sans: ['"Plus Jakarta Sans"', "Inter", "system-ui", "sans-serif"],
-        editorial: ['"Plus Jakarta Sans"', "Georgia", "serif"],
-        mono: ['"JetBrains Mono"', "Menlo", "monospace"],
+        malayalam: ['"Noto Sans Malayalam"', 'system-ui', 'sans-serif'],
+        'malayalam-body': ['"Noto Sans Malayalam"', 'system-ui', 'sans-serif'],
+        'ml-heading': ['"Noto Sans Malayalam"', 'system-ui', 'sans-serif'],
+        'ml-body': ['"Noto Sans Malayalam"', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', '"Noto Sans Malayalam"', 'Inter', 'system-ui', 'sans-serif'],
+        editorial: ['"Plus Jakarta Sans"', '"Noto Sans Malayalam"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'Menlo', 'monospace'],
       },
       fontSize: {
-        // Editorial scale
-        "display-xl": ["clamp(2.5rem, 8vw, 5rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
-        "display": ["clamp(2rem, 6vw, 3.75rem)", { lineHeight: "1.08", letterSpacing: "-0.02em" }],
-        "heading": ["clamp(1.5rem, 4vw, 2.5rem)", { lineHeight: "1.15", letterSpacing: "-0.01em" }],
-        "subheading": ["clamp(1.125rem, 2.5vw, 1.5rem)", { lineHeight: "1.3" }],
+        // Editorial scale with natural line heights and zero destructive letter spacing
+        "display-xl": ["clamp(2.5rem, 8vw, 5rem)", { lineHeight: "1.15", letterSpacing: "normal" }],
+        "display": ["clamp(2rem, 6vw, 3.75rem)", { lineHeight: "1.2", letterSpacing: "normal" }],
+        "heading": ["clamp(1.5rem, 4vw, 2.5rem)", { lineHeight: "1.25", letterSpacing: "normal" }],
+        "subheading": ["clamp(1.125rem, 2.5vw, 1.5rem)", { lineHeight: "1.35" }],
       },
       spacing: {
         "section": "clamp(4rem, 10vw, 8rem)",

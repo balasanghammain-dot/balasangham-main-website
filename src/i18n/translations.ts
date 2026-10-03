@@ -12,7 +12,7 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
     },
     hero: {
       badge: 'World’s Largest Progressive Children’s Movement',
-      headline: 'Study, Contemplate, Act',
+      headline: 'Balasangham Kannur',
       subheadline: 'The Vanguard of Children’s Liberation, Creativity, and Secular Democratic Brotherhood across Kerala.',
       exploreHistoryBtn: 'Explore Our History',
       listenAnthemBtn: 'Listen to Flag Song',
@@ -285,7 +285,7 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
       lyrics: [
         'Awaken and arise, pure white banner,\nRadiant flag of glorious action!\nAdorned with blood-red stars upon your chest,\nProud banner of Balasangham!\nRadiant flag of action, jewel-banner of human fraternity!',
         'Like the silver dove nurtured\nIn the heavenly nest of the sky,\nAs the very soul of human peace,\nYou awaken across our lands!',
-        'Stitched with the beauty of dawn’s first ray,\nBearing the message of noble ideals,\nWith the sacred mantra of Study, Contemplate, Act,\nFly high across the boundless expanse!',
+        'Stitched with the beauty of dawn’s first ray,\nBearing the message of noble ideals,\nWith the sacred message of noble actions,\nFly high across the boundless expanse!',
         'Against hunger, prison walls, and unemployment,\nWhen unjust laws and oppression rise\nAgainst India’s childhood on its path to liberation,\nAgainst them all, we raise you high:\nOur proud banner of resistance!',
       ],
       audioMockupPlay: 'Play Flag Song',
@@ -293,8 +293,6 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
       durationLabel: 'Duration: 3:24',
     },
     footer: {
-      mottoMalayalam: 'പഠനം, മനനം, ചലനം',
-      mottoEnglish: 'Study, Contemplate, Act',
       solidarityNote: 'Dedicated to the emancipation, creative joy, and democratic empowerment of every child. Guided by the immortal spirit of Kalliasseri, 1938.',
       copyright: '© 2026 Balasangham (ബാലസംഘം സംസ്ഥാന കമ്മിറ്റി). Democratic Children’s Movement of Kerala.',
     },
@@ -310,7 +308,7 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
     },
     hero: {
       badge: 'ലോകത്തിലെ ഏറ്റവും വലിയ ജനാധിപത്യ കുട്ടികളുടെ പ്രസ്ഥാനം',
-      headline: 'പഠനം, മനനം, ചലനം',
+      headline: 'ബാലസംഘം കണ്ണൂർ',
       subheadline: 'പോരാട്ടത്തിന്റെ ബാല്യം • സർഗ്ഗാത്മകതയുടെയും മതേതര സൗഹൃദത്തിന്റെയും വിപ്ലവ പതാകവാഹകർ.',
       exploreHistoryBtn: 'ചരിത്രം അറിയുക',
       listenAnthemBtn: 'പതാകഗാനം കേൾക്കുക',
@@ -591,8 +589,6 @@ export const translations: { en: TranslationDictionary; ml: TranslationDictionar
       durationLabel: 'ദൈർഘ്യം: 3:24',
     },
     footer: {
-      mottoMalayalam: 'പഠനം, മനനം, ചലനം',
-      mottoEnglish: 'Study, Contemplate, Act',
       solidarityNote: 'ഓരോ കുട്ടിയുടെയും സ്വതന്ത്രമായ സർഗ്ഗാത്മകതയ്ക്കും തുല്യ നീതിക്കും ജനാധിപത്യ അവകാശങ്ങൾക്കുമായി സമർപ്പിക്കുന്നു. 1938 കല്ല്യാശ്ശേരിയുടെ ധീരസ്മരണയിൽ.',
       copyright: '© 2026 ബാലസംഘം സംസ്ഥാന കമ്മിറ്റി. ജനാധിപത്യ കുട്ടികളുടെ പ്രസ്ഥാനം, കേരളം.',
     },

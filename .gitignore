@@ -14,7 +14,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment variables
+# Environment variables (secrets)
 .env
 .env.local
 .env.*.local
@@ -34,3 +34,48 @@ Thumbs.db
 # Testing / tooling
 coverage/
 .playwright-mcp/
+
+# Local raw media/photos directory (not stored in git)
+photos of the people/
+example images for design/
+heroic image/
+media/
+
+# Database files
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+
+# Uploads (generated at runtime)
+uploads/
+
+# Screenshots (debug/QA artifacts)
+screenshots/
+
+# Temporary viewport/hero debug images
+hero-viewport-*.png
+hero-mobile-*.png
+logo-navbar-*.png
+
+# Agent / AI tool configuration (local only)
+.agent/
+.agents/
+.gemini/
+.gsd/
+.claude/
+.superpowers/
+
+# Temporary project management files
+GSD-STYLE.md
+PROJECT_RULES.md
+CLAUDE.md
+model_capabilities.yaml
+adapters/
+docs/model-selection-playbook.md
+docs/token-optimization-guide.md
+
+# Audio source files (use Cloudinary or public/audio for production)
+flagsong.mp3
+
+# Server log
+server.log

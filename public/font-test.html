@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malayalam Font Comparison Test - Balasangham</title>
+  <!-- Google Fonts: Noto Sans Malayalam, Anek Malayalam, Gayathri, Manjari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;500;600;700;800&family=Gayathri:wght@400;700&family=Manjari:wght@400;700&family=Noto+Sans+Malayalam:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #FFF9E8;
+      color: #321A12;
+      padding: 32px 24px;
+      font-family: sans-serif;
+    }
+    h1.page-title {
+      font-size: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      color: #D71920;
+      font-weight: 800;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid rgba(50, 26, 18, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(50, 26, 18, 0.06);
+    }
+    .card-header {
+      border-bottom: 2px solid #FFC928;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .font-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #321A12;
+    }
+    .font-source {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    /* Font classes */
+    .f-noto { font-family: 'Noto Sans Malayalam', sans-serif; }
+    .f-anek { font-family: 'Anek Malayalam', sans-serif; }
+    .f-gayathri { font-family: 'Gayathri', sans-serif; }
+    .f-manjari { font-family: 'Manjari', sans-serif; }
+
+    /* Test elements */
+    .hero-title {
+      font-size: 32px;
+      line-height: 1.25;
+      letter-spacing: normal;
+      color: #321A12;
+      margin-bottom: 12px;
+    }
+    .hero-title .sub {
+      color: #D71920;
+      display: block;
+    }
+    .office-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #321A12;
+      margin-bottom: 12px;
+      letter-spacing: normal;
+    }
+    .slogan {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #087A3D;
+      margin-bottom: 14px;
+      background: #FFF4D6;
+      padding: 10px 14px;
+      border-radius: 8px;
+      letter-spacing: normal;
+    }
+    .address {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #321A12;
+      margin-bottom: 16px;
+      letter-spacing: normal;
+    }
+    .body-copy {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: #44332a;
+      margin-bottom: 16px;
+      letter-spacing: normal;
+    }
+    .button-preview {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #D71920;
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: normal;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .btn-secondary {
+      background: #FFF4D6;
+      color: #321A12;
+      border: 1px solid rgba(50,26,18,0.2);
+    }
+    .weights-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 14px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(50,26,18,0.15);
+    }
+    .w-400 { font-weight: 400; }
+    .w-500 { font-weight: 500; }
+    .w-600 { font-weight: 600; }
+    .w-700 { font-weight: 700; }
+    .w-800 { font-weight: 800; }
+  </style>
+</head>
+<body>
+  <h1 class="page-title">മലയാളം ഫോണ്ട് താരതമ്യ പരിശോധന (Malayalam Typography Evaluation)</h1>
+  
+  <div class="grid">
+    <!-- 1. NOTO SANS MALAYALAM -->
+    <div class="card f-noto">
+      <div class="card-header">
+        <span class="font-name">1. Noto Sans Malayalam</span>
+        <span class="font-source">Google / Monotype</span>
+      </div>
+      
+      <div class="hero-title w-800">
+        ബാലസംഘം കണ്ണൂർ
+        <span class="sub w-800">ജില്ലാ കമ്മിറ്റി</span>
+      </div>
+
+      <div class="office-title">
+        ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഓഫീസ്
+      </div>
+
+      <div class="slogan">
+        പഠിച്ച ഞങ്ങൾ നല്ലവരും,<br>
+        ഇയച്ച ഞങ്ങൾ മുന്നേറും.
+      </div>
+
+      <div class="address">
+        അഴീക്കോടൻ സ്മാരക മന്ദിരം<br>
+        തളാപ്പ്, കണ്ണൂർ
+      </div>
+
+      <div class="body-copy">
+        കുട്ടികളിൽ ജനാധിപത്യബോധവും മതനിരപേക്ഷ മൂല്യങ്ങളും സർഗ്ഗാത്മകതയും വളർത്തുന്ന കണ്ണൂർ ജില്ലയിലെ മഹത്തായ ബാലപ്രസ്ഥാനം. കല്ല്യാശ്ശേരിയുടെ ചരിത്രഭൂമിയിൽ നിന്നും പടർന്നുപന്തലിച്ച തലമുറകളുടെ സ്നേഹക്കൂട്ടായ്മ.
+      </div>
+
+      <div>
+        <span class="button-preview">അംഗത്വം എടുക്കൂ</span>
+        <span class="button-preview btn-secondary">കൂടുതൽ അറിയുക</span>
+      </div>
+
+      <div class="weights-row">
+        <span class="w-400">Regular 400</span>
+        <span class="w-500">Medium 500</span>
+        <span class="w-600">SemiBold 600</span>
+        <span class="w-700">Bold 700</span>
+        <span class="w-800">ExtraBold 800</span>
+      </div>
+    </div>
+
+    <!-- 2. ANEK MALAYALAM (CURRENT) -->
+    <div class="card f-anek">
+      <div class="card-header">
+        <span class="font-name">2. Anek Malayalam (Current)</span>
+        <span class="font-source">Ek Type</span>
+      </div>
+      
+      <div class="hero-title w-800">
+        ബാലസംഘം കണ്ണൂർ
+        <span class="sub w-800">ജില്ലാ കമ്മിറ്റി</span>
+      </div>
+
+      <div class="office-title">
+        ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഓഫീസ്
+      </div>
+
+      <div class="slogan">
+        പഠിച്ച ഞങ്ങൾ നല്ലവരും,<br>
+        ഇയച്ച ഞങ്ങൾ മുന്നേറും.
+      </div>
+
+      <div class="address">
+        അഴീക്കോടൻ സ്മാരക മന്ദിരം<br>
+        തളാപ്പ്, കണ്ണൂർ
+      </div>
+
+      <div class="body-copy">
+        കുട്ടികളിൽ ജനാധിപത്യബോധവും മതനിരപേക്ഷ മൂല്യങ്ങളും സർഗ്ഗാത്മകതയും വളർത്തുന്ന കണ്ണൂർ ജില്ലയിലെ മഹത്തായ ബാലപ്രസ്ഥാനം. കല്ല്യാശ്ശേരിയുടെ ചരിത്രഭൂമിയിൽ നിന്നും പടർന്നുപന്തലിച്ച തലമുറകളുടെ സ്നേഹക്കൂട്ടായ്മ.
+      </div>
+
+      <div>
+        <span class="button-preview">അംഗത്വം എടുക്കൂ</span>
+        <span class="button-preview btn-secondary">കൂടുതൽ അറിയുക</span>
+      </div>
+
+      <div class="weights-row">
+        <span class="w-400">Regular 400</span>
+        <span class="w-500">Medium 500</span>
+        <span class="w-600">SemiBold 600</span>
+        <span class="w-700">Bold 700</span>
+        <span class="w-800">ExtraBold 800</span>
+      </div>
+    </div>
+
+    <!-- 3. GAYATHRI -->
+    <div class="card f-gayathri">
+      <div class="card-header">
+        <span class="font-name">3. Gayathri</span>
+        <span class="font-source">SMC</span>
+      </div>
+      
+      <div class="hero-title w-700">
+        ബാലസംഘം കണ്ണൂർ
+        <span class="sub w-700">ജില്ലാ കമ്മിറ്റി</span>
+      </div>
+
+      <div class="office-title">
+        ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഓഫീസ്
+      </div>
+
+      <div class="slogan">
+        പഠിച്ച ഞങ്ങൾ നല്ലവരും,<br>
+        ഇയച്ച ഞങ്ങൾ മുന്നേറും.
+      </div>
+
+      <div class="address">
+        അഴീക്കോടൻ സ്മാരക മന്ദിരം<br>
+        തളാപ്പ്, കണ്ണൂർ
+      </div>
+
+      <div class="body-copy">
+        കുട്ടികളിൽ ജനാധിപത്യബോധവും മതനിരപേക്ഷ മൂല്യങ്ങളും സർഗ്ഗാത്മകതയും വളർത്തുന്ന കണ്ണൂർ ജില്ലയിലെ മഹത്തായ ബാലപ്രസ്ഥാനം. കല്ല്യാശ്ശേരിയുടെ ചരിത്രഭൂമിയിൽ നിന്നും പടർന്നുപന്തലിച്ച തലമുറകളുടെ സ്നേഹക്കൂട്ടായ്മ.
+      </div>
+
+      <div>
+        <span class="button-preview">അംഗത്വം എടുക്കൂ</span>
+        <span class="button-preview btn-secondary">കൂടുതൽ അറിയുക</span>
+      </div>
+
+      <div class="weights-row">
+        <span class="w-400">Regular 400</span>
+        <span class="w-700">Bold 700</span>
+      </div>
+    </div>
+
+    <!-- 4. MANJARI -->
+    <div class="card f-manjari">
+      <div class="card-header">
+        <span class="font-name">4. Manjari</span>
+        <span class="font-source">SMC</span>
+      </div>
+      
+      <div class="hero-title w-700">
+        ബാലസംഘം കണ്ണൂർ
+        <span class="sub w-700">ജില്ലാ കമ്മിറ്റി</span>
+      </div>
+
+      <div class="office-title">
+        ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഓഫീസ്
+      </div>
+
+      <div class="slogan">
+        പഠിച്ച ഞങ്ങൾ നല്ലവരും,<br>
+        ഇയച്ച ഞങ്ങൾ മുന്നേറും.
+      </div>
+
+      <div class="address">
+        അഴീക്കോടൻ സ്മാരക മന്ദിരം<br>
+        തളാപ്പ്, കണ്ണൂർ
+      </div>
+
+      <div class="body-copy">
+        കുട്ടികളിൽ ജനാധിപത്യബോധവും മതനിരപേക്ഷ മൂല്യങ്ങളും സർഗ്ഗാത്മകതയും വളർത്തുന്ന കണ്ണൂർ ജില്ലയിലെ മഹത്തായ ബാലപ്രസ്ഥാനം. കല്ല്യാശ്ശേരിയുടെ ചരിത്രഭൂമിയിൽ നിന്നും പടർന്നുപന്തലിച്ച തലമുറകളുടെ സ്നേഹക്കൂട്ടായ്മ.
+      </div>
+
+      <div>
+        <span class="button-preview">അംഗത്വം എടുക്കൂ</span>
+        <span class="button-preview btn-secondary">കൂടുതൽ അറിയുക</span>
+      </div>
+
+      <div class="weights-row">
+        <span class="w-400">Regular 400</span>
+        <span class="w-700">Bold 700</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

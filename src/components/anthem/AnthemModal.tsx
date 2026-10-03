@@ -92,16 +92,16 @@ export const AnthemModal = ({ isOpen, onClose }: AnthemModalProps) => {
     >
       <div className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="bg-gradient-to-r from-brand-red to-[#B71C1C] text-white p-6 sm:p-8 flex items-center justify-between">
+        <div className="bg-deep-red bg-gradient-to-r from-deep-red to-[#B71C1C] text-white p-6 sm:p-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-1 rounded-2xl bg-white shadow-xs flex items-center justify-center shrink-0">
               <BalasanghamLogo className="w-10 h-10 sm:w-12 sm:h-12" alt="Balasangham Logo" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold font-malayalam">
+              <h2 className="text-xl sm:text-2xl font-bold font-malayalam text-white">
                 {language === 'ml' ? t.anthem.title : 'ബാലസംഘം പതാകഗാനം (Flag Song)'}
               </h2>
-              <p className="text-xs sm:text-sm text-amber-200">
+              <p className="text-xs sm:text-sm text-amber-200 font-medium">
                 {t.anthem.subtitle}
               </p>
             </div>

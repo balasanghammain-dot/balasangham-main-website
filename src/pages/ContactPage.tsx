@@ -4,7 +4,7 @@ import { organizationInfo } from '../data/organizationData';
 import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
 import { RedStarIcon } from '../components/motifs/RedStarIcon';
 import { PeaceDove } from '../components/motifs/PeaceDove';
-import { Share2, MapPin, ShieldAlert, Sparkles, Phone } from 'lucide-react';
+import { Share2, MapPin, Sparkles, Phone } from 'lucide-react';
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '../components/common/SocialIcons';
 
 export const ContactPage = () => {
@@ -126,25 +126,7 @@ export const ContactPage = () => {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-soft-cream border border-slate-100">
-                  <span className="text-xs font-bold uppercase text-slate-500 block mb-1">
-                    {ml ? 'ജന്മസ്ഥലം & 2026 സമ്മേളന വേദി' : 'Historic Origin & Conference Venue'}
-                  </span>
-                  <p className="font-bold text-charcoal text-base">
-                    {ml ? 'പി.സി.ആർ ബാങ്ക് ഓഡിറ്റോറിയം, കല്ല്യാശ്ശേരി' : 'PCR Bank Auditorium, Kalliasseri'}
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">Kalliasseri, Kannur District, Kerala</p>
-                </div>
               </div>
-            </div>
-
-            <div className="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex items-start gap-2.5">
-              <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-              <span>
-                {ml
-                  ? 'ബാലസംഘം പ്രവർത്തനങ്ങളിൽ പങ്കെടുക്കാനാഗ്രഹിക്കുന്നവർ പ്രാദേശിക ഏരിയ/യൂണിറ്റ് കൺവീനർമാരുമായി നേരിട്ട് ബന്ധപ്പെടുക.'
-                  : 'For participation in local unit programs, connect with your designated neighborhood or school area convener.'}
-              </span>
             </div>
           </div>
         </div>

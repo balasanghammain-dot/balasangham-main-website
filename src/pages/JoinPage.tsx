@@ -4,7 +4,7 @@ import { Breadcrumb } from '../components/common/Breadcrumb';
 import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
 import { RedStarIcon } from '../components/motifs/RedStarIcon';
 import { PeaceDove } from '../components/motifs/PeaceDove';
-import { ShieldCheck, ArrowRight, Sparkles, MapPin, Users, HeartHandshake, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles, MapPin, Users, HeartHandshake } from 'lucide-react';
 
 export const JoinPage = () => {
   const { language } = useLanguage();
@@ -56,8 +56,8 @@ export const JoinPage = () => {
       </section>
 
       {/* Main Participation Guide Section */}
-      <section className="py-16 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200/90 shadow-xl mb-12">
+      <section className="py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200/90 shadow-xl mb-10">
           <div className="text-center sm:text-left mb-8">
             <span className="text-xs font-bold uppercase tracking-wider text-deep-red mb-1 block">
               {ml ? 'ഘട്ടങ്ങൾ' : '3 Simple Steps'}
@@ -67,7 +67,7 @@ export const JoinPage = () => {
             </h2>
           </div>
 
-          <div className="space-y-6 mb-10">
+          <div className="space-y-6">
             {[
               {
                 step: '01',
@@ -119,70 +119,6 @@ export const JoinPage = () => {
                 </div>
               );
             })}
-          </div>
-
-          {/* Child Protection and Safe Guidelines */}
-          <div className="p-6 rounded-2xl bg-amber-50 border border-amber-200/90 mb-6">
-            <h3 className="font-bold text-amber-900 mb-2 flex items-center gap-2 text-base">
-              <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0" />
-              <span className={ml ? 'font-malayalam' : ''}>{ml ? 'പ്രധാന അറിയിപ്പ്: ഓൺലൈൻ ഫീസുകളില്ല' : 'Safe & Transparent: No Online Payment Fees'}</span>
-            </h3>
-            <p className={`text-xs sm:text-sm text-amber-900/90 leading-relaxed ${ml ? 'font-malayalam-body leading-[1.75]' : ''}`}>
-              {ml
-                ? 'ബാലസംഘത്തിൽ അംഗമാകുന്നതിന് ഓൺലൈൻ പണമിടപാടുകളോ രജിസ്ട്രേഷൻ ഫീസോ ആവശ്യമില്ല. അംഗത്വ വിവരങ്ങൾ അറിയാൻ കണ്ണൂർ ജില്ലാ അല്ലെങ്കിൽ ഏരിയ കൺവീനർമാരുമായി നേരിട്ട് ബന്ധപ്പെടുക.'
-                : 'Balasangham does not collect online registration fees through external portals. All activities and memberships are organized transparently through authorized district, area, and local unit committees.'}
-            </p>
-          </div>
-
-          {/* What Children Gain with Celebratory Illustration */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-red-50 via-amber-50 to-orange-50 border border-amber-200/70 overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8">
-                <h3 className={`font-black text-deep-red mb-3 text-base sm:text-lg flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-                  <Sparkles className="w-5 h-5 text-amber-500" />
-                  <span>{ml ? 'ബാലസംഘം കുട്ടികൾക്ക് സമ്മാനിക്കുന്നത്' : 'What Children Experience in Balasangham'}</span>
-                </h3>
-                <p className={`text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>
-                  {ml
-                    ? 'പഠനത്തോടൊപ്പം കുട്ടികളുടെ സർഗ്ഗവാസനകൾ വികസിപ്പിക്കാനും, ജനാധിപത്യ മര്യാദകൾ ശീലിക്കാനും, ജീവിതകാലം മുഴുവൻ നിലനിൽക്കുന്ന സൗഹൃദങ്ങൾ കണ്ടെത്താനും ബാലസംഘം വേദി ഒരുക്കുന്നു.'
-                    : 'Along with academics, Balasangham offers a nurturing platform to foster creative talents, experience democratic values, and build lifelong friendships.'}
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700 font-semibold">
-                  <div className="flex items-center gap-2 bg-white/80 p-2.5 rounded-xl border border-red-100">
-                    <CheckCircle2 className="w-4 h-4 text-meadow-green shrink-0" />
-                    <span className={ml ? 'font-malayalam-body' : ''}>{ml ? 'വേനൽത്തുമ്പികൾ കലാജാഥ' : 'Venalthumbikal Arts Caravan'}</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/80 p-2.5 rounded-xl border border-red-100">
-                    <CheckCircle2 className="w-4 h-4 text-meadow-green shrink-0" />
-                    <span className={ml ? 'font-malayalam-body' : ''}>{ml ? 'വേനൽ കളരി സർഗ്ഗ ക്യാമ്പുകൾ' : 'Venal Kalari Creative Camps'}</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/80 p-2.5 rounded-xl border border-red-100">
-                    <CheckCircle2 className="w-4 h-4 text-meadow-green shrink-0" />
-                    <span className={ml ? 'font-malayalam-body' : ''}>{ml ? 'ശാസ്ത്ര ദീപ്തി വാനനിരീക്ഷണം' : 'Shasthra Deepthi Astronomy'}</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/80 p-2.5 rounded-xl border border-red-100">
-                    <CheckCircle2 className="w-4 h-4 text-meadow-green shrink-0" />
-                    <span className={ml ? 'font-malayalam-body' : ''}>{ml ? 'കിളിക്കൂട് മാസിക വായന' : 'Kilikkoodu Children’s Magazine'}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="lg:col-span-4 flex justify-center">
-                <div className="relative rounded-2xl overflow-hidden border-2 border-amber-300 shadow-lg bg-amber-400 max-w-xs group">
-                  <img
-                    src="/images/children-dancing.jpeg"
-                    alt="Children dancing joyfully with hands in the air"
-                    className="w-full h-48 sm:h-52 object-cover object-top transform group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 text-center">
-                    <span className="text-[11px] font-bold text-white block drop-shadow">
-                      {ml ? 'കുട്ടിക്കൂട്ടായ്മയുടെ സന്തോഷം' : 'The Joy of Children’s Fellowship'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 

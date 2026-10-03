@@ -115,7 +115,7 @@ BALASANGHAM KANNUR (ബാലസംഘം കണ്ണൂർ)
 │   └── Conference Souvenirs (സ്മരണികകൾ)
 │
 ├── JOIN US (/join)
-│   ├── Who can join (age 5-16)
+│   ├── Who can join (age 6-18)
 │   ├── How to join (through local unit)
 │   ├── What members do
 │   └── Find your local unit (area committee list)
@@ -124,7 +124,7 @@ BALASANGHAM KANNUR (ബാലസംഘം കണ്ണൂർ)
 │   ├── Social Media Links
 │   │   ├── Facebook: balasangham.kannur
 │   │   ├── Facebook: balasangham.kerala
-│   │   ├── Instagram: balasanghamkeralam
+│   │   ├── Instagram: balasanghamkannur_dc
 │   │   └── YouTube: balasanghamkerala2817
 │   ├── District Committee Info
 │   └── Address (when officially provided)

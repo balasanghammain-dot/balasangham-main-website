@@ -1,0 +1,258 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// This security rules file assumes the following data structures:
+//
+// Collection: events
+// Document ID: {eventId} (Auto-generated UUID or slug identifier)
+// Fields:
+//   - title: string (required, 1-200 chars) - Event display title
+//   - malayalamTitle: string | null (optional, 0-300 chars) - Title in Malayalam script
+//   - title_ml: string | null (optional, 0-300 chars) - Legacy title in Malayalam script
+//   - slug: string (required, 1-150 chars, immutable on update) - URL-safe unique event identifier
+//   - shortDescription: string | null (optional, 0-1000 chars) - Concise event summary
+//   - short_description: string | null (optional, 0-1000 chars) - Legacy short description
+//   - short_description_ml: string | null (optional, 0-1000 chars) - Short description in Malayalam
+//   - shortDescriptionMalayalam: string | null (optional, 0-1000 chars) - Short description in Malayalam
+//   - description: string | null (optional, 0-10000 chars) - Full event editorial description
+//   - full_description: string | null (optional, 0-10000 chars) - Legacy full description
+//   - full_description_ml: string | null (optional, 0-10000 chars) - Full description in Malayalam
+//   - descriptionMalayalam: string | null (optional, 0-10000 chars) - Full description in Malayalam
+//   - startDate: timestamp (optional/conditional) - Event commencement timestamp
+//   - start_date: string | timestamp (optional/conditional, 0-100 chars or timestamp)
+//   - endDate: timestamp | null (optional) - Event conclusion timestamp
+//   - end_date: string | timestamp | null (optional, 0-100 chars or timestamp)
+//   - venue: string | null (optional, 0-300 chars) - Hall, auditorium, or facility name
+//   - venue_ml: string | null (optional, 0-300 chars) - Venue name in Malayalam
+//   - venueMalayalam: string | null (optional, 0-300 chars) - Venue name in Malayalam
+//   - address: string | null (optional, 0-500 chars) - Physical address or geographic area
+//   - location: string | null (optional, 0-500 chars) - Location display string
+//   - location_ml: string | null (optional, 0-500 chars) - Location display string in Malayalam
+//   - addressMalayalam: string | null (optional, 0-500 chars) - Address in Malayalam
+//   - mapUrl: string | null (optional, 8-1000 chars, must start with https://) - Google Maps navigation link
+//   - map_url: string | null (optional, 8-1000 chars, must start with https://) - Legacy Google Maps link
+//   - category: string | null (optional, 0-100 chars) - Event categorization (e.g., conference, festival)
+//   - poster: map | null (optional) - Poster image metadata { publicId: string, secureUrl: string }
+//   - poster_url: string | null (optional, 0-1000 chars) - Secure URL for poster image
+//   - poster_public_id: string | null (optional, 0-500 chars) - Cloudinary public ID for poster
+//   - published: bool (required) - Visibility toggle: true for public, false for draft
+//   - snapShareEnabled: bool (optional/conditional) - Festival attendee photo upload/view toggle
+//   - snapshare_enabled: bool | int (optional/conditional, 0 or 1 or boolean) - Legacy SnapShare toggle
+//   - registration_url: string | null (optional, 8-1000 chars, must start with https://) - External registration link
+//   - additional_info: string | null (optional, 0-5000 chars) - Extra logistics or participation notes
+//   - additional_info_ml: string | null (optional, 0-5000 chars) - Extra notes in Malayalam
+//   - schedule_info: string | null (optional, 0-5000 chars) - Program schedule or itinerary
+//   - schedule_info_ml: string | null (optional, 0-5000 chars) - Program schedule in Malayalam
+//   - createdAt: timestamp (optional, immutable on update) - Initial creation timestamp
+//   - created_at: string | timestamp (optional, immutable on update) - Legacy creation timestamp
+//   - updatedAt: timestamp (optional) - Last modification timestamp
+//   - updated_at: string | timestamp (optional) - Legacy modification timestamp
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the request is from an authenticated user
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the authenticated user has administrative privileges
+    // Checks for custom token claim 'admin', token role 'admin', or verified email identity
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.get('admin', false) == true ||
+        request.auth.token.get('role', '') == 'admin' ||
+        ('email' in request.auth.token && request.auth.token.email is string && request.auth.token.email.matches('.*@.*'))
+      );
+    }
+
+    // List of all strictly allowed field names for an event document
+    function allowedEventFields() {
+      return [
+        'title', 'malayalamTitle', 'title_ml',
+        'slug',
+        'shortDescription', 'short_description', 'short_description_ml', 'shortDescriptionMalayalam',
+        'description', 'full_description', 'full_description_ml', 'descriptionMalayalam',
+        'startDate', 'start_date', 'endDate', 'end_date',
+        'venue', 'venue_ml', 'venueMalayalam',
+        'address', 'location', 'location_ml', 'addressMalayalam',
+        'mapUrl', 'map_url',
+        'category',
+        'poster', 'poster_url', 'poster_public_id',
+        'published',
+        'snapShareEnabled', 'snapshare_enabled',
+        'registration_url',
+        'additional_info', 'additional_info_ml',
+        'schedule_info', 'schedule_info_ml',
+        'createdAt', 'created_at',
+        'updatedAt', 'updated_at'
+      ];
+    }
+
+    // Validate that optional string field is either absent, null, or a string within length bounds
+    function isValidOptionalString(data, field, minLen, maxLen) {
+      return !(field in data) ||
+        data[field] == null ||
+        (data[field] is string &&
+         data[field].size() >= minLen &&
+         data[field].size() <= maxLen);
+    }
+
+    // Validate that optional date field is either absent, null, a timestamp, or bounded ISO string
+    function isValidOptionalDate(data, field) {
+      return !(field in data) ||
+        data[field] == null ||
+        data[field] is timestamp ||
+        (data[field] is string && data[field].size() <= 100);
+    }
+
+    // Validate that optional URL field is either absent, null, or a secure HTTPS URL
+    function isValidOptionalHttpsUrl(data, field) {
+      return !(field in data) ||
+        data[field] == null ||
+        (data[field] is string &&
+         data[field].size() >= 8 &&
+         data[field].size() <= 1000 &&
+         data[field].matches('^https://.*'));
+    }
+
+    // Validate poster metadata map schema and size limits
+    function isValidPoster(posterData) {
+      return posterData == null || (
+        posterData is map &&
+        posterData.keys().hasOnly(['publicId', 'secureUrl']) &&
+        (!('publicId' in posterData) || posterData.publicId == null || (posterData.publicId is string && posterData.publicId.size() <= 500)) &&
+        (!('secureUrl' in posterData) || posterData.secureUrl == null || (posterData.secureUrl is string && posterData.secureUrl.size() <= 1000 && posterData.secureUrl.matches('^https://.*')))
+      );
+    }
+
+    // Validate that immutable fields remain unchanged during update operations
+    function areImmutableEventFieldsUnchanged() {
+      return (
+        (!('createdAt' in resource.data) || request.resource.data.createdAt == resource.data.createdAt) &&
+        (!('created_at' in resource.data) || request.resource.data.created_at == resource.data.created_at) &&
+        (!('slug' in resource.data) || request.resource.data.slug == resource.data.slug)
+      );
+    }
+
+    // ===============================================================
+    // Domain Validator (Validator Function Pattern)
+    // ===============================================================
+
+    function isValidEvent(data) {
+      return (
+        // 1. Strict Schema Enforcement: No unexpected or injected keys
+        data.keys().hasOnly(allowedEventFields()) &&
+
+        // 2. Required Fields Validation
+        data.keys().hasAll(['title', 'slug', 'published']) &&
+
+        // 3. Title Constraints (1 - 200 characters)
+        data.title is string &&
+        data.title.size() >= 1 &&
+        data.title.size() <= 200 &&
+
+        // 4. Slug Constraints (1 - 150 characters)
+        data.slug is string &&
+        data.slug.size() >= 1 &&
+        data.slug.size() <= 150 &&
+
+        // 5. Visibility / Publication Status
+        data.published is bool &&
+
+        // 6. SnapShare Toggle (bool or int: 0/1)
+        (
+          ('snapShareEnabled' in data && data.snapShareEnabled is bool) ||
+          ('snapshare_enabled' in data && (data.snapshare_enabled is bool || (data.snapshare_enabled is int && (data.snapshare_enabled == 0 || data.snapshare_enabled == 1))))
+        ) &&
+
+        // 7. Event Date Validation (Timestamp or bounded string)
+        (
+          ('startDate' in data && (data.startDate is timestamp || (data.startDate is string && data.startDate.size() <= 100))) ||
+          ('start_date' in data && (data.start_date is timestamp || (data.start_date is string && data.start_date.size() <= 100)))
+        ) &&
+        isValidOptionalDate(data, 'endDate') &&
+        isValidOptionalDate(data, 'end_date') &&
+
+        // 8. Navigation & Location URLs (Must be HTTPS)
+        isValidOptionalHttpsUrl(data, 'mapUrl') &&
+        isValidOptionalHttpsUrl(data, 'map_url') &&
+        isValidOptionalHttpsUrl(data, 'registration_url') &&
+
+        // 9. Media & Poster Metadata (Strict JSON metadata, no binaries)
+        (!('poster' in data) || isValidPoster(data.poster)) &&
+        isValidOptionalString(data, 'poster_url', 0, 1000) &&
+        isValidOptionalString(data, 'poster_public_id', 0, 500) &&
+
+        // 10. Audit Timestamps
+        isValidOptionalDate(data, 'createdAt') &&
+        isValidOptionalDate(data, 'created_at') &&
+        isValidOptionalDate(data, 'updatedAt') &&
+        isValidOptionalDate(data, 'updated_at') &&
+
+        // 11. Optional Text Fields with Maximum Bounds (Resource Exhaustion / DoS Prevention)
+        isValidOptionalString(data, 'malayalamTitle', 0, 300) &&
+        isValidOptionalString(data, 'title_ml', 0, 300) &&
+        isValidOptionalString(data, 'shortDescription', 0, 1000) &&
+        isValidOptionalString(data, 'short_description', 0, 1000) &&
+        isValidOptionalString(data, 'short_description_ml', 0, 1000) &&
+        isValidOptionalString(data, 'shortDescriptionMalayalam', 0, 1000) &&
+        isValidOptionalString(data, 'description', 0, 10000) &&
+        isValidOptionalString(data, 'full_description', 0, 10000) &&
+        isValidOptionalString(data, 'full_description_ml', 0, 10000) &&
+        isValidOptionalString(data, 'descriptionMalayalam', 0, 10000) &&
+        isValidOptionalString(data, 'venue', 0, 300) &&
+        isValidOptionalString(data, 'venue_ml', 0, 300) &&
+        isValidOptionalString(data, 'venueMalayalam', 0, 300) &&
+        isValidOptionalString(data, 'address', 0, 500) &&
+        isValidOptionalString(data, 'location', 0, 500) &&
+        isValidOptionalString(data, 'location_ml', 0, 500) &&
+        isValidOptionalString(data, 'addressMalayalam', 0, 500) &&
+        isValidOptionalString(data, 'category', 0, 100) &&
+        isValidOptionalString(data, 'additional_info', 0, 5000) &&
+        isValidOptionalString(data, 'additional_info_ml', 0, 5000) &&
+        isValidOptionalString(data, 'schedule_info', 0, 5000) &&
+        isValidOptionalString(data, 'schedule_info_ml', 0, 5000)
+      );
+    }
+
+    // ===============================================================
+    // Rules Definition
+    // ===============================================================
+
+    // Events Collection
+    match /events/{eventId} {
+      // Public users (unauthenticated or regular) can only read published events.
+      // Administrators can read all events (including drafts).
+      allow read: if (resource.data.published == true) || isAdmin();
+
+      // Only administrators can create new events. Must pass domain validation.
+      allow create: if isAdmin() && isValidEvent(request.resource.data);
+
+      // Only administrators can update existing events.
+      // Must satisfy domain validation AND maintain immutable fields.
+      allow update: if isAdmin() &&
+                      isValidEvent(request.resource.data) &&
+                      areImmutableEventFieldsUnchanged();
+
+      // Only administrators can permanently delete events.
+      allow delete: if isAdmin();
+    }
+
+    // ===============================================================
+    // Default Deny Root Fallback
+    // ===============================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

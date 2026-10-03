@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { AboutSection } from '../components/sections/AboutSection';
-import { organizationInfo } from '../data/organizationData';
 import { BackdropSunburst } from '../components/motifs/BackdropSunburst';
 import { RedStarIcon } from '../components/motifs/RedStarIcon';
 import { PeaceDove } from '../components/motifs/PeaceDove';
@@ -41,8 +40,8 @@ export const AboutPage = () => {
       title: 'Leadership',
       titleMl: 'നേതൃത്വം',
       path: '/about/leadership',
-      desc: 'Verified Kannur District Committee and state leadership reference.',
-      descMl: 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഭാരവാഹികളും സംസ്ഥാന നേതൃത്വവും.',
+      desc: 'Kannur District Committee office bearers and committee members.',
+      descMl: 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി ഭാരവാഹികളും പ്രവർത്തകരും.',
       icon: Users,
     },
     {
@@ -98,72 +97,8 @@ export const AboutPage = () => {
         </div>
       </section>
 
-      {/* Overview & Symbols */}
-      <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* Symbolism */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-md">
-            <h2 className={`text-xl font-bold text-charcoal mb-4 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-              <RedStarIcon className="w-5 h-5 text-deep-red" />
-              <span>{ml ? 'ഔദ്യോഗിക ചിഹ്നങ്ങൾ' : 'Official Symbols'}</span>
-            </h2>
-            <div className="space-y-4 text-sm text-slate-700">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center shrink-0">
-                  <RedStarIcon className="w-5 h-5 text-deep-red" />
-                </div>
-                <div>
-                  <strong className="block text-charcoal">{ml ? 'വെള്ളക്കൊടിയും ചുവന്ന നക്ഷത്രവും' : 'White Flag & Red Star'}</strong>
-                  <p className={`text-slate-600 ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>{ml ? organizationInfo.symbols.flagMl : organizationInfo.symbols.flag}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0 text-sky-600">
-                  <PeaceDove filled className="w-6 h-5" />
-                </div>
-                <div>
-                  <strong className="block text-charcoal">{ml ? 'വെള്ളപ്രാവ് (സമാധാന ചിഹ്നം)' : 'Peace Dove (Universal Harmony)'}</strong>
-                  <p className={`text-slate-600 ${ml ? 'font-malayalam-body leading-[1.7]' : ''}`}>{ml ? organizationInfo.symbols.doveMl : organizationInfo.symbols.dove}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Mottos & Slogans */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-md">
-            <h2 className={`text-xl font-bold text-charcoal mb-4 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
-              <Sparkles className="w-5 h-5 text-sun-yellow" />
-              <span>{ml ? 'മുദ്രാവാക്യങ്ങളും ആദർശവും' : 'Mottos & Slogans'}</span>
-            </h2>
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-red-50/70 border border-red-100">
-                <span className="text-xs uppercase font-extrabold text-deep-red tracking-wider block mb-1">
-                  {ml ? 'പ്രധാന മുദ്രാവാക്യം' : 'Core Motto'}
-                </span>
-                <p className="text-lg font-bold text-deep-red font-malayalam">
-                  പഠനം, മനനം, ചലനം
-                </p>
-                <p className="text-xs text-slate-600 mt-1">
-                  Study, Contemplate, Act
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-100">
-                <span className="text-xs uppercase font-extrabold text-amber-800 tracking-wider block mb-1">
-                  {ml ? 'സംഘടനാ സന്ദേശം' : 'Action Slogan'}
-                </span>
-                <p className="text-lg font-bold text-amber-900 font-malayalam">
-                  പഠിക്കുക, പോരാടുക, വളരുക
-                </p>
-                <p className="text-xs text-slate-600 mt-1">
-                  Study, Struggle, Grow
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Sub-sections grid */}
+      {/* Sub-sections grid */}
+      <section className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-14">
           <h2 className={`text-2xl font-bold text-charcoal mb-6 text-center ${ml ? 'font-malayalam' : ''}`}>
             {ml ? 'വിശദ വിവരങ്ങൾ' : 'Explore About Balasangham'}

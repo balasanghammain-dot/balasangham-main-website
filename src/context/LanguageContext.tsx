@@ -9,7 +9,14 @@ interface LanguageContextType {
   t: TranslationDictionary;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const defaultContextValue: LanguageContextType = {
+  language: 'en',
+  setLanguage: () => {},
+  toggleLanguage: () => {},
+  t: translations.en,
+};
+
+const LanguageContext = createContext<LanguageContextType>(defaultContextValue);
 
 const STORAGE_KEY = 'balasangham_lang';
 
@@ -57,8 +64,5 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
+  return context || defaultContextValue;
 };

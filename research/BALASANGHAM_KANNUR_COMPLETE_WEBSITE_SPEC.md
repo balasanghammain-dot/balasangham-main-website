@@ -201,7 +201,7 @@ Top to bottom:
 | 6 | Latest News | 3 most recent items (Sodarathwena, Pinarayi Area Conference, etc.) | Verified |
 | 7 | Flag Song | Teaser with opening line + "Read Full" link/modal | User-provided |
 | 8 | Media Preview | 3-4 visual items (posters, photos if available) | Needs assets |
-| 9 | Join CTA | "Children ages 5-16 can join through local units" | Verified |
+| 9 | Join CTA | "Children ages 6-18 can join through local units" | Verified |
 | 10 | Footer | Navigation, social, contact, legal, language | Standard |
 
 ---
@@ -211,7 +211,7 @@ Top to bottom:
 ### Who We Are (/about)
 - Full organization description
 - Scope: 1M+ members, 20,000+ units, 14 districts
-- Target audience: children ages 5-16
+- Target audience: children ages 6-18
 - Identity: progressive, secular, democratic children's cultural and social organization
 - Official symbols: white flag with red star, white dove
 - Mottos: "പഠനം, മനനം, ചലനം" / "പഠിക്കുക, പോരാടുക, വളരുക"
@@ -385,7 +385,7 @@ Source: Deshabhimani (Oct 7, 2024). Confidence: HIGH.
 |---|---|---|
 | Facebook (Kannur) | Balasangham Kannur | https://www.facebook.com/balasangham.kannur/ |
 | Facebook (Kerala) | Balasangham Kerala | https://www.facebook.com/balasangham.kerala/ |
-| Instagram | @balasanghamkeralam | https://www.instagram.com/balasanghamkeralam/ |
+| Instagram | @balasanghamkannur_dc | https://www.instagram.com/balasanghamkannur_dc/ |
 | YouTube | Balasangham Kerala | https://www.youtube.com/@balasanghamkerala2817 |
 
 **Unverified (NOT to be published)**:
@@ -400,7 +400,7 @@ Source: Deshabhimani (Oct 7, 2024). Confidence: HIGH.
 ## 22. Membership / Participation
 
 ### Verified Information (/join)
-- **Age range**: Children 5-16 years
+- **Age range**: Children 6-18 years
 - **How to join**: Through local neighborhood or school units
 - **Unit structure**: 20,000+ units across Kerala
 - **Democratic process**: Children elect their own unit leaders

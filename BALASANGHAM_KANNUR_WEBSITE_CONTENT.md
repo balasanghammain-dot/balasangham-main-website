@@ -32,7 +32,7 @@
 ## 2. ABOUT
 
 ### Who We Are
-Balasangham (ബാലസംഘം) is a secular, progressive, and democratic children's movement uniting more than one million school-age children (ages 5 to 16) across 20,000 neighborhood and school units in Kerala. Operating as an autonomous parallel educational and cultural platform, Balasangham enables children to direct their own activities, debate social realities, and practice democratic leadership outside conventional examination pressures.
+Balasangham (ബാലസംഘം) is a secular, progressive, and democratic children's movement uniting more than one million school-age children (ages 6 to 18) across 20,000 neighborhood and school units in Kerala. Operating as an autonomous parallel educational and cultural platform, Balasangham enables children to direct their own activities, debate social realities, and practice democratic leadership outside conventional examination pressures.
 
 ### Core Ideological Tenets
 1. **Childhood Democracy:** Run directly by children. Student delegates elect unit, area, district, and state leaders, while adult cultural mentors act strictly as supportive conveners (*രക്ഷാധികാരി സമിതി*).
@@ -195,5 +195,5 @@ Mass community campaigns protecting school students from narcotics, substance ab
 - **Official Social Communication:**
   - Facebook (Kannur): `https://www.facebook.com/balasangham.kannur/`
   - Facebook (Statewide): `https://www.facebook.com/balasangham.kerala/`
-  - Instagram: `https://www.instagram.com/balasanghamkeralam/`
+  - Instagram: `https://www.instagram.com/balasanghamkannur_dc/`
 - **Notice on Contact Information:** Detailed office telephone numbers and direct reception helpline desks will be published once officially designated for public release by the Reception Committee.
