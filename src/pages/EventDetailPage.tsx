@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { Calendar, MapPin, ArrowRight, Camera } from 'lucide-react';
-import { EventData, MediaItem } from '../types/event';
+import { MediaItem } from '../types/event';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { CalendarDropdown } from '../components/event/CalendarDropdown';
@@ -11,78 +10,17 @@ import { ShareButton } from '../components/event/ShareButton';
 import { EventMediaGallery } from '../components/event/EventMediaGallery';
 import { EventLocationSection } from '../components/event/EventLocationSection';
 
-import { getEventBySlug } from '../lib/eventsService';
+import { VERIFIED_EVENTS } from '../data/verifiedEvents';
 
 export const EventDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const ml = language === 'ml';
 
-  const [event, setEvent] = useState<EventData | null>(null);
-  const [media, setMedia] = useState<MediaItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchEvent = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        if (!slug) return;
-
-        // 1. Retrieve event document from Firestore
-        let eventData: EventData | null = null;
-        try {
-          eventData = await getEventBySlug(slug);
-        } catch (fsErr) {
-          console.warn('Firestore fetch failed, checking fallback:', fsErr);
-        }
-
-        // 2. Fetch media from server / fallback API
-        let mediaItems: MediaItem[] = [];
-        try {
-          const res = await fetch(`/api/public/events/${slug}`);
-          if (res.ok) {
-            const apiData = await res.json();
-            mediaItems = apiData.media || [];
-            if (!eventData) {
-              eventData = apiData.event || apiData;
-            }
-          }
-        } catch (apiErr) {
-          // Fallback fetch failed
-        }
-
-        if (isMounted) {
-          if (eventData) {
-            setEvent(eventData);
-            setMedia(mediaItems);
-          } else {
-            setError('Event not found or failed to load.');
-          }
-        }
-      } catch (err) {
-        console.error('Error in EventDetailPage:', err);
-        if (isMounted) setError('Event not found or failed to load.');
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    fetchEvent();
-    return () => {
-      isMounted = false;
-    };
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-soft-cream flex justify-center items-center">
-        <div className="w-8 h-8 rounded-full border-3 border-sun-primary border-t-deep-red animate-spin" />
-      </div>
-    );
-  }
+  // Look up event from static data
+  const event = VERIFIED_EVENTS.find(e => e.slug === slug) || null;
+  const media: MediaItem[] = [];
+  const error = !event ? 'Event not found.' : null;
 
   if (error || !event) {
     return (

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -7,73 +6,37 @@ import { Button } from '../ui/button';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { EventData } from '../../types/event';
 import { CalendarDropdown } from '../event/CalendarDropdown';
-import { subscribeToLatestEvent, getLatestEvent } from '../../lib/eventsService';
+import { VERIFIED_EVENTS } from '../../data/verifiedEvents';
 
-const DEFAULT_FEATURED_EVENT: EventData = {
-  id: 'kannur-district-conference-2026',
-  slug: 'kannur-district-conference-2026',
-  title: 'Balasangham Kannur District Conference',
-  title_ml: 'ബാലസംഘം കണ്ണൂർ ജില്ലാ സമ്മേളനം',
-  short_description: 'The historic District Conference of Balasangham Kannur bringing together thousands of child delegates at Kalliasseri.',
-  short_description_ml: 'കല്ല്യാശ്ശേരിയുടെ ചരിത്രഭൂമിയിൽ ആയിരക്കണക്കിന് ബാലപ്രതിനിധികൾ ഒത്തുചേരുന്ന കണ്ണൂർ ജില്ലാ സമ്മേളനം.',
-  start_date: '2026-01-23',
-  end_date: '2026-01-25',
-  venue: 'Kalliasseri, Kannur',
-  venue_ml: 'കല്ല്യാശ്ശേരി, കണ്ണൂർ',
-  location: 'Kalliasseri, Kannur',
-  location_ml: 'കല്ല്യാശ്ശേരി, കണ്ണൂർ',
-  category: 'conference',
-  poster_url: '/images/conference-poster-2026.jpg',
-  published: true,
-  snapshare_enabled: true
-} as unknown as EventData;
+/**
+ * Selects the best event to feature on the homepage from static data:
+ * 1. Nearest upcoming event
+ * 2. If none upcoming, most recently completed event
+ */
+function selectFeaturedEvent(): EventData | null {
+  const now = Date.now();
+  const upcoming = VERIFIED_EVENTS
+    .filter(e => {
+      const start = e.start_date ? new Date(e.start_date).getTime() : 0;
+      const end = e.end_date ? new Date(e.end_date).getTime() : start;
+      return (e.published === 1 || e.published === true) && (start >= now || end >= now);
+    })
+    .sort((a, b) => new Date(a.start_date!).getTime() - new Date(b.start_date!).getTime());
+
+  if (upcoming.length > 0) return upcoming[0];
+
+  const past = VERIFIED_EVENTS
+    .filter(e => e.published === 1 || e.published === true)
+    .sort((a, b) => new Date(b.start_date!).getTime() - new Date(a.start_date!).getTime());
+
+  return past.length > 0 ? past[0] : null;
+}
 
 export const EventSection = () => {
   const { language } = useLanguage();
   const ml = language === 'ml';
   const sectionRef = useScrollReveal<HTMLElement>();
-  const [event, setEvent] = useState<EventData | null>(DEFAULT_FEATURED_EVENT);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    // Use Firestore real-time listener so homepage updates automatically when an event is published
-    const unsubscribe = subscribeToLatestEvent(
-      (latestEvent) => {
-        if (isMounted) {
-          setEvent(latestEvent);
-          setLoading(false);
-        }
-      },
-      async (_err) => {
-        // Fallback to one-time query or REST fallback on listener issues
-        if (isMounted) {
-          try {
-            const fallback = await getLatestEvent();
-            if (isMounted) setEvent(fallback);
-          } catch {
-            // Keep clean fallback, no raw error
-          } finally {
-            if (isMounted) setLoading(false);
-          }
-        }
-      }
-    );
-
-    return () => {
-      isMounted = false;
-      unsubscribe();
-    };
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="bg-gradient-to-br from-sun-bright/40 via-warm-cream to-warm-orange/20 section-padding flex justify-center items-center">
-        <div className="w-8 h-8 rounded-full border-3 border-sun-primary border-t-deep-red animate-spin" />
-      </section>
-    );
-  }
+  const event = selectFeaturedEvent();
 
   if (!event) {
     return (

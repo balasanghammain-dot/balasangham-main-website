@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
@@ -7,44 +7,15 @@ import { EventData } from '../types/event';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 
-import { getPublishedEvents } from '../lib/eventsService';
+import { VERIFIED_EVENTS } from '../data/verifiedEvents';
 
 export const EventsPage = () => {
   const { language } = useLanguage();
   const ml = language === 'ml';
   const [activeTab, setActiveTab] = useState<'all' | 'upcoming' | 'past' | 'observances'>('all');
   
-  const [events, setEvents] = useState<EventData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchEvents = async () => {
-      try {
-        const firestoreEvents = await getPublishedEvents();
-        if (isMounted) {
-          setEvents(firestoreEvents);
-        }
-      } catch (err) {
-        console.warn('Falling back to public events API:', err);
-        try {
-          const res = await fetch('/api/public/events');
-          if (res.ok) {
-            const data = await res.json();
-            if (isMounted) setEvents(Array.isArray(data) ? data : (data.events || []));
-          }
-        } catch (apiErr) {
-          console.error('Error fetching fallback events:', apiErr);
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-    fetchEvents();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  // Use static verified events (published only)
+  const events = VERIFIED_EVENTS.filter(e => e.published === 1 || e.published === true);
 
   const now = new Date().getTime();
   const upcomingEvents = events
@@ -158,14 +129,6 @@ export const EventsPage = () => {
   };
 
   const renderEventGrid = (eventsList: EventData[]) => {
-    if (loading) {
-      return (
-        <div className="flex justify-center py-20">
-          <div className="w-8 h-8 rounded-full border-3 border-sun-primary border-t-deep-red animate-spin" />
-        </div>
-      );
-    }
-    
     if (eventsList.length === 0) {
       return (
         <div className="text-center py-20 bg-white rounded-3xl border border-slate-100">
