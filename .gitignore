@@ -36,15 +36,13 @@ coverage/
 .playwright-mcp/
 
 # Local raw media/photos directory (not stored in git)
-photos of the people/
-example images for design/
-heroic image/
-media/
+/photos of the people/
+/example images for design/
+/heroic image/
+/media/
 
-# Database files
-server/data/*.db
-server/data/*.db-shm
-server/data/*.db-wal
+# Backend server (frontend-only repository)
+server/
 
 # Uploads (generated at runtime)
 uploads/
@@ -75,7 +73,7 @@ docs/model-selection-playbook.md
 docs/token-optimization-guide.md
 
 # Audio source files (use Cloudinary or public/audio for production)
-flagsong.mp3
+/flagsong.mp3
 
 # Server log
 server.log
