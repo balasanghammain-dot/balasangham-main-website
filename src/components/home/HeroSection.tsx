@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { Button } from '../ui/button';
 import { BalasanghamLogo } from '../motifs/BalasanghamLogo';
-import { ArrowRight, Music } from 'lucide-react';
+import { ArrowRight, Music, Gamepad2 } from 'lucide-react';
 
 interface HeroSectionProps {
   onOpenAnthem?: () => void;
@@ -124,6 +124,20 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
                     {ml ? '· ചേരുക' : '· JOIN'}
                   </span>
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="w-full min-[420px]:w-auto border-amber-400 bg-amber-100/80 hover:bg-amber-200/90 text-amber-950 font-bold min-h-[48px] px-5 py-3 rounded-full shadow-xs transition-all active:scale-95 justify-center"
+              >
+                <Link to="/game">
+                  <Gamepad2 className="w-4 h-4 text-deep-red mr-2" />
+                  <span className={ml ? 'font-malayalam font-bold text-sm' : 'font-sans font-bold text-sm'}>
+                    {ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കൂ' : 'Play Poster Game 🎮'}
+                  </span>
                 </Link>
               </Button>
 

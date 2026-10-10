@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { YoutubeIcon } from '../components/common/SocialIcons';
 import mediaCloudinaryData from '../data/mediaCloudinary.json';
+import { db } from '../lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 // Verified Photo Archive (Historical)
 const photosList: ArchiveImage[] = [
@@ -214,10 +216,32 @@ export const MediaPage = () => {
   const [activeVideoModal, setActiveVideoModal] = useState<VideoModalItem | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchMedia = async () => {
+      // 1. Try querying published media directly from Firestore
+      try {
+        const mediaCol = collection(db, 'media');
+        const q = query(mediaCol, where('published', '==', true));
+        const snap = await getDocs(q);
+        if (!snap.empty && isMounted) {
+          const list: MediaItem[] = [];
+          snap.forEach(d => {
+            list.push({ id: d.id, ...d.data() } as MediaItem);
+          });
+          if (list.length > 0) {
+            setDynamicMedia(list);
+            return;
+          }
+        }
+      } catch (fsErr) {
+        // Fallback to Express backend or static pre-seeded data
+      }
+
+      // 2. Try fetching from server API endpoint
       try {
         const res = await fetch('/api/public/media');
-        if (res.ok) {
+        if (res.ok && isMounted) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
             const flatList: MediaItem[] = [];
@@ -237,7 +261,12 @@ export const MediaPage = () => {
         // Fallback already pre-seeded from mediaCloudinaryData
       }
     };
+
     fetchMedia();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Filter out any potential leadership photos (Strict security constraint)

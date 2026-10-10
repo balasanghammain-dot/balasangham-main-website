@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
@@ -8,14 +8,46 @@ import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 
 import { VERIFIED_EVENTS } from '../data/verifiedEvents';
+import { subscribeToPublishedEvents, getPublishedEvents } from '../lib/eventsService';
 
 export const EventsPage = () => {
   const { language } = useLanguage();
   const ml = language === 'ml';
   const [activeTab, setActiveTab] = useState<'all' | 'upcoming' | 'past' | 'observances'>('all');
   
-  // Use static verified events (published only)
-  const events = VERIFIED_EVENTS.filter(e => e.published === 1 || e.published === true);
+  // Initialize with verified events, then hydrate live from Firestore
+  const [events, setEvents] = useState<EventData[]>(() => 
+    VERIFIED_EVENTS.filter(e => e.published === 1 || e.published === true)
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    // Attach real-time listener for published events
+    const unsubscribe = subscribeToPublishedEvents(
+      (liveEvents) => {
+        if (isMounted && liveEvents && liveEvents.length > 0) {
+          setEvents(liveEvents);
+        }
+      },
+      async (err) => {
+        console.warn('Firestore subscription failed, falling back to one-time query:', err);
+        try {
+          const liveEvents = await getPublishedEvents();
+          if (isMounted && liveEvents && liveEvents.length > 0) {
+            setEvents(liveEvents);
+          }
+        } catch {
+          // Fallback state already preserved from VERIFIED_EVENTS
+        }
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   const now = new Date().getTime();
   const upcomingEvents = events

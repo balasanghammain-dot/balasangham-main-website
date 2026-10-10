@@ -303,4 +303,314 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       expect(canDelete(adminAuth)).toBe(true);
     });
   });
+
+  describe('Media Collection Security Rules & Validator Function Pattern', () => {
+    const allowedMediaFields = [
+      'title',
+      'description',
+      'caption',
+      'caption_ml',
+      'url', 'secureUrl', 'secure_url',
+      'publicId', 'public_id', 'cloudinary_public_id',
+      'type', 'resource_type',
+      'format',
+      'width',
+      'height',
+      'duration',
+      'thumbnail_url', 'thumbnailUrl',
+      'eventId', 'event_id',
+      'published',
+      'sort_order',
+      'createdAt', 'created_at',
+      'updatedAt', 'updated_at'
+    ];
+
+    function isValidOptionalThumbnailUrl(data: any, field: string): boolean {
+      if (!(field in data)) return true;
+      const val = data[field];
+      if (val === null) return true;
+      return typeof val === 'string' && val.length >= 8 && val.length <= 1000 && (val.startsWith('https://') || val.startsWith('/'));
+    }
+
+    function isValidOptionalNumber(data: any, field: string): boolean {
+      if (!(field in data)) return true;
+      const val = data[field];
+      if (val === null) return true;
+      return typeof val === 'number' && !isNaN(val) && val >= 0;
+    }
+
+    function isValidOptionalSortOrder(data: any, field: string): boolean {
+      if (!(field in data)) return true;
+      const val = data[field];
+      if (val === null) return true;
+      return typeof val === 'number' && !isNaN(val);
+    }
+
+    function isValidMedia(data: Record<string, any>): boolean {
+      // 1. Strict schema
+      const keys = Object.keys(data);
+      if (!keys.every(k => allowedMediaFields.includes(k))) return false;
+
+      // 2. Required URL Validation
+      const hasUrlField = ('url' in data) || ('secureUrl' in data) || ('secure_url' in data);
+      if (!hasUrlField) return false;
+      if ('url' in data && (typeof data.url !== 'string' || data.url.length < 8 || data.url.length > 1000 || !data.url.startsWith('https://'))) return false;
+      if ('secureUrl' in data && (typeof data.secureUrl !== 'string' || data.secureUrl.length < 8 || data.secureUrl.length > 1000 || !data.secureUrl.startsWith('https://'))) return false;
+      if ('secure_url' in data && (typeof data.secure_url !== 'string' || data.secure_url.length < 8 || data.secure_url.length > 1000 || !data.secure_url.startsWith('https://'))) return false;
+
+      // 3. Required Public ID Validation
+      const hasPublicIdField = ('publicId' in data) || ('public_id' in data) || ('cloudinary_public_id' in data);
+      if (!hasPublicIdField) return false;
+      if ('publicId' in data && (typeof data.publicId !== 'string' || data.publicId.length < 1 || data.publicId.length > 500)) return false;
+      if ('public_id' in data && (typeof data.public_id !== 'string' || data.public_id.length < 1 || data.public_id.length > 500)) return false;
+      if ('cloudinary_public_id' in data && (typeof data.cloudinary_public_id !== 'string' || data.cloudinary_public_id.length < 1 || data.cloudinary_public_id.length > 500)) return false;
+
+      // 4. Required Type Validation
+      const hasTypeField = ('type' in data) || ('resource_type' in data);
+      if (!hasTypeField) return false;
+      if ('type' in data && (typeof data.type !== 'string' || (data.type !== 'image' && data.type !== 'video'))) return false;
+      if ('resource_type' in data && (typeof data.resource_type !== 'string' || (data.resource_type !== 'image' && data.resource_type !== 'video'))) return false;
+
+      // 5. Visibility / Publication Status
+      if (!('published' in data)) return false;
+      const isValidPublished = typeof data.published === 'boolean' || data.published === 0 || data.published === 1;
+      if (!isValidPublished) return false;
+
+      // 6. Optional Format String
+      if (!isValidOptionalString(data, 'format', 1, 20)) return false;
+
+      // 7. Optional Dimensions & Duration
+      if (!isValidOptionalNumber(data, 'width')) return false;
+      if (!isValidOptionalNumber(data, 'height')) return false;
+      if (!isValidOptionalNumber(data, 'duration')) return false;
+
+      // 8. Optional Sort Order
+      if (!isValidOptionalSortOrder(data, 'sort_order')) return false;
+
+      // 9. Optional Thumbnail URL
+      if (!isValidOptionalThumbnailUrl(data, 'thumbnail_url')) return false;
+      if (!isValidOptionalThumbnailUrl(data, 'thumbnailUrl')) return false;
+
+      // 10. Optional Event Association
+      if (!isValidOptionalString(data, 'eventId', 0, 150)) return false;
+      if (!isValidOptionalString(data, 'event_id', 0, 150)) return false;
+
+      // 11. Timestamps
+      if (!isValidOptionalDate(data, 'createdAt')) return false;
+      if (!isValidOptionalDate(data, 'created_at')) return false;
+      if (!isValidOptionalDate(data, 'updatedAt')) return false;
+      if (!isValidOptionalDate(data, 'updated_at')) return false;
+
+      // 12. Optional Text Bounds
+      if (!isValidOptionalString(data, 'title', 0, 300)) return false;
+      if (!isValidOptionalString(data, 'description', 0, 2000)) return false;
+      if (!isValidOptionalString(data, 'caption', 0, 500)) return false;
+      if (!isValidOptionalString(data, 'caption_ml', 0, 500)) return false;
+
+      return true;
+    }
+
+    function canReadMedia(auth: any, resourceData: Record<string, any>): boolean {
+      return (resourceData.published === true || resourceData.published === 1) || isAdmin(auth);
+    }
+
+    function canCreateMedia(auth: any, newData: Record<string, any>): boolean {
+      return isAdmin(auth) && isValidMedia(newData);
+    }
+
+    function canUpdateMedia(auth: any, oldData: Record<string, any>, newData: Record<string, any>): boolean {
+      if (!isAdmin(auth)) return false;
+      if (!isValidMedia(newData)) return false;
+
+      if ('createdAt' in oldData && newData.createdAt !== oldData.createdAt) return false;
+      if ('created_at' in oldData && newData.created_at !== oldData.created_at) return false;
+
+      return true;
+    }
+
+    function canDeleteMedia(auth: any): boolean {
+      return isAdmin(auth);
+    }
+
+    const validMediaPayload: Record<string, any> = {
+      title: 'Venalthumbikal 2025 Cultural Troupe Presentation',
+      description: 'Children stage performance and cultural troupe assembly in Kannur district.',
+      caption: 'Venalthumbikal 2025 Cultural Troupe Presentation (1)',
+      caption_ml: 'വേനൽത്തുമ്പികൾ 2025 ജില്ലാ സംഗമം (1)',
+      url: 'https://res.cloudinary.com/dj4apdzk/image/upload/v1/balasangham/photo1.jpg',
+      publicId: 'balasangham/media/photo1',
+      type: 'image',
+      format: 'jpg',
+      width: 1280,
+      height: 853,
+      duration: 0,
+      thumbnail_url: 'https://res.cloudinary.com/dj4apdzk/image/upload/w_600/photo1.jpg',
+      eventId: 'venalthumbikal-district-sangamam-2025',
+      published: true,
+      sort_order: 1,
+      createdAt: '2026-05-24T10:00:00Z',
+      updatedAt: '2026-05-24T10:00:00Z'
+    };
+
+    describe('Media Domain Validator & Schema Rules', () => {
+      it('accepts a fully compliant media item', () => {
+        expect(isValidMedia(validMediaPayload)).toBe(true);
+      });
+
+      it('accepts general media without an associated eventId or event_id', () => {
+        const generalMedia = { ...validMediaPayload };
+        delete generalMedia.eventId;
+        delete generalMedia.event_id;
+        expect(isValidMedia(generalMedia)).toBe(true);
+
+        const nullEventMedia = { ...validMediaPayload, eventId: null, event_id: null };
+        expect(isValidMedia(nullEventMedia)).toBe(true);
+      });
+
+      it('accepts snake_case / legacy media attributes (resource_type, cloudinary_public_id, secure_url, published 0/1)', () => {
+        const legacyMedia = {
+          title: 'Legacy Video',
+          secure_url: 'https://res.cloudinary.com/dj4apdzk/video/upload/v1/video.mp4',
+          cloudinary_public_id: 'balasangham/media/video1',
+          resource_type: 'video',
+          published: 1,
+          format: 'mp4',
+          duration: 120.5,
+          thumbnail_url: '/images/video-thumb.jpg'
+        };
+        expect(isValidMedia(legacyMedia)).toBe(true);
+      });
+
+      it('rejects payloads missing mandatory fields (url, publicId, type, published)', () => {
+        const missingUrl = { ...validMediaPayload };
+        delete missingUrl.url;
+        expect(isValidMedia(missingUrl)).toBe(false);
+
+        const missingPublicId = { ...validMediaPayload };
+        delete missingPublicId.publicId;
+        expect(isValidMedia(missingPublicId)).toBe(false);
+
+        const missingType = { ...validMediaPayload };
+        delete missingType.type;
+        expect(isValidMedia(missingType)).toBe(false);
+
+        const missingPublished = { ...validMediaPayload };
+        delete missingPublished.published;
+        expect(isValidMedia(missingPublished)).toBe(false);
+      });
+
+      it('rejects schema pollution attacks (unexpected keys)', () => {
+        const polluted = {
+          ...validMediaPayload,
+          injectedScript: '<script>alert("hack")</script>',
+          isSuperAdmin: true
+        };
+        expect(isValidMedia(polluted)).toBe(false);
+      });
+
+      it('rejects insecure non-HTTPS url', () => {
+        const insecure = {
+          ...validMediaPayload,
+          url: 'http://insecure-cdn.com/image.jpg'
+        };
+        expect(isValidMedia(insecure)).toBe(false);
+      });
+
+      it('rejects invalid type values (must be image or video)', () => {
+        const invalidType = {
+          ...validMediaPayload,
+          type: 'executable'
+        };
+        expect(isValidMedia(invalidType)).toBe(false);
+      });
+
+      it('rejects Resource Exhaustion / DoS attacks (oversized text fields)', () => {
+        const oversizedTitle = { ...validMediaPayload, title: 'A'.repeat(301) };
+        expect(isValidMedia(oversizedTitle)).toBe(false);
+
+        const oversizedDesc = { ...validMediaPayload, description: 'B'.repeat(2001) };
+        expect(isValidMedia(oversizedDesc)).toBe(false);
+
+        const oversizedCaption = { ...validMediaPayload, caption: 'C'.repeat(501) };
+        expect(isValidMedia(oversizedCaption)).toBe(false);
+      });
+
+      it('rejects invalid thumbnail URLs (must start with https:// or /)', () => {
+        const insecureThumb = { ...validMediaPayload, thumbnail_url: 'http://cdn.com/thumb.jpg' };
+        expect(isValidMedia(insecureThumb)).toBe(false);
+
+        const relativeThumb = { ...validMediaPayload, thumbnail_url: '/images/thumb.jpg' };
+        expect(isValidMedia(relativeThumb)).toBe(true);
+      });
+
+      it('rejects negative numbers for width, height, or duration', () => {
+        const negativeWidth = { ...validMediaPayload, width: -100 };
+        expect(isValidMedia(negativeWidth)).toBe(false);
+
+        const negativeHeight = { ...validMediaPayload, height: -50 };
+        expect(isValidMedia(negativeHeight)).toBe(false);
+
+        const negativeDuration = { ...validMediaPayload, duration: -10 };
+        expect(isValidMedia(negativeDuration)).toBe(false);
+      });
+    });
+
+    describe('Media Read Access Control & Visibility Protection', () => {
+      it('allows unauthenticated public access to published media (bool true or int 1)', () => {
+        expect(canReadMedia(null, { published: true })).toBe(true);
+        expect(canReadMedia(null, { published: 1 })).toBe(true);
+      });
+
+      it('strictly denies unauthenticated public access to draft media (bool false or int 0)', () => {
+        expect(canReadMedia(null, { published: false })).toBe(false);
+        expect(canReadMedia(null, { published: 0 })).toBe(false);
+      });
+
+      it('allows authenticated administrator to access draft media', () => {
+        const adminAuth = { token: { admin: true } };
+        expect(canReadMedia(adminAuth, { published: false })).toBe(true);
+        expect(canReadMedia(adminAuth, { published: 0 })).toBe(true);
+
+        const adminEmailAuth = { token: { email: 'admin@balasangham.org' } };
+        expect(canReadMedia(adminEmailAuth, { published: false })).toBe(true);
+      });
+    });
+
+    describe('Media Write Access Control & Immutable Field Protection', () => {
+      const adminAuth = { token: { admin: true } };
+      const userAuth = { token: { uid: 'regular-user' } };
+
+      it('denies media creation by unauthenticated or regular users', () => {
+        expect(canCreateMedia(null, validMediaPayload)).toBe(false);
+        expect(canCreateMedia(userAuth, validMediaPayload)).toBe(false);
+      });
+
+      it('allows media creation by authenticated admin with valid payload', () => {
+        expect(canCreateMedia(adminAuth, validMediaPayload)).toBe(true);
+      });
+
+      it('strictly denies media updates that attempt to modify immutable fields (createdAt)', () => {
+        const existingDoc = { ...validMediaPayload };
+        const alteredCreatedAt = { ...validMediaPayload, createdAt: '1980-01-01T00:00:00Z' };
+        expect(canUpdateMedia(adminAuth, existingDoc, alteredCreatedAt)).toBe(false);
+      });
+
+      it('allows legitimate administrative updates that preserve immutable fields', () => {
+        const existingDoc = { ...validMediaPayload };
+        const updatedDoc = {
+          ...validMediaPayload,
+          title: 'Updated Presentation Title',
+          updatedAt: '2026-10-10T12:00:00Z'
+        };
+        expect(canUpdateMedia(adminAuth, existingDoc, updatedDoc)).toBe(true);
+      });
+
+      it('restricts media delete operations exclusively to administrators', () => {
+        expect(canDeleteMedia(null)).toBe(false);
+        expect(canDeleteMedia(userAuth)).toBe(false);
+        expect(canDeleteMedia(adminAuth)).toBe(true);
+      });
+    });
+  });
 });
+

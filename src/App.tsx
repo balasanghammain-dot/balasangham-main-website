@@ -21,6 +21,7 @@ const EventDetailPage = lazy(() => import('./pages/EventDetailPage').then(m => (
 const SnapSharePage = lazy(() => import('./pages/SnapSharePage').then(m => ({ default: m.SnapSharePage })));
 const MediaPage = lazy(() => import('./pages/MediaPage').then(m => ({ default: m.MediaPage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const PosterGamePage = lazy(() => import('./pages/PosterGamePage').then(m => ({ default: m.PosterGamePage })));
 const JoinPage = lazy(() => import('./pages/JoinPage').then(m => ({ default: m.JoinPage })));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
 const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })));
@@ -73,6 +74,8 @@ function AppContent() {
             {/* Engagement & Info */}
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/join" element={<JoinPage />} />
+            <Route path="/game" element={<PosterGamePage />} />
+            <Route path="/poster-game" element={<PosterGamePage />} />
 
             {/* Legal & Utility */}
             <Route path="/privacy" element={<PrivacyPage />} />

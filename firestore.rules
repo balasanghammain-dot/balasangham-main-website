@@ -51,13 +51,43 @@ rules_version = '2';
 //   - updatedAt: timestamp (optional) - Last modification timestamp
 //   - updated_at: string | timestamp (optional) - Legacy modification timestamp
 //
+// Collection: media
+// Document ID: {mediaId} (Auto-generated UUID or custom identifier)
+// Fields:
+//   - title: string | null (optional, 0-300 chars) - Title/headline for media
+//   - description: string | null (optional, 0-2000 chars) - Detailed description
+//   - caption: string | null (optional, 0-500 chars) - Short caption
+//   - caption_ml: string | null (optional, 0-500 chars) - Caption in Malayalam
+//   - url: string (required/conditional, 8-1000 chars, must start with https://) - Media asset URL
+//   - secureUrl: string (required/conditional, 8-1000 chars, must start with https://) - Cloudinary secure URL
+//   - secure_url: string (required/conditional, 8-1000 chars, must start with https://) - Legacy secure URL
+//   - publicId: string (required/conditional, 1-500 chars) - Asset public identifier
+//   - public_id: string (required/conditional, 1-500 chars) - Asset public identifier
+//   - cloudinary_public_id: string (required/conditional, 1-500 chars) - Cloudinary public ID
+//   - type: string (required/conditional, 'image' or 'video') - Media resource type
+//   - resource_type: string (required/conditional, 'image' or 'video') - Resource type
+//   - format: string | null (optional, 1-20 chars) - File extension/format (jpg, mp4, etc.)
+//   - width: int | number | null (optional, non-negative) - Media pixel width
+//   - height: int | number | null (optional, non-negative) - Media pixel height
+//   - duration: int | number | null (optional, non-negative) - Video duration in seconds
+//   - thumbnail_url: string | null (optional, 8-1000 chars, starts with https:// or /) - Thumbnail preview
+//   - thumbnailUrl: string | null (optional, 8-1000 chars, starts with https:// or /) - Thumbnail preview
+//   - eventId: string | null (optional, 0-150 chars) - Associated event ID
+//   - event_id: string | null (optional, 0-150 chars) - Legacy associated event ID
+//   - published: bool | int (required, bool or 0/1) - Publication status toggle
+//   - sort_order: int | number | null (optional) - Grid display sequence index
+//   - createdAt: timestamp | string | null (optional, immutable on update) - Creation timestamp
+//   - created_at: timestamp | string | null (optional, immutable on update) - Legacy creation timestamp
+//   - updatedAt: timestamp | string | null (optional) - Last modification timestamp
+//   - updated_at: timestamp | string | null (optional) - Legacy modification timestamp
+//
 // ===============================================================
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
     // ===============================================================
-    // Helper Functions
+    // Common Helper Functions
     // ===============================================================
 
     // Check if the request is from an authenticated user
@@ -73,29 +103,6 @@ service cloud.firestore {
         request.auth.token.get('role', '') == 'admin' ||
         ('email' in request.auth.token && request.auth.token.email is string && request.auth.token.email.matches('.*@.*'))
       );
-    }
-
-    // List of all strictly allowed field names for an event document
-    function allowedEventFields() {
-      return [
-        'title', 'malayalamTitle', 'title_ml',
-        'slug',
-        'shortDescription', 'short_description', 'short_description_ml', 'shortDescriptionMalayalam',
-        'description', 'full_description', 'full_description_ml', 'descriptionMalayalam',
-        'startDate', 'start_date', 'endDate', 'end_date',
-        'venue', 'venue_ml', 'venueMalayalam',
-        'address', 'location', 'location_ml', 'addressMalayalam',
-        'mapUrl', 'map_url',
-        'category',
-        'poster', 'poster_url', 'poster_public_id',
-        'published',
-        'snapShareEnabled', 'snapshare_enabled',
-        'registration_url',
-        'additional_info', 'additional_info_ml',
-        'schedule_info', 'schedule_info_ml',
-        'createdAt', 'created_at',
-        'updatedAt', 'updated_at'
-      ];
     }
 
     // Validate that optional string field is either absent, null, or a string within length bounds
@@ -125,6 +132,33 @@ service cloud.firestore {
          data[field].matches('^https://.*'));
     }
 
+    // ===============================================================
+    // Events Domain Validation
+    // ===============================================================
+
+    // List of all strictly allowed field names for an event document
+    function allowedEventFields() {
+      return [
+        'title', 'malayalamTitle', 'title_ml',
+        'slug',
+        'shortDescription', 'short_description', 'short_description_ml', 'shortDescriptionMalayalam',
+        'description', 'full_description', 'full_description_ml', 'descriptionMalayalam',
+        'startDate', 'start_date', 'endDate', 'end_date',
+        'venue', 'venue_ml', 'venueMalayalam',
+        'address', 'location', 'location_ml', 'addressMalayalam',
+        'mapUrl', 'map_url',
+        'category',
+        'poster', 'poster_url', 'poster_public_id',
+        'published',
+        'snapShareEnabled', 'snapshare_enabled',
+        'registration_url',
+        'additional_info', 'additional_info_ml',
+        'schedule_info', 'schedule_info_ml',
+        'createdAt', 'created_at',
+        'updatedAt', 'updated_at'
+      ];
+    }
+
     // Validate poster metadata map schema and size limits
     function isValidPoster(posterData) {
       return posterData == null || (
@@ -135,7 +169,7 @@ service cloud.firestore {
       );
     }
 
-    // Validate that immutable fields remain unchanged during update operations
+    // Validate that immutable fields remain unchanged during update operations on events
     function areImmutableEventFieldsUnchanged() {
       return (
         (!('createdAt' in resource.data) || request.resource.data.createdAt == resource.data.createdAt) &&
@@ -144,10 +178,7 @@ service cloud.firestore {
       );
     }
 
-    // ===============================================================
-    // Domain Validator (Validator Function Pattern)
-    // ===============================================================
-
+    // Domain validator for events collection
     function isValidEvent(data) {
       return (
         // 1. Strict Schema Enforcement: No unexpected or injected keys
@@ -226,7 +257,142 @@ service cloud.firestore {
     }
 
     // ===============================================================
-    // Rules Definition
+    // Media Domain Validation
+    // ===============================================================
+
+    // List of all strictly allowed field names for a media document
+    function allowedMediaFields() {
+      return [
+        'title',
+        'description',
+        'caption',
+        'caption_ml',
+        'url', 'secureUrl', 'secure_url',
+        'publicId', 'public_id', 'cloudinary_public_id',
+        'type', 'resource_type',
+        'format',
+        'width',
+        'height',
+        'duration',
+        'thumbnail_url', 'thumbnailUrl',
+        'eventId', 'event_id',
+        'published',
+        'sort_order',
+        'createdAt', 'created_at',
+        'updatedAt', 'updated_at'
+      ];
+    }
+
+    // Validate that optional thumbnail URL is either absent, null, or a valid URL (HTTPS or relative '/')
+    function isValidOptionalThumbnailUrl(data, field) {
+      return !(field in data) ||
+        data[field] == null ||
+        (data[field] is string &&
+         data[field].size() >= 8 &&
+         data[field].size() <= 1000 &&
+         (data[field].matches('^https://.*') || data[field].matches('^/.*')));
+    }
+
+    // Validate that optional numeric field is either absent, null, or a valid number (int or float)
+    function isValidOptionalNumber(data, field) {
+      return !(field in data) ||
+        data[field] == null ||
+        ((data[field] is int || data[field] is float || data[field] is number) && data[field] >= 0);
+    }
+
+    // Validate that optional sort_order numeric field is either absent, null, or a valid number
+    function isValidOptionalSortOrder(data, field) {
+      return !(field in data) ||
+        data[field] == null ||
+        data[field] is int ||
+        data[field] is float ||
+        data[field] is number;
+    }
+
+    // Validate that immutable fields remain unchanged during update operations on media
+    function areImmutableMediaFieldsUnchanged() {
+      return (
+        (!('createdAt' in resource.data) || request.resource.data.createdAt == resource.data.createdAt) &&
+        (!('created_at' in resource.data) || request.resource.data.created_at == resource.data.created_at)
+      );
+    }
+
+    // Domain validator for media collection (Validator Function Pattern)
+    function isValidMedia(data) {
+      return (
+        // 1. Strict Schema Enforcement: No unexpected or injected keys
+        data.keys().hasOnly(allowedMediaFields()) &&
+
+        // 2. Required URL Validation (at least one HTTPS URL field is mandatory)
+        (
+          ('url' in data) ||
+          ('secureUrl' in data) ||
+          ('secure_url' in data)
+        ) &&
+        (!('url' in data) || (data.url is string && data.url.size() >= 8 && data.url.size() <= 1000 && data.url.matches('^https://.*'))) &&
+        (!('secureUrl' in data) || (data.secureUrl is string && data.secureUrl.size() >= 8 && data.secureUrl.size() <= 1000 && data.secureUrl.matches('^https://.*'))) &&
+        (!('secure_url' in data) || (data.secure_url is string && data.secure_url.size() >= 8 && data.secure_url.size() <= 1000 && data.secure_url.matches('^https://.*'))) &&
+
+        // 3. Required Public ID Validation (at least one public ID field is mandatory, 1-500 chars)
+        (
+          ('publicId' in data) ||
+          ('public_id' in data) ||
+          ('cloudinary_public_id' in data)
+        ) &&
+        (!('publicId' in data) || (data.publicId is string && data.publicId.size() >= 1 && data.publicId.size() <= 500)) &&
+        (!('public_id' in data) || (data.public_id is string && data.public_id.size() >= 1 && data.public_id.size() <= 500)) &&
+        (!('cloudinary_public_id' in data) || (data.cloudinary_public_id is string && data.cloudinary_public_id.size() >= 1 && data.cloudinary_public_id.size() <= 500)) &&
+
+        // 4. Required Type Validation (must be 'image' or 'video')
+        (
+          ('type' in data) ||
+          ('resource_type' in data)
+        ) &&
+        (!('type' in data) || (data.type is string && (data.type == 'image' || data.type == 'video'))) &&
+        (!('resource_type' in data) || (data.resource_type is string && (data.resource_type == 'image' || data.resource_type == 'video'))) &&
+
+        // 5. Visibility / Publication Status (Required, bool or 0/1)
+        ('published' in data) &&
+        (
+          data.published is bool ||
+          (data.published is int && (data.published == 0 || data.published == 1))
+        ) &&
+
+        // 6. Optional Format String (1-20 chars)
+        isValidOptionalString(data, 'format', 1, 20) &&
+
+        // 7. Optional Dimensions and Duration (non-negative numbers)
+        isValidOptionalNumber(data, 'width') &&
+        isValidOptionalNumber(data, 'height') &&
+        isValidOptionalNumber(data, 'duration') &&
+
+        // 8. Optional Sort Order
+        isValidOptionalSortOrder(data, 'sort_order') &&
+
+        // 9. Optional Thumbnail URL (HTTPS or relative '/')
+        isValidOptionalThumbnailUrl(data, 'thumbnail_url') &&
+        isValidOptionalThumbnailUrl(data, 'thumbnailUrl') &&
+
+        // 10. Optional Event Association (general media does NOT require an event association)
+        isValidOptionalString(data, 'eventId', 0, 150) &&
+        isValidOptionalString(data, 'event_id', 0, 150) &&
+
+        // 11. Audit Timestamps
+        isValidOptionalDate(data, 'createdAt') &&
+        isValidOptionalDate(data, 'created_at') &&
+        isValidOptionalDate(data, 'updatedAt') &&
+        isValidOptionalDate(data, 'updated_at') &&
+
+        // 12. Optional Text Fields with Strict Length Bounds (Resource Exhaustion / DoS Prevention)
+        isValidOptionalString(data, 'title', 0, 300) &&
+        isValidOptionalString(data, 'description', 0, 2000) &&
+        isValidOptionalString(data, 'caption', 0, 500) &&
+        isValidOptionalString(data, 'caption_ml', 0, 500)
+      );
+    }
+
+    // ===============================================================
+    // Rules Definitions
     // ===============================================================
 
     // Events Collection
@@ -245,6 +411,25 @@ service cloud.firestore {
                       areImmutableEventFieldsUnchanged();
 
       // Only administrators can permanently delete events.
+      allow delete: if isAdmin();
+    }
+
+    // Media Collection
+    match /media/{mediaId} {
+      // Public users can read only published media (published == true or published == 1).
+      // Administrators can read all media (including drafts).
+      allow read: if (resource.data.published == true || resource.data.published == 1) || isAdmin();
+
+      // Only administrators can create new media assets. Must pass domain validation.
+      allow create: if isAdmin() && isValidMedia(request.resource.data);
+
+      // Only administrators can update existing media assets.
+      // Must satisfy domain validation AND maintain immutable fields.
+      allow update: if isAdmin() &&
+                      isValidMedia(request.resource.data) &&
+                      areImmutableMediaFieldsUnchanged();
+
+      // Only administrators can delete media assets.
       allow delete: if isAdmin();
     }
 

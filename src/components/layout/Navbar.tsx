@@ -5,7 +5,7 @@ import { BalasanghamLogo } from '../motifs/BalasanghamLogo';
 import { LanguageToggle } from '../common/LanguageToggle';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '../ui/sheet';
 import { Button } from '../ui/button';
-import { Menu, Music, ChevronDown, ArrowRight } from 'lucide-react';
+import { Menu, Music, ChevronDown, ArrowRight, Gamepad2 } from 'lucide-react';
 
 interface NavbarProps {
   onOpenAnthem: () => void;
@@ -35,6 +35,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
     { to: '/', label: 'Home', labelMl: 'ഹോം' },
     { to: '/about', label: 'About', labelMl: 'ഞങ്ങളെക്കുറിച്ച്' },
     { to: '/events', label: 'Events', labelMl: 'സമ്മേളനങ്ങൾ' },
+    { to: '/game', label: 'Play Game 🎮', labelMl: 'പോസ്റ്റർ ഗെയിം 🎮' },
     { to: '/media', label: 'Media', labelMl: 'മീഡിയ' },
     { to: '/contact', label: 'Contact', labelMl: 'സമ്പർക്കം' },
   ];
@@ -147,8 +148,17 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             })}
           </nav>
 
-          {/* Desktop Actions: Flag Song | EN/മലയാളം | Join */}
-          <div className="hidden lg:flex items-center gap-2.5 xl:gap-3.5 shrink-0">
+          {/* Desktop Actions: Flag Song | Game | EN/മലയാളം | Join */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-2.5 shrink-0">
+            <Link
+              to="/game"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-amber-950 bg-amber-400 hover:bg-amber-300 transition-colors border border-amber-500/40 shadow-xs min-h-[36px]"
+              aria-label="Play Poster Game"
+              title={ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കാം' : 'Play Poster Game'}
+            >
+              <Gamepad2 className="w-3.5 h-3.5 text-deep-red" />
+              <span className={ml ? 'font-malayalam normal-case' : ''}>{ml ? 'ഗെയിം' : 'Play Game'}</span>
+            </Link>
             <button
               type="button"
               onClick={onOpenAnthem}
@@ -252,11 +262,23 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           </nav>
 
           {/* Bottom actions in sheet */}
-          <div className="px-4 py-4 border-t border-dark-brown/10 space-y-3 pb-safe">
+          <div className="px-4 py-4 border-t border-dark-brown/10 space-y-2.5 pb-safe">
             <Button className="w-full" asChild>
               <Link to="/join" onClick={() => setSheetOpen(false)}>
                 <span className={ml ? 'font-malayalam normal-case text-sm' : ''}>{ml ? 'അംഗത്വം എടുക്കൂ' : 'Join Balasangham'}</span>
                 <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full border-amber-400 bg-amber-50 hover:bg-amber-100 text-amber-950 font-bold"
+              asChild
+            >
+              <Link to="/game" onClick={() => setSheetOpen(false)}>
+                <Gamepad2 className="w-4 h-4 text-deep-red mr-2" />
+                <span className={ml ? 'font-malayalam normal-case text-sm' : ''}>
+                  {ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കാം' : 'Play Poster Game 🎮'}
+                </span>
               </Link>
             </Button>
             <Button

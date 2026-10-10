@@ -1,8 +1,9 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
-import { Calendar, MapPin, ArrowRight, Camera } from 'lucide-react';
-import { MediaItem } from '../types/event';
+import { Calendar, MapPin, ArrowRight, Camera, Gamepad2, Loader2 } from 'lucide-react';
+import { EventData, MediaItem } from '../types/event';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { CalendarDropdown } from '../components/event/CalendarDropdown';
@@ -11,23 +12,103 @@ import { EventMediaGallery } from '../components/event/EventMediaGallery';
 import { EventLocationSection } from '../components/event/EventLocationSection';
 
 import { VERIFIED_EVENTS } from '../data/verifiedEvents';
+import { getEventBySlug } from '../lib/eventsService';
+import { db } from '../lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export const EventDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const ml = language === 'ml';
 
-  // Look up event from static data
-  const event = VERIFIED_EVENTS.find(e => e.slug === slug) || null;
-  const media: MediaItem[] = [];
-  const error = !event ? 'Event not found.' : null;
+  // Seed with static verified event if matching slug
+  const [event, setEvent] = useState<EventData | null>(() => 
+    VERIFIED_EVENTS.find(e => e.slug === slug) || null
+  );
+  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(!event);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (!slug) return;
+
+    const fetchLiveEvent = async () => {
+      try {
+        // 1. Fetch live event document from Firestore by slug
+        const liveEvent = await getEventBySlug(slug);
+        if (isMounted && liveEvent) {
+          setEvent(liveEvent);
+        }
+
+        // 2. Fetch associated media from Firestore media collection
+        const mediaCol = collection(db, 'media');
+        const eventId = liveEvent?.id || slug;
+        
+        // Try querying by eventId or slug
+        const mediaQ = query(
+          mediaCol,
+          where('eventId', '==', eventId),
+          where('published', '==', true)
+        );
+        const mediaSnap = await getDocs(mediaQ);
+        const items: MediaItem[] = [];
+        mediaSnap.forEach(d => {
+          items.push({ id: d.id, ...d.data() } as MediaItem);
+        });
+
+        // Also fallback to API media if empty
+        if (items.length === 0) {
+          try {
+            const res = await fetch(`/api/public/events/${slug}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data.media && Array.isArray(data.media)) {
+                items.push(...data.media);
+              }
+            }
+          } catch {
+            // API optional
+          }
+        }
+
+        if (isMounted) {
+          setMedia(items);
+        }
+      } catch (err: any) {
+        console.warn('Failed to load live event from Firestore:', err);
+        if (isMounted && !event) {
+          setError('Event not found.');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchLiveEvent();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-soft-cream pt-32 pb-20 px-4 text-center flex flex-col items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-dark-brown/60 mb-4" />
+        <p className="text-dark-brown/70">{ml ? 'വിവരങ്ങൾ ലഭ്യമാക്കുന്നു...' : 'Loading event details...'}</p>
+      </div>
+    );
+  }
 
   if (error || !event) {
     return (
       <div className="min-h-screen bg-soft-cream pt-32 pb-20 px-4 text-center">
-        <h2 className="text-2xl font-bold text-dark-brown mb-4">{error || 'Event Not Found'}</h2>
+        <h2 className="text-2xl font-bold text-dark-brown mb-4">{error || (ml ? 'പരിപാടി കണ്ടെത്താനായില്ല' : 'Event Not Found')}</h2>
         <Button asChild>
-          <Link to="/events">Back to Events</Link>
+          <Link to="/events">{ml ? 'എല്ലാ പരിപാടികളും' : 'Back to Events'}</Link>
         </Button>
       </div>
     );
@@ -116,7 +197,13 @@ export const EventDetailPage = () => {
               )}
 
               {/* Actions Bar */}
-              <div className="flex flex-wrap gap-4 pt-6 border-t border-slate-100">
+              <div className="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
+                <Button asChild className="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold border border-amber-500/30 shadow-xs">
+                  <Link to="/game">
+                    <Gamepad2 className="w-4 h-4 text-deep-red mr-2" />
+                    <span>{ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കൂ' : 'Play Poster Game 🎮'}</span>
+                  </Link>
+                </Button>
                 <CalendarDropdown event={calendarEvent} />
                 <ShareButton title={title} url={currentUrl} />
                 {event.registration_url && (
@@ -170,6 +257,27 @@ export const EventDetailPage = () => {
 
           {/* Sidebar */}
           <div className="space-y-8">
+            {/* Poster Tetris Game Card */}
+            <div className="bg-gradient-to-br from-amber-100 via-warm-cream to-sun-primary/20 rounded-3xl p-6 sm:p-8 border border-amber-300 shadow-sm text-center">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-deep-red border border-amber-200">
+                <Gamepad2 className="w-8 h-8" />
+              </div>
+              <h3 className={`text-xl font-black text-dark-brown mb-2 ${ml ? 'font-malayalam' : ''}`}>
+                {ml ? 'പോസ്റ്റർ ടെട്രിസ് പസിൽ' : 'Poster Tetris Puzzle'}
+              </h3>
+              <p className={`text-sm text-slate-700 mb-6 ${ml ? 'font-malayalam-body' : ''}`}>
+                {ml
+                  ? 'ടെട്രിസ് കളിച്ച് ബ്ലോക്കുകൾ നിറച്ച് ഈ സമ്മേളന പോസ്റ്റർ അൺലോക്ക് ചെയ്യൂ!'
+                  : 'Play easy Tetris to permanently reveal this official conference poster!'}
+              </p>
+              <Button asChild className="w-full bg-deep-red hover:bg-bright-red text-white font-bold">
+                <Link to="/game">
+                  {ml ? 'ഗെയിം കളിക്കുക' : 'Play Poster Game'}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+
             {Boolean(event.snapshare_enabled) && (
               <div className="bg-gradient-to-br from-warm-orange/20 to-sun-primary/20 rounded-3xl p-8 border border-warm-orange/30 text-center">
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-deep-red">

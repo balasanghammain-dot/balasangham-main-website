@@ -376,6 +376,42 @@ export async function getLatestEvent(): Promise<EventData | null> {
 }
 
 /**
+ * Real-time listener for all published events across the website
+ */
+export function subscribeToPublishedEvents(
+  onUpdate: (events: EventData[]) => void,
+  onError?: (err: Error) => void
+): () => void {
+  try {
+    const eventsCol = collection(db, COLLECTION_NAME);
+    const q = query(eventsCol, where('published', '==', true));
+
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const events: EventData[] = [];
+        snapshot.forEach(docSnap => {
+          events.push(normalizeFirestoreEvent(docSnap.id, docSnap.data()));
+        });
+        const sorted = events.sort((a, b) => {
+          const timeA = a.start_date ? new Date(a.start_date).getTime() : 0;
+          const timeB = b.start_date ? new Date(b.start_date).getTime() : 0;
+          return timeB - timeA;
+        });
+        onUpdate(sorted);
+      },
+      (err) => {
+        console.warn('subscribeToPublishedEvents error:', err);
+        if (onError) onError(err);
+      }
+    );
+  } catch (err: any) {
+    if (onError) onError(err);
+    return () => {};
+  }
+}
+
+/**
  * Requirement 16: Real-time listener for the Homepage latest event
  * Attaches a Firestore listener for published events so that when an admin
  * publishes/edits an event, the homepage updates without code deployment.
