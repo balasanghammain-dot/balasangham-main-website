@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Share2, Check, Copy } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ShareButtonProps {
   title: string;
@@ -10,6 +11,8 @@ interface ShareButtonProps {
 
 export const ShareButton = ({ title, url, className }: ShareButtonProps) => {
   const [copied, setCopied] = useState(false);
+  const { language } = useLanguage();
+  const ml = language === 'ml';
 
   const handleShare = async () => {
     if ('share' in navigator && navigator.share) {
@@ -37,17 +40,21 @@ export const ShareButton = ({ title, url, className }: ShareButtonProps) => {
     <Button
       variant="outline"
       onClick={handleShare}
-      className={className}
+      className={`${className || ''} ${ml ? 'font-malayalam' : ''}`}
     >
       {copied ? (
         <>
-          <Check className="w-4 h-4 mr-2 text-green-600" />
-          Copied
+          <Check className="w-4 h-4 mr-2 text-green-600 shrink-0" />
+          <span>{ml ? 'ലിങ്ക് പകർത്തി' : 'Copied'}</span>
         </>
       ) : (
         <>
-          {'share' in navigator ? <Share2 className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-          Share
+          {'share' in navigator ? (
+            <Share2 className="w-4 h-4 mr-2 shrink-0" />
+          ) : (
+            <Copy className="w-4 h-4 mr-2 shrink-0" />
+          )}
+          <span>{ml ? 'പങ്കുവെക്കൂ' : 'Share'}</span>
         </>
       )}
     </Button>

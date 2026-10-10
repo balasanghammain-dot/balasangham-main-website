@@ -80,15 +80,15 @@ export const Footer = () => {
               {ml ? 'ജില്ലാ കമ്മിറ്റി ഓഫീസ്' : 'District Committee Office'}
             </h4>
             <div className="space-y-3 text-sm text-white/70">
-              <address className="not-italic space-y-1 font-malayalam leading-relaxed">
+              <address className={`not-italic space-y-1 leading-relaxed ${ml ? 'font-malayalam' : ''}`}>
                 <p className="font-bold text-white">
-                  {organizationInfo.contact.addressLines[0]}
+                  {(ml ? organizationInfo.contact.addressLinesMl : organizationInfo.contact.addressLinesEn)[0]}
                 </p>
                 <p className="text-white/80">
-                  {organizationInfo.contact.addressLines[1]}
+                  {(ml ? organizationInfo.contact.addressLinesMl : organizationInfo.contact.addressLinesEn)[1]}
                 </p>
                 <p className="text-white/80">
-                  {organizationInfo.contact.addressLines[2]}
+                  {(ml ? organizationInfo.contact.addressLinesMl : organizationInfo.contact.addressLinesEn)[2]}
                 </p>
               </address>
 
@@ -100,7 +100,7 @@ export const Footer = () => {
                 >
                   <Phone className="w-4 h-4 text-sun-primary shrink-0" />
                   <span>
-                    Phone: <strong className="text-white group-hover:text-sun-primary underline decoration-white/30 group-hover:decoration-sun-primary">{organizationInfo.contact.phone}</strong>
+                    {ml ? 'ഫോൺ: ' : 'Phone: '}<strong className="text-white group-hover:text-sun-primary underline decoration-white/30 group-hover:decoration-sun-primary">{organizationInfo.contact.phone}</strong>
                   </span>
                 </a>
               </div>
@@ -121,7 +121,7 @@ export const Footer = () => {
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/40">
-          <p>© {new Date().getFullYear()} Balasangham Kannur District Committee</p>
+          <p>© {new Date().getFullYear()} {ml ? 'ബാലസംഘം കണ്ണൂർ ജില്ലാ കമ്മിറ്റി' : 'Balasangham Kannur District Committee'}</p>
           <div className="flex items-center gap-4">
             <Link to="/privacy" className="hover:text-white/70 transition-colors">{ml ? 'സ്വകാര്യത' : 'Privacy'}</Link>
             <Link to="/terms" className="hover:text-white/70 transition-colors">{ml ? 'നിബന്ധനകൾ' : 'Terms'}</Link>

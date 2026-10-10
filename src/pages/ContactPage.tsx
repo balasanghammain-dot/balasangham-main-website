@@ -46,7 +46,7 @@ export const ContactPage = () => {
       <section className="py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Verified Social Media Channels */}
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 border border-slate-200 shadow-sm">
             <h2 className={`text-xl font-bold text-charcoal mb-6 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
               <Share2 className="w-5 h-5 text-deep-red" />
               <span>{ml ? 'ഔദ്യോഗിക സോഷ്യൽ മീഡിയ' : 'Verified Social Media Channels'}</span>
@@ -64,19 +64,19 @@ export const ContactPage = () => {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl border border-slate-100 bg-soft-cream hover:border-deep-red hover:bg-red-50/20 transition-all group"
+                    className="flex items-center justify-between gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl border border-slate-100 bg-soft-cream hover:border-deep-red hover:bg-red-50/20 transition-all group overflow-hidden"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-red-100 text-deep-red flex items-center justify-center group-hover:bg-deep-red group-hover:text-white transition-colors">
-                        <Icon className="w-5 h-5" />
+                    <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-red-100 text-deep-red flex items-center justify-center group-hover:bg-deep-red group-hover:text-white transition-colors shrink-0">
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
-                      <div>
-                        <strong className="block text-sm text-charcoal font-bold">{link.platform}</strong>
-                        <span className="text-xs text-slate-500">{link.handle}</span>
+                      <div className="min-w-0">
+                        <strong className="block text-xs sm:text-sm text-charcoal font-bold truncate">{link.platform}</strong>
+                        <span className="text-[11px] sm:text-xs text-slate-500 truncate block">{link.handle}</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-deep-red group-hover:translate-x-1 transition-transform">
-                      Visit &rarr;
+                    <span className="text-xs font-bold text-deep-red group-hover:translate-x-1 transition-transform shrink-0 whitespace-nowrap">
+                      {ml ? 'സന്ദർശിക്കുക →' : 'Visit →'}
                     </span>
                   </a>
                 );
@@ -85,7 +85,7 @@ export const ContactPage = () => {
           </div>
 
           {/* District Committee Office */}
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between h-full">
             <div>
               <h2 className={`text-xl font-bold text-charcoal mb-6 flex items-center gap-2 ${ml ? 'font-malayalam' : ''}`}>
                 <MapPin className="w-5 h-5 text-deep-red" />
@@ -93,20 +93,20 @@ export const ContactPage = () => {
               </h2>
 
               <div className="space-y-4 text-sm">
-                <div className="p-5 rounded-xl bg-soft-cream border border-slate-100">
+                <div className="p-4 sm:p-5 rounded-xl bg-soft-cream border border-slate-100">
                   <span className="text-xs font-bold uppercase tracking-wider text-deep-red block mb-2">
                     {ml ? 'ഔദ്യോഗിക വിലാസം' : 'Official Office Address'}
                   </span>
 
-                  <div className="space-y-1 font-malayalam leading-relaxed">
+                  <div className={`space-y-1 leading-relaxed ${ml ? 'font-malayalam' : ''}`}>
                     <p className="font-bold text-charcoal text-base">
-                      {organizationInfo.contact.addressLines[0]}
+                      {(ml ? organizationInfo.contact.addressLinesMl : organizationInfo.contact.addressLinesEn)[0]}
                     </p>
                     <p className="text-slate-700">
-                      {organizationInfo.contact.addressLines[1]}
+                      {(ml ? organizationInfo.contact.addressLinesMl : organizationInfo.contact.addressLinesEn)[1]}
                     </p>
                     <p className="text-slate-700">
-                      {organizationInfo.contact.addressLines[2]}
+                      {(ml ? organizationInfo.contact.addressLinesMl : organizationInfo.contact.addressLinesEn)[2]}
                     </p>
                   </div>
 
@@ -120,7 +120,7 @@ export const ContactPage = () => {
                         <Phone className="w-4 h-4" />
                       </span>
                       <span>
-                        Phone: <span className="text-deep-red underline decoration-deep-red/40 group-hover:decoration-deep-red">{organizationInfo.contact.phone}</span>
+                        {ml ? 'ഫോൺ: ' : 'Phone: '}<span className="text-deep-red underline decoration-deep-red/40 group-hover:decoration-deep-red">{organizationInfo.contact.phone}</span>
                       </span>
                     </a>
                   </div>

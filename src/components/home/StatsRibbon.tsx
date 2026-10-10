@@ -37,15 +37,13 @@ export const StatsRibbon = () => {
         {/* Subtle festive gradient line inspired by festival colors */}
         <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#D32020] via-[#F5A623] to-[#257A3E]" />
 
-        <div className="stats-grid-2x2 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-[#2A1610]/10">
+        <div className="stats-grid-2x2 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 md:divide-x divide-[#2A1610]/10">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             return (
               <div
                 key={idx}
-                className={`group flex flex-col items-center text-center p-2 sm:p-3 transition-transform hover:-translate-y-1 duration-300 ${
-                  idx > 0 ? 'pt-4 md:pt-2' : ''
-                }`}
+                className="group flex flex-col items-center text-center p-2 sm:p-3 transition-transform hover:-translate-y-1 duration-300"
               >
                 <div
                   className={`p-3 rounded-2xl mb-2.5 border shadow-xs transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 ${stat.accent}`}

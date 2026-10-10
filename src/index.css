@@ -54,14 +54,70 @@
   .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
   .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 
-  /* Malayalam conjunct preservation */
-  [lang="ml"], .font-malayalam, .font-malayalam-body {
-    line-height: 1.7;
+  /* Malayalam typography optimizations */
+  html[lang="ml"],
+  [lang="ml"] body {
+    font-family: "Noto Sans Malayalam", "Plus Jakarta Sans", system-ui, sans-serif;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* Reset letter spacing for Malayalam: negative letter spacing crushes Malayalam conjuncts */
+  [lang="ml"] h1,
+  [lang="ml"] h2,
+  [lang="ml"] h3,
+  [lang="ml"] h4,
+  [lang="ml"] h5,
+  [lang="ml"] h6,
+  [lang="ml"] .font-display,
+  [lang="ml"] .tracking-tight,
+  [lang="ml"] .tracking-tighter,
+  [lang="ml"] .tracking-wide,
+  [lang="ml"] .tracking-wider,
+  [lang="ml"] .tracking-widest,
+  .font-malayalam,
+  .font-malayalam-body,
+  .font-ml-heading,
+  .font-ml-body {
+    letter-spacing: normal !important;
+  }
+
+  /* Malayalam line height rules: headings need at least 1.3 to prevent glyph clipping */
+  [lang="ml"] h1,
+  [lang="ml"] h2,
+  [lang="ml"] h3,
+  [lang="ml"] .text-heading,
+  [lang="ml"] .text-display,
+  [lang="ml"] .text-display-xl,
+  .font-ml-heading {
+    line-height: 1.35;
+  }
+
+  /* Malayalam body text line height */
+  [lang="ml"] p,
+  [lang="ml"] li,
+  [lang="ml"] .font-malayalam-body,
+  .font-malayalam,
+  .font-ml-body {
+    line-height: 1.75;
     font-feature-settings: "kern" 1;
   }
 
-  /* Editorial headings */
-  h1, h2, h3, .font-display {
+  /* Prevent glyph clipping in buttons, badges, navigation items */
+  [lang="ml"] button,
+  [lang="ml"] a,
+  [lang="ml"] input,
+  [lang="ml"] .badge,
+  .font-malayalam button {
+    overflow-wrap: break-word;
+    letter-spacing: normal;
+  }
+
+  /* Editorial headings in English */
+  :not([lang="ml"]) h1,
+  :not([lang="ml"]) h2,
+  :not([lang="ml"]) h3,
+  :not([lang="ml"]) .font-display {
     letter-spacing: -0.025em;
   }
 

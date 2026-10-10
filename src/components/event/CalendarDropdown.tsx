@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Calendar, ChevronDown, Download, ExternalLink } from 'lucide-react';
 import { Button } from '../ui/button';
 import { downloadICS, generateGoogleCalendarUrl } from '../../lib/calendar';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface CalendarDropdownProps {
   event: {
@@ -18,6 +19,8 @@ interface CalendarDropdownProps {
 export const CalendarDropdown: React.FC<CalendarDropdownProps> = ({ event, className }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { language } = useLanguage();
+  const ml = language === 'ml';
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -34,11 +37,11 @@ export const CalendarDropdown: React.FC<CalendarDropdownProps> = ({ event, class
       <Button
         variant="outline"
         onClick={() => setIsOpen(!isOpen)}
-        className="gap-2"
+        className={`gap-2 ${ml ? 'font-malayalam' : ''}`}
       >
-        <Calendar className="w-4 h-4" />
-        Add to Calendar
-        <ChevronDown className="w-4 h-4" />
+        <Calendar className="w-4 h-4 shrink-0" />
+        <span>{ml ? 'കലണ്ടറിൽ ചേർക്കൂ' : 'Add to Calendar'}</span>
+        <ChevronDown className="w-4 h-4 shrink-0" />
       </Button>
 
       {isOpen && (
@@ -48,21 +51,25 @@ export const CalendarDropdown: React.FC<CalendarDropdownProps> = ({ event, class
               href={generateGoogleCalendarUrl(event)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-4 py-3 text-sm text-dark-brown hover:bg-soft-cream transition-colors"
+              className={`flex items-center gap-3 px-4 py-3 text-sm text-dark-brown hover:bg-soft-cream transition-colors ${
+                ml ? 'font-malayalam' : ''
+              }`}
               onClick={() => setIsOpen(false)}
             >
-              <ExternalLink className="w-4 h-4 text-sun-primary" />
-              Google Calendar
+              <ExternalLink className="w-4 h-4 text-sun-primary shrink-0" />
+              <span>{ml ? 'ഗൂഗിൾ കലണ്ടർ' : 'Google Calendar'}</span>
             </a>
             <button
               onClick={() => {
                 downloadICS(event);
                 setIsOpen(false);
               }}
-              className="flex items-center gap-3 px-4 py-3 w-full text-left text-sm text-dark-brown hover:bg-soft-cream transition-colors"
+              className={`flex items-center gap-3 px-4 py-3 w-full text-left text-sm text-dark-brown hover:bg-soft-cream transition-colors ${
+                ml ? 'font-malayalam' : ''
+              }`}
             >
-              <Download className="w-4 h-4 text-sun-primary" />
-              Download .ics
+              <Download className="w-4 h-4 text-sun-primary shrink-0" />
+              <span>{ml ? '.ics ഫയൽ ഡൗൺലോഡ്' : 'Download .ics'}</span>
             </button>
           </div>
         </div>

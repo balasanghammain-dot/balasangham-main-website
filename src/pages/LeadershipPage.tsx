@@ -45,15 +45,17 @@ const LeaderProfile = ({ leader, ml, index }: { leader: Leader; ml: boolean; ind
         )}
       </div>
 
-      {/* Name */}
-      <h3 className={`mt-4 sm:mt-5 text-base sm:text-lg font-bold text-charcoal tracking-tight leading-snug group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
-        {displayName}
-      </h3>
+      {/* Name & Role Text Block */}
+      <div className="w-full max-w-[200px] mt-4 sm:mt-5 flex flex-col items-center">
+        <h3 className={`w-full min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-center text-base sm:text-lg font-bold text-charcoal tracking-tight leading-snug group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
+          {displayName}
+        </h3>
 
-      {/* Designation */}
-      <p className={`mt-1 text-xs sm:text-sm text-dark-brown/70 font-normal leading-normal ${ml ? 'font-malayalam-body' : ''}`}>
-        {displayRole}
-      </p>
+        {/* Designation */}
+        <p className={`w-full min-h-[2.25rem] sm:min-h-[2.5rem] flex items-start justify-center text-center mt-1 text-xs sm:text-sm text-dark-brown/70 font-normal leading-normal ${ml ? 'font-malayalam-body' : ''}`}>
+          {displayRole}
+        </p>
+      </div>
     </article>
   );
 };

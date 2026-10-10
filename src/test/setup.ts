@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, beforeEach } from 'vitest';
 
 window.scrollTo = vi.fn();
 
@@ -15,4 +15,8 @@ class MockIntersectionObserver implements IntersectionObserver {
 
 window.IntersectionObserver = MockIntersectionObserver;
 global.IntersectionObserver = MockIntersectionObserver;
+
+beforeEach(() => {
+  localStorage.clear();
+});
 

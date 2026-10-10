@@ -69,30 +69,30 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
       {/* Top accent line */}
       <div className="h-0.5 bg-deep-red" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-4 xl:px-6 2xl:px-8">
         <div className={`flex items-center justify-between transition-all duration-200 ${
           isScrolled ? 'h-14' : 'h-16 sm:h-20'
         }`}>
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red rounded-full p-1 shrink-0 active:scale-[0.98] transition-transform"
+            className="flex items-center gap-1.5 sm:gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red rounded-full p-1 shrink-0 active:scale-[0.98] transition-transform"
           >
             <div className="p-1 rounded-xl bg-white shadow-xs border border-sun-primary/30 group-hover:rotate-3 transition-transform flex items-center justify-center shrink-0">
-              <BalasanghamLogo className="w-8 h-8 sm:w-9 sm:h-9" alt="Balasangham Logo" />
+              <BalasanghamLogo className="w-7 h-7 sm:w-8 sm:h-8 xl:w-9 xl:h-9" alt="Balasangham Logo" />
             </div>
             <div className="flex flex-col shrink-0">
-              <span className={`text-base sm:text-xl font-black tracking-tight text-dark-brown group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
+              <span className={`text-sm sm:text-base xl:text-xl font-black tracking-tight text-dark-brown group-hover:text-deep-red transition-colors ${ml ? 'font-malayalam' : ''}`}>
                 {ml ? 'ബാലസംഘം' : 'Balasangham'}
               </span>
-              <span className="text-[10px] font-bold text-dark-brown/60 uppercase tracking-widest -mt-0.5 hidden sm:block">
+              <span className="text-[10px] font-bold text-dark-brown/60 uppercase tracking-widest -mt-0.5 hidden xl:block">
                 {ml ? 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി' : 'Kannur District'}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1.5 xl:gap-3 2xl:gap-4">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-2 2xl:gap-3 shrink-0">
             {navLinks.map((link) => {
               if (link.to === '/about') {
                 return (
@@ -100,15 +100,15 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
                     <NavLink
                       to="/about"
                       className={({ isActive }) =>
-                        `inline-flex items-center gap-1 px-3 py-2 text-sm font-bold tracking-normal transition-colors rounded-lg ${
+                        `inline-flex items-center gap-1 px-2 xl:px-2.5 2xl:px-3 py-1.5 xl:py-2 text-xs xl:text-sm font-bold tracking-normal transition-colors rounded-lg whitespace-nowrap ${
                           isActive || isAboutActive
                             ? 'text-deep-red font-black'
                             : 'text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5'
                         }`
                       }
                     >
-                      <span className={ml ? 'font-malayalam text-sm' : ''}>{ml ? link.labelMl : link.label}</span>
-                      <ChevronDown className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform text-dark-brown/50 group-hover:text-deep-red" />
+                      <span className={ml ? 'font-malayalam' : ''}>{ml ? link.labelMl : link.label}</span>
+                      <ChevronDown className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform text-dark-brown/50 group-hover:text-deep-red shrink-0" />
                     </NavLink>
                     {/* Dropdown */}
                     <div className="absolute top-full left-0 w-60 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none group-hover:pointer-events-auto">
@@ -134,11 +134,11 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) =>
-                    `px-3 py-2 text-sm font-bold tracking-normal transition-colors rounded-lg ${
+                    `px-2 xl:px-2.5 2xl:px-3 py-1.5 xl:py-2 text-xs xl:text-sm font-bold tracking-normal transition-colors rounded-lg whitespace-nowrap ${
                       isActive
                         ? 'text-deep-red font-black'
                         : 'text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5'
-                    } ${ml ? 'font-malayalam text-sm' : ''}`
+                    } ${ml ? 'font-malayalam' : ''}`
                   }
                 >
                   {ml ? link.labelMl : link.label}
@@ -148,31 +148,35 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
           </nav>
 
           {/* Desktop Actions: Flag Song | Game | EN/മലയാളം | Join */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-2.5 shrink-0">
+          <div className="hidden lg:flex items-center gap-1 xl:gap-1.5 2xl:gap-2.5 shrink-0">
             <Link
               to="/game"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-amber-950 bg-amber-400 hover:bg-amber-300 transition-colors border border-amber-500/40 shadow-xs min-h-[36px]"
+              className="flex items-center justify-center gap-1.5 px-2.5 2xl:px-3 py-1.5 rounded-full text-xs font-bold text-amber-950 bg-amber-400 hover:bg-amber-300 transition-colors border border-amber-500/40 shadow-xs min-h-[36px]"
               aria-label="Play Poster Game"
               title={ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കാം' : 'Play Poster Game'}
             >
-              <Gamepad2 className="w-3.5 h-3.5 text-deep-red" />
-              <span className={ml ? 'font-malayalam normal-case' : ''}>{ml ? 'ഗെയിം' : 'Play Game'}</span>
+              <Gamepad2 className="w-3.5 h-3.5 text-deep-red shrink-0" />
+              <span className={`hidden 2xl:inline ${ml ? 'font-malayalam normal-case' : ''}`}>
+                {ml ? 'ഗെയിം' : 'Play Game'}
+              </span>
             </Link>
             <button
               type="button"
               onClick={onOpenAnthem}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5 transition-colors border border-dark-brown/15 min-h-[36px]"
+              className="flex items-center justify-center gap-1.5 px-2.5 2xl:px-3 py-1.5 rounded-full text-xs font-bold text-dark-brown/75 hover:text-deep-red hover:bg-deep-red/5 transition-colors border border-dark-brown/15 min-h-[36px]"
               aria-label="Flag Song"
               title={ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}
             >
-              <Music className="w-3.5 h-3.5 text-deep-red" />
-              <span className={ml ? 'font-malayalam normal-case' : ''}>{ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}</span>
+              <Music className="w-3.5 h-3.5 text-deep-red shrink-0" />
+              <span className={`hidden 2xl:inline ${ml ? 'font-malayalam normal-case' : ''}`}>
+                {ml ? 'കൊടിപ്പാട്ട്' : 'Flag Song'}
+              </span>
             </button>
             <LanguageToggle />
-            <Button variant="default" size="sm" className="px-4 shadow-sm" asChild>
+            <Button variant="default" size="sm" className="px-2.5 xl:px-3.5 text-xs xl:text-sm shadow-sm whitespace-nowrap min-h-[36px]" asChild>
               <Link to="/join">
-                <span className={ml ? 'font-malayalam normal-case text-sm' : ''}>{ml ? 'അംഗത്വം' : 'Join'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span className={ml ? 'font-malayalam normal-case' : ''}>{ml ? 'അംഗത്വം' : 'Join'}</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1 shrink-0" />
               </Link>
             </Button>
           </div>
@@ -183,7 +187,7 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
             <button
               type="button"
               onClick={() => setSheetOpen(true)}
-              className="flex items-center justify-center min-h-[44px] min-w-[44px] h-11 w-11 rounded-full text-dark-brown hover:bg-dark-brown/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red"
+              className="flex items-center justify-center min-h-[40px] min-w-[40px] h-10 w-10 sm:h-11 sm:w-11 rounded-full text-dark-brown hover:bg-dark-brown/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-red"
               aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5" />

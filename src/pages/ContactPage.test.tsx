@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../context/LanguageContext';
 import { ContactPage } from './ContactPage';
@@ -7,6 +7,10 @@ import { Footer } from '../components/layout/Footer';
 import { organizationInfo, officialContact } from '../data/organizationData';
 
 describe('Contact Information & Data Architecture', () => {
+  beforeEach(() => {
+    localStorage.setItem('balasangham_lang', 'ml');
+  });
+
   it('canonical organization data contains verified office details and phone', () => {
     expect(organizationInfo.contact).toBeDefined();
     expect(officialContact).toBe(organizationInfo.contact);

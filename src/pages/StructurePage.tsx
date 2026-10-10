@@ -9,31 +9,43 @@ import { Shield, Users, Award, Sparkles } from 'lucide-react';
 const structuralTiers = [
   {
     tier: 'Unit (യൂണിറ്റ്)',
+    tierMl: 'യൂണിറ്റ് (Unit)',
     title: 'Neighborhood & School Units',
+    titleMl: 'അയൽപക്ക & സ്കൂൾ യൂണിറ്റുകൾ',
     desc: 'The foundational bedrock located in every residential ward, village, and school. Neighborhood children hold fortnightly meetings, elect their own unit president and secretary through secret ballot, and plan community activities.',
     descMl: 'ഓരോ പ്രദേശത്തെയും കുട്ടികൾ ഒത്തുചേരുന്ന അടിസ്ഥാന ഘടകം. കുട്ടികൾ സ്വയം ജനാധിപത്യപരമായി പ്രസിഡന്റിനെയും സെക്രട്ടറിയെയും തിരഞ്ഞെടുക്കുന്നു.',
     scope: '20,000+ across Kerala; hundreds active across Kannur',
+    scopeMl: 'കേരളത്തിലുടനീളം 20,000+; കണ്ണൂരിലുടനീളം നൂറുകണക്കിന് സജീവ യൂണിറ്റുകൾ',
   },
   {
     tier: 'Village / Area (വില്ലേജ് / ഏരിയ)',
+    tierMl: 'വില്ലേജ് / ഏരിയ (Village / Area)',
     title: 'Area Committees',
+    titleMl: 'ഏരിയ കമ്മിറ്റികൾ',
     desc: 'Federates local neighborhood units within an area (such as Pinarayi, Taliparamba, Payyannur, Thalassery, Kannur City, etc.). Coordinates Venal Kalari camps, area conferences, and local campaigns.',
     descMl: 'ഒരു പ്രദേശത്തെ യൂണിറ്റുകളെ ഏകോപിപ്പിക്കുന്ന ഏരിയ കമ്മിറ്റികൾ. ഏരിയ സമ്മേളനങ്ങളിലൂടെ കുട്ടികളുടെ പ്രതിനിധികൾ നേതൃത്വത്തെ തിരഞ്ഞെടുക്കുന്നു.',
     scope: 'Sub-district geographic clusters',
+    scopeMl: 'താലൂക്ക് / ഉപമേഖലാ തല ഏകോപനം',
   },
   {
     tier: 'District (ജില്ല)',
+    tierMl: 'ജില്ല (District)',
     title: 'Kannur District Committee',
+    titleMl: 'കണ്ണൂർ ജില്ലാ കമ്മിറ്റി',
     desc: 'Kannur District Conference brings together elected delegates from all area committees to elect the District President, Secretary, and committee, guiding districtwide programs and state representation.',
     descMl: 'ജില്ലയിലെ മുഴുവൻ ഏരിയകളിൽ നിന്നുമുള്ള പ്രതിനിധികൾ പങ്കെടുക്കുന്ന ജില്ലാ സമ്മേളനം നേതൃത്വത്തെ തിരഞ്ഞെടുക്കുന്നു.',
     scope: 'Kannur District jurisdiction (Birthplace district)',
+    scopeMl: 'കണ്ണൂർ ജില്ലാ പരിധി (പ്രസ്ഥാനത്തിന്റെ ജന്മദേശം)',
   },
   {
     tier: 'State (സംസ്ഥാനം)',
+    tierMl: 'സംസ്ഥാനം (State)',
     title: 'State Committee & Council',
+    titleMl: 'സംസ്ഥാന കമ്മിറ്റിയും കൗൺസിലും',
     desc: 'Apex deliberative body representing over one million children across Kerala\'s 14 revenue districts. Meets triennially at the State Conference.',
     descMl: 'കേരളത്തിലെ 14 ജില്ലകളിലെയും ലക്ഷക്കണക്കിന് കുട്ടികളെ പ്രതിനിധീകരിക്കുന്ന പരമോന്നത സമിതി.',
     scope: 'Statewide apex governance',
+    scopeMl: 'സംസ്ഥാനതല പരമോന്നത സമിതി',
   },
 ];
 
@@ -97,20 +109,20 @@ export const StructurePage = () => {
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-deep-red">
-                      {tier.tier}
+                    <span className={`text-xs font-bold uppercase tracking-wider text-deep-red ${ml ? 'font-malayalam' : ''}`}>
+                      {ml ? tier.tierMl : tier.tier}
                     </span>
                     <span className="text-xs text-slate-400 font-medium">Level 0{idx + 1}</span>
                   </div>
-                  <h3 className="text-lg font-bold text-charcoal mb-2">
-                    {tier.title}
+                  <h3 className={`text-lg font-bold text-charcoal mb-2 ${ml ? 'font-malayalam' : ''}`}>
+                    {ml ? tier.titleMl : tier.title}
                   </h3>
                   <p className={`text-sm text-slate-600 leading-relaxed mb-4 ${ml ? 'font-malayalam-body' : ''}`}>
                     {ml ? tier.descMl : tier.desc}
                   </p>
                 </div>
-                <div className="pt-3 border-t border-slate-100 text-xs font-medium text-slate-500">
-                  <span className="font-semibold text-slate-700">Scope:</span> {tier.scope}
+                <div className={`pt-3 border-t border-slate-100 text-xs font-medium text-slate-500 ${ml ? 'font-malayalam' : ''}`}>
+                  <span className="font-semibold text-slate-700">{ml ? 'പരിധി:' : 'Scope:'}</span> {ml ? tier.scopeMl : tier.scope}
                 </div>
               </div>
             ))}

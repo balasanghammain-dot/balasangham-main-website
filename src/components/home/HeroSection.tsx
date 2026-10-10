@@ -71,11 +71,11 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
               <div className="space-y-1 sm:space-y-2 w-full">
                 {ml ? (
                   <h1 className="font-malayalam font-extrabold tracking-tight text-dark-brown">
-                    <span className="block text-3xl min-[390px]:text-4xl sm:text-5xl lg:text-5xl xl:text-6xl text-dark-brown leading-[1.14]">
+                    <span className="block text-3xl min-[390px]:text-4xl sm:text-5xl lg:text-5xl xl:text-6xl text-dark-brown leading-[1.25] sm:leading-[1.2]">
                       <span className="inline-block whitespace-nowrap">ബാലസംഘം</span>{' '}
                       <span className="inline-block whitespace-nowrap">കണ്ണൂർ</span>
                     </span>
-                    <span className="block text-2xl min-[390px]:text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-black text-deep-red leading-[1.2] mt-1 sm:mt-2">
+                    <span className="block text-2xl min-[390px]:text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-black text-deep-red leading-[1.3] mt-1 sm:mt-2">
                       ജില്ലാ കമ്മിറ്റി
                     </span>
                   </h1>
@@ -110,20 +110,20 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
             </div>
 
             {/* 3. Action Buttons (Single instance in DOM, order-4 on mobile, order-3 on desktop) */}
-            <div className="order-4 lg:order-3 flex flex-col min-[420px]:flex-row items-center gap-3 pt-2 sm:pt-3 w-full max-w-sm lg:max-w-none justify-center lg:justify-start">
+            <div className="order-4 lg:order-3 flex flex-col min-[420px]:flex-row flex-wrap items-center gap-2.5 sm:gap-3 pt-2 sm:pt-3 w-full max-w-sm lg:max-w-none justify-center lg:justify-start">
               <Button
                 size="lg"
-                className="w-full min-[420px]:w-auto bg-deep-red hover:bg-bright-red text-white shadow-warm-lg font-bold min-h-[48px] px-7 py-3 rounded-full transition-all duration-200 active:scale-95 group justify-center"
+                className="w-full min-[420px]:w-auto bg-deep-red hover:bg-bright-red text-white shadow-warm-lg font-bold min-h-[48px] px-6 sm:px-7 py-3 rounded-full transition-all duration-200 active:scale-95 group justify-center shrink-0"
                 asChild
               >
                 <Link to="/join">
-                  <span className={ml ? 'font-malayalam font-bold text-base' : 'font-sans font-bold text-sm tracking-wide uppercase'}>
+                  <span className={ml ? 'font-malayalam font-bold text-sm sm:text-base' : 'font-sans font-bold text-sm tracking-wide uppercase'}>
                     {ml ? 'അംഗത്വം എടുക്കൂ' : 'Join Now'}
                   </span>
                   <span className="font-mono text-xs uppercase tracking-wider text-white/80 ml-1.5">
                     {ml ? '· ചേരുക' : '· JOIN'}
                   </span>
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform shrink-0" />
                 </Link>
               </Button>
 
@@ -131,10 +131,10 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
                 variant="outline"
                 size="lg"
                 asChild
-                className="w-full min-[420px]:w-auto border-amber-400 bg-amber-100/80 hover:bg-amber-200/90 text-amber-950 font-bold min-h-[48px] px-5 py-3 rounded-full shadow-xs transition-all active:scale-95 justify-center"
+                className="w-full min-[420px]:w-auto border-amber-400 bg-amber-100/80 hover:bg-amber-200/90 text-amber-950 font-bold min-h-[48px] px-4 sm:px-5 py-3 rounded-full shadow-xs transition-all active:scale-95 justify-center shrink-0"
               >
                 <Link to="/game">
-                  <Gamepad2 className="w-4 h-4 text-deep-red mr-2" />
+                  <Gamepad2 className="w-4 h-4 text-deep-red mr-2 shrink-0" />
                   <span className={ml ? 'font-malayalam font-bold text-sm' : 'font-sans font-bold text-sm'}>
                     {ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കൂ' : 'Play Poster Game 🎮'}
                   </span>
@@ -146,9 +146,9 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
                   variant="outline"
                   size="lg"
                   onClick={onOpenAnthem}
-                  className="w-full min-[420px]:w-auto border-dark-brown/20 hover:border-dark-brown/40 bg-white/70 hover:bg-white text-dark-brown font-semibold min-h-[48px] px-5 py-3 rounded-full shadow-xs transition-all active:scale-95 justify-center"
+                  className="w-full min-[420px]:w-auto border-dark-brown/20 hover:border-dark-brown/40 bg-white/70 hover:bg-white text-dark-brown font-semibold min-h-[48px] px-4 sm:px-5 py-3 rounded-full shadow-xs transition-all active:scale-95 justify-center shrink-0"
                 >
-                  <Music className="w-4 h-4 text-deep-red mr-2" />
+                  <Music className="w-4 h-4 text-deep-red mr-2 shrink-0" />
                   <span className={ml ? 'font-malayalam text-sm' : 'font-sans text-sm'}>
                     {ml ? 'പതാകഗാനം' : 'Flag Song'}
                   </span>
