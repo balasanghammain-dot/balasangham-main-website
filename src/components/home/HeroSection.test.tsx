@@ -16,6 +16,7 @@ describe('HeroSection Component', () => {
 
     expect(screen.getByText(/Balasangham/)).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /JOIN|ചേരുക/i }).length).toBeGreaterThan(0);
+    expect(screen.getByRole('link', { name: /Find Out Leaders|നേതൃത്വത്തെ അറിയൂ/i })).toHaveAttribute('href', '/about/leadership');
   });
 
   it('does not display removed core motto', () => {

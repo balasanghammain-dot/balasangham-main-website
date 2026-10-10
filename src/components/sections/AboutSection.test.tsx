@@ -16,6 +16,7 @@ describe('AboutSection Component', () => {
 
     expect(screen.getByRole('heading', { level: 2, name: /Democratic Movement|ജനാധിപത്യ പ്രസ്ഥാനം/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Read Our Story|ഞങ്ങളുടെ കഥ/i })).toHaveAttribute('href', '/about');
+    expect(screen.getByRole('link', { name: /Find Out Leaders|നേതൃത്വത്തെ അറിയൂ/i })).toHaveAttribute('href', '/about/leadership');
   });
 
   it('renders about image with alt text', () => {

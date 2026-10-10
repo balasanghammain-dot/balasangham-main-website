@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { Badge } from '../ui/badge';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Users } from 'lucide-react';
 
 export const AboutSection = () => {
   const { language } = useLanguage();
@@ -31,15 +31,30 @@ export const AboutSection = () => {
                 : 'Born in Kalliasseri in 1938, Balasangham nurtures democratic values, secular fraternity, and creative expression in over one million children across Kerala.'}
             </p>
 
-            <Link
-              to="/about"
-              className="inline-flex items-center gap-2 text-deep-red font-bold text-sm hover:gap-3 transition-all group"
-            >
-              <span className={ml ? 'font-malayalam normal-case' : ''}>
-                {ml ? 'ഞങ്ങളുടെ കഥ വായിക്കൂ' : 'Read Our Story'}
-              </span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-1">
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 text-deep-red font-bold text-sm hover:gap-3 transition-all group"
+              >
+                <span className={ml ? 'font-malayalam normal-case' : ''}>
+                  {ml ? 'ഞങ്ങളുടെ കഥ വായിക്കൂ' : 'Read Our Story'}
+                </span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <span className="text-dark-brown/30 hidden sm:inline" aria-hidden="true">•</span>
+
+              <Link
+                to="/about/leadership"
+                className="inline-flex items-center gap-2 text-dark-brown hover:text-deep-red font-bold text-sm hover:gap-3 transition-all group"
+              >
+                <Users className="w-4 h-4 text-deep-red shrink-0" />
+                <span className={ml ? 'font-malayalam normal-case' : ''}>
+                  {ml ? 'നേതൃത്വത്തെ അറിയൂ' : 'Find Out Leaders'}
+                </span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </div>
 
           {/* Image */}

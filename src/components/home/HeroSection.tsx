@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { Button } from '../ui/button';
 import { BalasanghamLogo } from '../motifs/BalasanghamLogo';
-import { ArrowRight, Music, Gamepad2 } from 'lucide-react';
+import { ArrowRight, Music, Gamepad2, Users } from 'lucide-react';
 
 interface HeroSectionProps {
   onOpenAnthem?: () => void;
@@ -137,6 +137,20 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
                   <Gamepad2 className="w-4 h-4 text-deep-red mr-2 shrink-0" />
                   <span className={ml ? 'font-malayalam font-bold text-sm' : 'font-sans font-bold text-sm'}>
                     {ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കൂ' : 'Play Poster Game 🎮'}
+                  </span>
+                </Link>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="w-full min-[420px]:w-auto border-dark-brown/20 hover:border-dark-brown/40 bg-white/70 hover:bg-white text-dark-brown font-semibold min-h-[48px] px-4 sm:px-5 py-3 rounded-full shadow-xs transition-all active:scale-95 justify-center shrink-0"
+              >
+                <Link to="/about/leadership">
+                  <Users className="w-4 h-4 text-deep-red mr-2 shrink-0" />
+                  <span className={ml ? 'font-malayalam font-bold text-sm' : 'font-sans font-bold text-sm'}>
+                    {ml ? 'നേതൃത്വത്തെ അറിയൂ' : 'Find Out Leaders'}
                   </span>
                 </Link>
               </Button>
