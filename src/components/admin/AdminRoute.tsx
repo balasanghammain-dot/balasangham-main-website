@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
+import { auth } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
 
 export default function AdminRoute() {
@@ -8,15 +10,22 @@ export default function AdminRoute() {
   const location = useLocation();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const data = await api.get<{ authenticated?: boolean }>('/api/admin/session');
-        setIsAuthenticated(data?.authenticated === true);
-      } catch (error) {
-        setIsAuthenticated(false);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user && user.email) {
+        setIsAuthenticated(true);
+        // Ensure backend session is synced
+        api.get<{ authenticated?: boolean }>('/api/admin/session').catch(() => {});
+      } else {
+        try {
+          const data = await api.get<{ authenticated?: boolean }>('/api/admin/session');
+          setIsAuthenticated(data?.authenticated === true);
+        } catch {
+          setIsAuthenticated(false);
+        }
       }
-    };
-    checkAuth();
+    });
+
+    return () => unsubscribe();
   }, [location.pathname]); // Re-check if navigation happens, or just on mount
 
   if (isAuthenticated === null) {

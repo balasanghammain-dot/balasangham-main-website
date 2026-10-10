@@ -21,21 +21,34 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      // 1. Authenticate with backend Express session
-      await api.post('/api/admin/login', { username, password });
+      const emailToUse = username.trim().includes('@') ? username.trim() : 'balasangham.main@gmail.com';
+      const cleanPassword = password.trim();
+
+      // 1. Authenticate with Google Firebase Auth (Primary Authority)
+      await signInWithEmailAndPassword(auth, emailToUse, cleanPassword);
       
-      // 2. Authenticate with Firebase Auth client SDK for direct Firestore operations
+      // 2. Synchronize Express session for Cloudinary and SQLite storage
       try {
-        const emailToUse = username.includes('@') ? username : 'balasangham.main@gmail.com';
-        await signInWithEmailAndPassword(auth, emailToUse, password);
-      } catch (fbErr: any) {
-        console.info('Client-side Firebase Auth sign-in status:', fbErr.code || fbErr.message);
+        await api.post('/api/admin/login', { username: emailToUse, password: cleanPassword });
+      } catch (backendErr: any) {
+        console.warn('Backend Express session sync note:', backendErr.message);
       }
 
       const from = location.state?.from?.pathname || '/admin';
       navigate(from, { replace: true });
     } catch (err: any) {
-      setError(err.message || 'Invalid credentials');
+      console.error('Sign in error:', err);
+      if (
+        err.code === 'auth/invalid-credential' || 
+        err.code === 'auth/wrong-password' || 
+        err.code === 'auth/user-not-found'
+      ) {
+        setError('Invalid email or password. Please check your credentials.');
+      } else if (err.code === 'auth/too-many-requests') {
+        setError('Too many unsuccessful login attempts. Please try again later.');
+      } else {
+        setError(err.message || 'Authentication failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
