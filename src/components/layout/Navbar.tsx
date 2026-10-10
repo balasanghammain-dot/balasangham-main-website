@@ -35,7 +35,6 @@ export const Navbar = ({ onOpenAnthem }: NavbarProps) => {
     { to: '/', label: 'Home', labelMl: 'ഹോം' },
     { to: '/about', label: 'About', labelMl: 'ഞങ്ങളെക്കുറിച്ച്' },
     { to: '/events', label: 'Events', labelMl: 'സമ്മേളനങ്ങൾ' },
-    { to: '/game', label: 'Play Game 🎮', labelMl: 'പോസ്റ്റർ ഗെയിം 🎮' },
     { to: '/media', label: 'Media', labelMl: 'മീഡിയ' },
     { to: '/contact', label: 'Contact', labelMl: 'സമ്പർക്കം' },
   ];

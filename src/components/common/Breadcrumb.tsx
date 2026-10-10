@@ -15,7 +15,7 @@ export const Breadcrumb = ({ items, className = '' }: { items: BreadcrumbItem[];
 
   return (
     <nav aria-label="Breadcrumb" className={`py-3 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto ${className}`}>
-      <ol className="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 overflow-x-auto whitespace-nowrap">
+      <ol className="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <li>
           <Link
             to="/"

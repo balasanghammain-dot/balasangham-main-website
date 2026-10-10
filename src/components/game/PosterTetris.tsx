@@ -482,7 +482,7 @@ export const PosterTetris: React.FC = () => {
   const ghostY = getGhostY();
 
   return (
-    <div className="relative min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center p-3 sm:p-6 bg-gradient-to-b from-warm-cream via-soft-cream to-amber-50/50">
+    <div className="relative flex flex-col items-center p-1 sm:p-3">
       {/* Canvas for full-screen confetti */}
       <canvas
         ref={canvasRef}
@@ -491,23 +491,23 @@ export const PosterTetris: React.FC = () => {
 
       <div className="w-full max-w-4xl mx-auto">
         {/* Top Header Card */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-warm border border-amber-200/60 mb-4 sm:mb-6">
-          <div className="text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-              <Badge variant="default" className="bg-deep-red text-white">
-                <Sparkles className="w-3 h-3 mr-1" />
+        <div className="flex flex-row items-center justify-between gap-2 sm:gap-3 bg-white/90 backdrop-blur-md p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-warm border border-amber-200/60 mb-2 sm:mb-4">
+          <div className="text-left">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <Badge variant="default" className="bg-deep-red text-white text-[10px] sm:text-[11px] py-0 px-1.5 sm:px-2">
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
                 {ml ? 'ഈസി മോഡ് • പോസ്റ്റർ പസിൽ' : 'EASY MODE • POSTER REVEAL'}
               </Badge>
-              <Badge variant="outline" className="border-amber-400 text-amber-800 bg-amber-50">
+              <Badge variant="outline" className="border-amber-400 text-amber-800 bg-amber-50 text-[10px] sm:text-[11px] py-0 px-1.5 sm:px-2">
                 8×10 {ml ? 'ഗ്രിഡ്' : 'Grid'}
               </Badge>
             </div>
-            <h1 className={`text-xl sm:text-2xl font-black text-dark-brown ${ml ? 'font-malayalam' : ''}`}>
+            <h1 className={`text-sm sm:text-xl font-black text-dark-brown leading-tight ${ml ? 'font-malayalam' : ''}`}>
               {ml
                 ? 'ടെട്രിസ് കളിച്ച് ജില്ലാ സമ്മേളന പോസ്റ്റർ തുറക്കൂ!'
                 : 'Tetris Poster Reveal Challenge'}
             </h1>
-            <p className="text-xs sm:text-sm text-dark-brown/70 mt-0.5">
+            <p className="hidden sm:block text-xs text-dark-brown/70 mt-0.5">
               {ml
                 ? 'ബ്ലോക്കുകൾ സ്ഥിരമായി നിലനിൽക്കും. എല്ലാ ബ്ലോക്കുകളും നിറച്ച് പൂർണ്ണ പോസ്റ്റർ കാണൂ!'
                 : 'Blocks stay permanent when they land! Fill all 80 cells to reveal the official conference poster.'}
@@ -515,34 +515,34 @@ export const PosterTetris: React.FC = () => {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <Button
               variant="outline"
               size="sm"
               onClick={toggleSound}
-              className="rounded-full w-9 h-9 p-0 border-amber-200 hover:bg-amber-100"
+              className="rounded-full w-7 h-7 sm:w-8 sm:h-8 p-0 border-amber-200 hover:bg-amber-100"
               title={soundMuted ? 'Unmute Audio' : 'Mute Audio'}
             >
-              {soundMuted ? <VolumeX className="w-4 h-4 text-dark-brown/60" /> : <Volume2 className="w-4 h-4 text-deep-red" />}
+              {soundMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-dark-brown/60" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-deep-red" />}
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsPlaying(!isPlaying)}
-              className="rounded-full px-3 py-1 text-xs border-amber-200 hover:bg-amber-100"
+              className="rounded-full px-2 sm:px-3 py-1 h-7 sm:h-8 text-[11px] sm:text-xs border-amber-200 hover:bg-amber-100"
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5 mr-1" /> : <Play className="w-3.5 h-3.5 mr-1" />}
+              {isPlaying ? <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-0.5 sm:mr-1" /> : <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-0.5 sm:mr-1" />}
               {isPlaying ? (ml ? 'പോസ്' : 'Pause') : (ml ? 'തുടങ്ങൂ' : 'Resume')}
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={restartGame}
-              className="rounded-full px-3 py-1 text-xs border-amber-200 hover:bg-amber-100"
+              className="rounded-full px-2 sm:px-3 py-1 h-7 sm:h-8 text-[11px] sm:text-xs border-amber-200 hover:bg-amber-100"
               title="Restart Game"
             >
-              <RotateCcw className="w-3.5 h-3.5 mr-1" />
-              {ml ? 'റീസ്റ്റാർട്ട്' : 'Restart'}
+              <RotateCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-0.5 sm:mr-1" />
+              <span className="hidden sm:inline">{ml ? 'റീസ്റ്റാർട്ട്' : 'Restart'}</span>
             </Button>
           </div>
         </div>
@@ -641,8 +641,80 @@ export const PosterTetris: React.FC = () => {
           {/* Center: The Tetris Poster Board */}
           <div className="lg:col-span-6 flex flex-col items-center">
             
-            {/* Live Progress Bar */}
-            <div className="w-full max-w-[340px] sm:max-w-[380px] mb-3">
+            {/* Mobile Top HUD (Hold, Progress, Next) */}
+            <div className="w-full max-w-[340px] sm:max-w-[380px] mb-2 lg:hidden flex items-center justify-between gap-2 bg-white/90 backdrop-blur-sm px-2.5 py-1.5 rounded-xl border border-amber-200/60 shadow-xs">
+              {/* Mini Hold Preview */}
+              <button
+                type="button"
+                onClick={handleHold}
+                disabled={!canHold}
+                className={`flex items-center gap-1.5 text-left transition-transform ${canHold ? 'active:scale-95' : 'opacity-70 cursor-not-allowed'}`}
+                title={ml ? 'ഹോൾഡ് (Hold)' : 'Hold Piece'}
+              >
+                <div className="w-8 h-8 rounded-lg bg-slate-900/5 border border-amber-200/80 flex items-center justify-center p-0.5 shrink-0">
+                  {holdPiece ? (
+                    <div className="grid gap-0.5" style={{ gridTemplateColumns: `repeat(${holdPiece.shape[0].length}, minmax(0, 1fr))` }}>
+                      {holdPiece.shape.map((row, rIdx) =>
+                        row.map((cell, cIdx) => (
+                          <div
+                            key={`m-hold-${rIdx}-${cIdx}`}
+                            className={`w-1.5 h-1.5 rounded-xs ${cell ? holdPiece.color : 'bg-transparent'}`}
+                          />
+                        ))
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-[9px] text-dark-brown/40 font-mono font-bold">H</span>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] uppercase font-bold text-dark-brown/60 leading-none">Hold</span>
+                  <span className="text-[10px] font-bold text-deep-red leading-tight">{canHold ? (ml ? 'ഹോൾഡ്' : 'Tap') : '—'}</span>
+                </div>
+              </button>
+
+              {/* Progress in center */}
+              <div className="flex-1 px-1">
+                <div className="flex items-center justify-between text-[11px] font-bold text-dark-brown mb-0.5">
+                  <span className="flex items-center gap-1 text-[10px]">
+                    <Sparkles className="w-2.5 h-2.5 text-deep-red" />
+                    {filledCount}/{TOTAL_CELLS}
+                  </span>
+                  <span className="font-mono text-deep-red text-xs font-black">
+                    {percentComplete}%
+                  </span>
+                </div>
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-amber-300 shadow-inner">
+                  <div
+                    className="h-full bg-gradient-to-r from-sun-primary via-warm-orange to-deep-red rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${percentComplete}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Mini Next Preview */}
+              <div className="flex items-center gap-1.5 text-right">
+                <div className="flex flex-col items-end">
+                  <span className="text-[9px] uppercase font-bold text-dark-brown/60 leading-none">Next</span>
+                  <span className="text-[10px] font-bold text-dark-brown leading-tight">{ml ? 'അടുത്തത്' : 'Next'}</span>
+                </div>
+                <div className="w-8 h-8 rounded-lg bg-slate-900/5 border border-amber-200/80 flex items-center justify-center p-0.5 shrink-0">
+                  <div className="grid gap-0.5" style={{ gridTemplateColumns: `repeat(${nextPiece.shape[0].length}, minmax(0, 1fr))` }}>
+                    {nextPiece.shape.map((row, rIdx) =>
+                      row.map((cell, cIdx) => (
+                        <div
+                          key={`m-next-${rIdx}-${cIdx}`}
+                          className={`w-1.5 h-1.5 rounded-xs ${cell ? nextPiece.color : 'bg-transparent'}`}
+                        />
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Progress Bar */}
+            <div className="hidden lg:block w-full max-w-[340px] sm:max-w-[380px] mb-3">
               <div className="flex items-center justify-between text-xs font-bold text-dark-brown mb-1 px-1">
                 <span className="flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5 text-deep-red" />
@@ -661,11 +733,11 @@ export const PosterTetris: React.FC = () => {
             </div>
 
             {/* The Game Board Matrix */}
-            <div className="relative p-2 sm:p-3 rounded-2xl sm:rounded-3xl bg-dark-brown shadow-warm-xl border-4 border-amber-400">
+            <div className="relative p-2 sm:p-3 rounded-2xl sm:rounded-3xl bg-dark-brown shadow-warm-xl border-4 border-amber-400 w-fit mx-auto flex flex-col items-center">
               
               {/* Board Container with 4:5 aspect ratio */}
               <div
-                className="relative w-[288px] h-[360px] sm:w-[336px] sm:h-[420px] rounded-xl overflow-hidden bg-slate-950 select-none shadow-2xl"
+                className="relative w-[280px] h-[350px] sm:w-[336px] sm:h-[420px] rounded-xl overflow-hidden bg-slate-950 select-none shadow-2xl"
               >
                 {/* Grid Overlay */}
                 <div
@@ -715,7 +787,7 @@ export const PosterTetris: React.FC = () => {
                             isWon
                               ? 'border border-transparent'
                               : isCellFilled
-                              ? `border border-white/20 ${isCelebrating ? 'ring-2 ring-amber-300 ring-inset' : ''}`
+                              ? `${isCelebrating ? 'ring-2 ring-amber-300 ring-inset' : ''}`
                               : isCurrentPieceCell
                               ? `${currentPiece.color} ${currentPiece.borderColor} border-2 shadow-sm ring-1 ring-white/60`
                               : isGhostCell
@@ -740,7 +812,7 @@ export const PosterTetris: React.FC = () => {
                                 draggable={false}
                               />
                               {/* Grid border above image */}
-                              <div className={`absolute inset-0 pointer-events-none ${isWon ? 'border-transparent' : 'border border-white/20'}`} />
+                              <div className={`absolute inset-0 pointer-events-none ${isWon ? 'border-transparent' : 'border border-white/15'}`} />
                             </div>
                           )}
 
@@ -766,81 +838,133 @@ export const PosterTetris: React.FC = () => {
                   </div>
                 )}
               </div>
+
+              {/* Desktop Compact Control Bar */}
+              <div className="hidden lg:flex items-center justify-center gap-1.5 mt-2.5 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-200/70 shadow-xs w-full max-w-[336px]">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => moveHorizontally(-1)}
+                  className="h-8 w-9 p-0 rounded-full text-dark-brown hover:bg-amber-100"
+                  title="Move Left (← / A)"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={rotatePiece}
+                  className="h-8 px-2.5 rounded-full text-xs text-dark-brown hover:bg-amber-100 font-semibold flex items-center gap-1"
+                  title="Rotate (↑ / W)"
+                >
+                  <RotateCw className="w-3.5 h-3.5 text-amber-600" />
+                  <span className="text-[11px]">{ml ? 'തിരിക്കുക' : 'Rotate'}</span>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => moveHorizontally(1)}
+                  className="h-8 w-9 p-0 rounded-full text-dark-brown hover:bg-amber-100"
+                  title="Move Right (→ / D)"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+                <div className="w-px h-4 bg-amber-200 mx-1" />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={dropStep}
+                  className="h-8 w-9 p-0 rounded-full text-dark-brown hover:bg-amber-100"
+                  title="Soft Drop (↓ / S)"
+                >
+                  <ArrowDown className="w-4 h-4 text-deep-red" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={hardDrop}
+                  className="h-8 px-2.5 rounded-full text-xs bg-deep-red hover:bg-deep-red/90 text-white font-bold shadow-xs active:scale-95 flex items-center gap-1"
+                  title="Hard Drop (Space)"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span className="text-[11px]">{ml ? 'സ്ലാം' : 'Drop'}</span>
+                </Button>
+              </div>
             </div>
 
             {/* Mobile Touch Controls */}
-            <div className="w-full max-w-[340px] sm:max-w-[380px] mt-4 flex flex-col gap-2">
+            <div className="w-full max-w-[340px] sm:max-w-[380px] mt-2.5 flex flex-col gap-1.5 lg:hidden">
               {/* Row 1: Left, Rotate, Right */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5">
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={() => moveHorizontally(-1)}
-                  className="h-14 rounded-2xl bg-white border-2 border-amber-300 shadow-sm active:scale-95 text-dark-brown hover:bg-amber-50"
+                  className="h-11 sm:h-12 rounded-xl bg-white border-2 border-amber-300 shadow-xs active:scale-95 text-dark-brown hover:bg-amber-50"
                   aria-label="Move Left"
                 >
-                  <ArrowLeft className="w-6 h-6" />
+                  <ArrowLeft className="w-5 h-5" />
                 </Button>
                 <Button
                   size="lg"
                   onClick={rotatePiece}
-                  className="h-14 rounded-2xl bg-amber-400 hover:bg-amber-500 text-dark-brown font-bold border-2 border-amber-500 shadow-sm active:scale-95"
+                  className="h-11 sm:h-12 rounded-xl bg-amber-400 hover:bg-amber-500 text-dark-brown font-bold border-2 border-amber-500 shadow-xs active:scale-95 flex items-center justify-center gap-1"
                   aria-label="Rotate Piece"
                 >
-                  <RotateCw className="w-6 h-6 mr-1" />
+                  <RotateCw className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span className="text-xs">{ml ? 'തിരിക്കുക' : 'Rotate'}</span>
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={() => moveHorizontally(1)}
-                  className="h-14 rounded-2xl bg-white border-2 border-amber-300 shadow-sm active:scale-95 text-dark-brown hover:bg-amber-50"
+                  className="h-11 sm:h-12 rounded-xl bg-white border-2 border-amber-300 shadow-xs active:scale-95 text-dark-brown hover:bg-amber-50"
                   aria-label="Move Right"
                 >
-                  <ArrowRight className="w-6 h-6" />
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
               </div>
 
-              {/* Row 2: Soft Drop, Hard Drop, Hold/Magic */}
-              <div className="grid grid-cols-3 gap-2">
+              {/* Row 2: Soft Drop, Hard Drop, Star */}
+              <div className="grid grid-cols-3 gap-1.5">
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={dropStep}
-                  className="h-14 rounded-2xl bg-white border-2 border-amber-300 shadow-sm active:scale-95 text-dark-brown hover:bg-amber-50"
+                  className="h-11 sm:h-12 rounded-xl bg-white border-2 border-amber-300 shadow-xs active:scale-95 text-dark-brown hover:bg-amber-50 flex items-center justify-center gap-1"
                   aria-label="Soft Drop"
                 >
-                  <ArrowDown className="w-6 h-6 mr-1 text-deep-red" />
+                  <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 text-deep-red" />
                   <span className="text-xs">{ml ? 'താഴേക്ക്' : 'Down'}</span>
                 </Button>
                 <Button
                   size="lg"
                   onClick={hardDrop}
-                  className="h-14 rounded-2xl bg-deep-red hover:bg-deep-red/90 text-white font-bold shadow-sm active:scale-95"
+                  className="h-11 sm:h-12 rounded-xl bg-deep-red hover:bg-deep-red/90 text-white font-bold shadow-xs active:scale-95 flex items-center justify-center gap-1"
                   aria-label="Hard Drop"
                 >
-                  <Zap className="w-6 h-6 mr-1" />
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span className="text-xs">{ml ? 'സ്ലാം' : 'Drop'}</span>
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={useMagicStar}
-                  className="h-14 rounded-2xl bg-white border-2 border-amber-300 shadow-sm active:scale-95 text-dark-brown hover:bg-amber-50"
+                  className="h-11 sm:h-12 rounded-xl bg-white border-2 border-amber-300 shadow-xs active:scale-95 text-dark-brown hover:bg-amber-50 flex items-center justify-center gap-1"
                   aria-label="Star Helper"
                 >
-                  <Sparkles className="w-5 h-5 mr-1 text-warm-orange" />
-                  <span className="text-xs">{ml ? 'സ്റ്റാർ' : 'Star (1x1)'}</span>
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-warm-orange" />
+                  <span className="text-xs">{ml ? 'സ്റ്റാർ' : 'Star'}</span>
                 </Button>
               </div>
 
-              {/* Mobile quick actions: Settle & Undo */}
-              <div className="grid grid-cols-2 gap-2 mt-1 sm:hidden">
+              {/* Row 3: Settle & Undo */}
+              <div className="grid grid-cols-2 gap-1.5 mt-0.5">
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={settleGravity}
-                  className="rounded-xl border-amber-300 bg-white/90 text-xs py-2"
+                  className="h-9 rounded-xl border-amber-300 bg-white/90 text-xs text-dark-brown"
                 >
                   <ArrowDown className="w-3.5 h-3.5 mr-1 text-deep-red" />
                   {ml ? 'ഗ്യാപ്പ് നികത്തൂ' : 'Settle Gaps'}
@@ -850,7 +974,7 @@ export const PosterTetris: React.FC = () => {
                   variant="outline"
                   onClick={handleUndo}
                   disabled={history.length === 0}
-                  className="rounded-xl border-amber-300 bg-white/90 text-xs py-2"
+                  className="h-9 rounded-xl border-amber-300 bg-white/90 text-xs text-dark-brown"
                 >
                   <Undo2 className="w-3.5 h-3.5 mr-1" />
                   {ml ? 'Undo' : 'Undo'}
@@ -862,8 +986,8 @@ export const PosterTetris: React.FC = () => {
           {/* Right Panel: Next Piece, Stats & Info */}
           <div className="lg:col-span-3 flex flex-col gap-4">
             
-            {/* Next Piece Card */}
-            <div className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-amber-200/70 shadow-sm text-center">
+            {/* Next Piece Card (Desktop Only) */}
+            <div className="hidden lg:block bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-amber-200/70 shadow-sm text-center">
               <span className="text-xs font-bold text-dark-brown/70 uppercase tracking-wider block mb-2">
                 {ml ? 'അടുത്ത ബ്ലോക്ക്' : 'NEXT PIECE'}
               </span>
