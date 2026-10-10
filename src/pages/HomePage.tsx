@@ -2,6 +2,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { HeroSection } from '../components/home/HeroSection';
 import { AboutSection } from '../components/sections/AboutSection';
 import { EventSection } from '../components/sections/EventsSection';
+import { GameSection } from '../components/home/GameSection';
 import { MediaSection } from '../components/home/MediaShowcaseSection';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { Badge } from '../components/ui/badge';
@@ -28,10 +29,13 @@ export const HomePage = ({ onOpenAnthem }: HomePageProps) => {
       {/* 3. FEATURED EVENT */}
       <EventSection />
 
-      {/* 4. MEDIA */}
+      {/* 4. DEDICATED GAME SECTION */}
+      <GameSection />
+
+      {/* 5. MEDIA */}
       <MediaSection />
 
-      {/* 5. FINAL CTA */}
+      {/* 6. FINAL CTA */}
       <CTASection ml={ml} />
     </>
   );
