@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
+import { auth } from '@/lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Star, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLoginPage() {
-  const [username, setUsername] = useState('admin');
+  const [username, setUsername] = useState('balasangham.main@gmail.com');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -19,8 +21,17 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
+      // 1. Authenticate with backend Express session
       await api.post('/api/admin/login', { username, password });
       
+      // 2. Authenticate with Firebase Auth client SDK for direct Firestore operations
+      try {
+        const emailToUse = username.includes('@') ? username : 'balasangham.main@gmail.com';
+        await signInWithEmailAndPassword(auth, emailToUse, password);
+      } catch (fbErr: any) {
+        console.info('Client-side Firebase Auth sign-in status:', fbErr.code || fbErr.message);
+      }
+
       const from = location.state?.from?.pathname || '/admin';
       navigate(from, { replace: true });
     } catch (err: any) {
@@ -50,7 +61,7 @@ export default function AdminLoginPage() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-bold text-dark-brown mb-2" htmlFor="username">
-                Username
+                Email / Username
               </label>
               <input
                 id="username"
@@ -58,8 +69,8 @@ export default function AdminLoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-deep-red focus:ring-2 focus:ring-deep-red/20 outline-none transition-all"
+                placeholder="admin or email"
                 required
-                readOnly
               />
             </div>
 

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -18,11 +20,11 @@ export default function AdminLayout() {
 
   const handleLogout = async () => {
     try {
+      signOut(auth).catch(() => {});
       await api.post('/api/admin/logout');
       navigate('/admin/login');
     } catch (error) {
       console.error('Logout failed', error);
-      // Force navigate anyway
       navigate('/admin/login');
     }
   };
