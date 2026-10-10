@@ -96,12 +96,15 @@ service cloud.firestore {
     }
 
     // Check if the authenticated user has administrative privileges
-    // Checks for custom token claim 'admin', token role 'admin', or verified email identity
+    // Checks for custom token claim 'admin', token role 'admin', or authorized administrator emails
     function isAdmin() {
       return isAuthenticated() && (
         request.auth.token.get('admin', false) == true ||
         request.auth.token.get('role', '') == 'admin' ||
-        ('email' in request.auth.token && request.auth.token.email is string && request.auth.token.email.matches('.*@.*'))
+        ('email' in request.auth.token && (
+          request.auth.token.email == 'balasangham.main@gmail.com' ||
+          request.auth.token.email == 'admin@balasanghamkannur.org'
+        ))
       );
     }
 

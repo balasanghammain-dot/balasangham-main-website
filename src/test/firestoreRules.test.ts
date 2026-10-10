@@ -31,7 +31,9 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
     return (
       token.admin === true ||
       token.role === 'admin' ||
-      (typeof token.email === 'string' && /.*@.*/.test(token.email))
+      (typeof token.email === 'string' &&
+        (token.email === 'balasangham.main@gmail.com' ||
+         token.email === 'admin@balasanghamkannur.org'))
     );
   }
 
@@ -169,6 +171,38 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
     updatedAt: '2026-01-01T00:00:00Z'
   };
 
+  describe('Administrator Authorization & Privilege Escalation Prevention (isAdmin)', () => {
+    it('grants admin privileges to custom claim admin: true', () => {
+      expect(isAdmin({ token: { admin: true } })).toBe(true);
+    });
+
+    it('grants admin privileges to custom claim role: admin', () => {
+      expect(isAdmin({ token: { role: 'admin' } })).toBe(true);
+    });
+
+    it('grants admin privileges to authorized admin emails', () => {
+      expect(isAdmin({ token: { email: 'balasangham.main@gmail.com' } })).toBe(true);
+      expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org' } })).toBe(true);
+    });
+
+    it('strictly denies arbitrary authenticated emails and prevents privilege escalation', () => {
+      expect(isAdmin({ token: { email: 'random@example.com' } })).toBe(false);
+      expect(isAdmin({ token: { email: 'attacker@evil.com' } })).toBe(false);
+      expect(isAdmin({ token: { email: 'admin@balasangham.org' } })).toBe(false);
+      expect(isAdmin({ token: { email: 'user@gmail.com' } })).toBe(false);
+    });
+
+    it('denies unauthenticated requests or tokens without admin claims/emails', () => {
+      expect(isAdmin(null)).toBe(false);
+      expect(isAdmin(undefined)).toBe(false);
+      expect(isAdmin({})).toBe(false);
+      expect(isAdmin({ token: {} })).toBe(false);
+      expect(isAdmin({ token: { uid: 'user123' } })).toBe(false);
+      expect(isAdmin({ token: { admin: false } })).toBe(false);
+      expect(isAdmin({ token: { role: 'member' } })).toBe(false);
+    });
+  });
+
   describe('Validator Function Pattern & Schema Validation', () => {
     it('accepts a fully compliant event payload', () => {
       expect(isValidEvent(validEventPayload)).toBe(true);
@@ -257,22 +291,42 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       const adminAuth = { token: { admin: true } };
       expect(canRead(adminAuth, { published: false })).toBe(true);
 
-      const adminEmailAuth = { token: { email: 'admin@balasangham.org' } };
-      expect(canRead(adminEmailAuth, { published: false })).toBe(true);
+      const adminEmailAuth1 = { token: { email: 'balasangham.main@gmail.com' } };
+      expect(canRead(adminEmailAuth1, { published: false })).toBe(true);
+
+      const adminEmailAuth2 = { token: { email: 'admin@balasanghamkannur.org' } };
+      expect(canRead(adminEmailAuth2, { published: false })).toBe(true);
+    });
+
+    it('strictly denies authenticated non-admin users (e.g. random@example.com) from accessing draft events', () => {
+      const randomUserAuth = { token: { uid: 'user-random', email: 'random@example.com' } };
+      expect(canRead(randomUserAuth, { published: false })).toBe(false);
     });
   });
 
   describe('Write Access Control & Immutable Field Protection', () => {
     const adminAuth = { token: { admin: true } };
     const userAuth = { token: { uid: 'user-123' } }; // non-admin authenticated
+    const randomEmailUserAuth = { token: { uid: 'user-random', email: 'random@example.com' } };
 
-    it('denies creation by unauthenticated or non-admin users', () => {
+    it('denies creation by unauthenticated, non-admin, or arbitrary email users', () => {
       expect(canCreate(null, validEventPayload)).toBe(false);
       expect(canCreate(userAuth, validEventPayload)).toBe(false);
+      expect(canCreate(randomEmailUserAuth, validEventPayload)).toBe(false);
     });
 
     it('allows creation by authenticated admin with valid payload', () => {
       expect(canCreate(adminAuth, validEventPayload)).toBe(true);
+    });
+
+    it('strictly denies updates from non-admin authenticated users with arbitrary email', () => {
+      const existingDoc = { ...validEventPayload };
+      const updatedDoc = {
+        ...validEventPayload,
+        title: 'Updated Conference Title 2026',
+        updatedAt: '2026-10-01T12:00:00Z'
+      };
+      expect(canUpdate(randomEmailUserAuth, existingDoc, updatedDoc)).toBe(false);
     });
 
     it('strictly denies updates that attempt to modify immutable fields (slug, createdAt)', () => {
@@ -297,9 +351,10 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       expect(canUpdate(adminAuth, existingDoc, updatedDoc)).toBe(true);
     });
 
-    it('restricts delete operations exclusively to administrators', () => {
+    it('restricts delete operations exclusively to administrators and denies arbitrary users', () => {
       expect(canDelete(null)).toBe(false);
       expect(canDelete(userAuth)).toBe(false);
+      expect(canDelete(randomEmailUserAuth)).toBe(false);
       expect(canDelete(adminAuth)).toBe(true);
     });
   });
@@ -571,22 +626,43 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
         expect(canReadMedia(adminAuth, { published: false })).toBe(true);
         expect(canReadMedia(adminAuth, { published: 0 })).toBe(true);
 
-        const adminEmailAuth = { token: { email: 'admin@balasangham.org' } };
-        expect(canReadMedia(adminEmailAuth, { published: false })).toBe(true);
+        const adminEmailAuth1 = { token: { email: 'balasangham.main@gmail.com' } };
+        expect(canReadMedia(adminEmailAuth1, { published: false })).toBe(true);
+
+        const adminEmailAuth2 = { token: { email: 'admin@balasanghamkannur.org' } };
+        expect(canReadMedia(adminEmailAuth2, { published: false })).toBe(true);
+      });
+
+      it('strictly denies authenticated non-admin users (e.g. random@example.com) from accessing draft media', () => {
+        const randomUserAuth = { token: { uid: 'user-random', email: 'random@example.com' } };
+        expect(canReadMedia(randomUserAuth, { published: false })).toBe(false);
+        expect(canReadMedia(randomUserAuth, { published: 0 })).toBe(false);
       });
     });
 
     describe('Media Write Access Control & Immutable Field Protection', () => {
       const adminAuth = { token: { admin: true } };
       const userAuth = { token: { uid: 'regular-user' } };
+      const randomEmailUserAuth = { token: { uid: 'regular-user', email: 'random@example.com' } };
 
-      it('denies media creation by unauthenticated or regular users', () => {
+      it('denies media creation by unauthenticated, regular, or arbitrary email users', () => {
         expect(canCreateMedia(null, validMediaPayload)).toBe(false);
         expect(canCreateMedia(userAuth, validMediaPayload)).toBe(false);
+        expect(canCreateMedia(randomEmailUserAuth, validMediaPayload)).toBe(false);
       });
 
       it('allows media creation by authenticated admin with valid payload', () => {
         expect(canCreateMedia(adminAuth, validMediaPayload)).toBe(true);
+      });
+
+      it('strictly denies media updates from non-admin authenticated users with arbitrary email', () => {
+        const existingDoc = { ...validMediaPayload };
+        const updatedDoc = {
+          ...validMediaPayload,
+          title: 'Updated Presentation Title',
+          updatedAt: '2026-10-10T12:00:00Z'
+        };
+        expect(canUpdateMedia(randomEmailUserAuth, existingDoc, updatedDoc)).toBe(false);
       });
 
       it('strictly denies media updates that attempt to modify immutable fields (createdAt)', () => {
@@ -605,9 +681,10 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
         expect(canUpdateMedia(adminAuth, existingDoc, updatedDoc)).toBe(true);
       });
 
-      it('restricts media delete operations exclusively to administrators', () => {
+      it('restricts media delete operations exclusively to administrators and denies arbitrary users', () => {
         expect(canDeleteMedia(null)).toBe(false);
         expect(canDeleteMedia(userAuth)).toBe(false);
+        expect(canDeleteMedia(randomEmailUserAuth)).toBe(false);
         expect(canDeleteMedia(adminAuth)).toBe(true);
       });
     });

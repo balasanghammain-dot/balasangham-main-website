@@ -5,16 +5,27 @@ import { auth } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
 
+const ALLOWED_ADMIN_EMAILS = [
+  'balasangham.main@gmail.com',
+  'admin@balasanghamkannur.org'
+];
+
 export default function AdminRoute() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user && user.email) {
+      const email = user?.email?.toLowerCase();
+      const isAllowedAdmin = Boolean(email && ALLOWED_ADMIN_EMAILS.includes(email));
+
+      if (user && isAllowedAdmin) {
         setIsAuthenticated(true);
         // Ensure backend session is synced
         api.get<{ authenticated?: boolean }>('/api/admin/session').catch(() => {});
+      } else if (user && !isAllowedAdmin) {
+        // Authenticated non-admin user: strictly denied
+        setIsAuthenticated(false);
       } else {
         try {
           const data = await api.get<{ authenticated?: boolean }>('/api/admin/session');

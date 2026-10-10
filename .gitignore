@@ -19,7 +19,15 @@ lerna-debug.log*
 .env
 .env.local
 .env.*.local
+.env.production
 !.env.example
+
+# Service accounts and credentials
+*serviceAccount*.json
+*service-account*.json
+*credentials*.json
+*.pem
+*.key
 
 # Editor / IDE
 .vscode/*

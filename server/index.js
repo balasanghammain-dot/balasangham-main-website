@@ -7,9 +7,20 @@ const SqliteStore = require('better-sqlite3-session-store')(session);
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const crypto = require('crypto');
+const { requireAuth } = require('./auth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Basic security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
 
 // Ensure data directory exists
 const dataDir = path.join(__dirname, 'data');
@@ -32,15 +43,22 @@ app.use(cors({
     // Allow requests with no origin (e.g. mobile apps, curl, same-origin)
     if (!origin) return callback(null, true);
     const prodUrl = process.env.PRODUCTION_URL ? process.env.PRODUCTION_URL.replace(/\/$/, '') : null;
+    const customOrigins = process.env.ALLOWED_ORIGINS 
+      ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim().replace(/\/$/, '')).filter(Boolean)
+      : [];
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:4173',
       'http://localhost:3001',
       'https://balasanghamkannur.org',
       'https://www.balasanghamkannur.org',
-      prodUrl
+      'https://balasangam-8e562.web.app',
+      'https://balasangam-8e562.firebaseapp.com',
+      prodUrl,
+      ...customOrigins
     ].filter(Boolean);
-    if (allowedOrigins.includes(origin)) {
+
+    if (allowedOrigins.includes(origin) || (process.env.NODE_ENV !== 'production' && origin.endsWith('.vercel.app'))) {
       return callback(null, true);
     }
     return callback(new Error('Not allowed by CORS'));
@@ -51,8 +69,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
-  console.warn('SECURITY WARNING: SESSION_SECRET environment variable is not set. Using default secret in production is unsafe.');
+let sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('SECURITY NOTICE: SESSION_SECRET is not set in environment. Generating a cryptographically secure random session key for this process runtime.');
+    sessionSecret = crypto.randomBytes(32).toString('hex');
+  } else {
+    sessionSecret = 'balasangham-dev-session-secret';
+  }
 }
 
 app.use(session({
@@ -63,7 +87,7 @@ app.use(session({
       intervalMs: 900000
     }
   }),
-  secret: process.env.SESSION_SECRET || 'balasangham-dev-session-secret',
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -105,9 +129,9 @@ if (fs.existsSync(publicUploads)) {
   app.use('/uploads', express.static(publicUploads));
 }
 
-// Mount Multer on upload endpoints before admin routes
-app.use('/api/admin/upload', upload.any());
-app.use('/api/admin/media/upload', upload.any());
+// Protected upload middleware: enforce authentication BEFORE Multer writes any file to disk
+app.use('/api/admin/upload', requireAuth, upload.any());
+app.use('/api/admin/media/upload', requireAuth, upload.any());
 
 // Routes
 const publicRoutes = require('./routes/public');
@@ -124,10 +148,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Global Error Handler
+// Global Error Handler (prevents leaking internal stack traces or paths in production)
 app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong: ' + (err.message || '') });
+  console.error(err.stack || err.message);
+  const isProd = process.env.NODE_ENV === 'production';
+  const message = isProd ? 'Internal server error' : ('Something went wrong: ' + (err.message || ''));
+  res.status(err.status || 500).json({ error: message });
 });
 
 app.listen(PORT, function() {

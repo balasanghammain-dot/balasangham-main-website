@@ -25,8 +25,12 @@ const loginHandler = async (req, res) => {
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  if (!password) {
+  if (!password || typeof password !== 'string') {
     return res.status(400).json({ error: 'Password is required' });
+  }
+
+  if (password.length > 256) {
+    return res.status(400).json({ error: 'Password exceeds maximum length' });
   }
 
   try {
