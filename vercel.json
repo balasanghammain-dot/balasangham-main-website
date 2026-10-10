@@ -1,6 +1,18 @@
 {
   "rewrites": [
     {
+      "source": "/api/admin/upload",
+      "destination": "/api/upload"
+    },
+    {
+      "source": "/api/admin/media/upload",
+      "destination": "/api/upload"
+    },
+    {
+      "source": "/api/upload",
+      "destination": "/api/upload"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

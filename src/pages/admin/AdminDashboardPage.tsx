@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '@/lib/api';
+import { getDashboardStats } from '@/lib/mediaService';
 import { 
   Calendar, 
   FileText, 
@@ -25,10 +26,17 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const data = await api.get<DashboardStats>('/api/admin/stats');
+        // 1. Calculate directly from Firebase Firestore (Serverless)
+        const data = await getDashboardStats();
         setStats(data);
       } catch (err: any) {
-        setError(err.message || 'Failed to load dashboard stats');
+        // 2. Fallback to server API if present
+        try {
+          const data = await api.get<DashboardStats>('/api/admin/stats');
+          setStats(data);
+        } catch {
+          setError(err.message || 'Failed to load dashboard stats');
+        }
       } finally {
         setLoading(false);
       }

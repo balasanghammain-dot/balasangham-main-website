@@ -19,6 +19,7 @@ import {
   normalizeFirestoreEvent, 
   isValidGoogleMapsUrl 
 } from '@/lib/eventsService';
+import { uploadFile } from '@/lib/uploadService';
 import { getMiniMapEmbedUrl } from '@/lib/mapUtils';
 import { EventData } from '@/types/event';
 
@@ -148,22 +149,18 @@ export default function AdminEventEditorPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const data = new FormData();
-    data.append('file', file);
-    if (id) data.append('eventId', id);
-
     try {
       setUploadingPoster(true);
-      const res = await api.post<{ url: string; public_id?: string; publicId?: string }>('/api/admin/upload', data);
+      const res = await uploadFile(file, { eventId: id, title: formData.title });
       if (res && res.url) {
         setFormData(prev => ({ 
           ...prev, 
           poster_url: res.url,
-          poster_public_id: res.public_id || res.publicId || ''
+          poster_public_id: res.public_id || ''
         }));
       }
-    } catch (err) {
-      alert('Poster upload failed');
+    } catch (err: any) {
+      alert('Poster upload failed: ' + (err.message || ''));
     } finally {
       setUploadingPoster(false);
     }
@@ -177,12 +174,8 @@ export default function AdminEventEditorPage() {
     const newUrls: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
-      const data = new FormData();
-      data.append('file', files[i]);
-      if (id) data.append('eventId', id);
-
       try {
-        const res = await api.post<{ url: string }>('/api/admin/upload', data);
+        const res = await uploadFile(files[i], { eventId: id });
         if (res && res.url) newUrls.push(res.url);
       } catch (err) {
         console.error('Gallery upload failed for a file');

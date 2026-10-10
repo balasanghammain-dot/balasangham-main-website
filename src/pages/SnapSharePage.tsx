@@ -5,6 +5,9 @@ import { EventData, MediaItem } from '../types/event';
 import { EventMediaGallery } from '../components/event/EventMediaGallery';
 import { Camera, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { getEventBySlug } from '../lib/eventsService';
+import { db } from '../lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export const SnapSharePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -17,22 +20,60 @@ export const SnapSharePage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchSnapShare = async () => {
+      if (!slug) return;
       try {
         setLoading(true);
+
+        // 1. Try fetching event from Firestore
+        const liveEvent = await getEventBySlug(slug);
+        if (liveEvent && isMounted) {
+          setEvent(liveEvent);
+          const isSnapEnabled = Boolean(liveEvent.snapshare_enabled || liveEvent.snapShareEnabled);
+          if (!isSnapEnabled) {
+            setError('SnapShare is disabled for this event');
+            setLoading(false);
+            return;
+          }
+
+          // Fetch media for event from Firestore
+          try {
+            const mediaCol = collection(db, 'media');
+            const q = query(
+              mediaCol,
+              where('eventId', '==', liveEvent.id),
+              where('published', '==', true)
+            );
+            const snap = await getDocs(q);
+            const items: MediaItem[] = [];
+            snap.forEach(d => items.push({ id: d.id, ...d.data() } as MediaItem));
+            if (isMounted) setMedia(items);
+          } catch {
+            // Media query optional
+          }
+          if (isMounted) setLoading(false);
+          return;
+        }
+
+        // 2. Fallback to API if not loaded from Firestore
         const res = await fetch(`/api/public/events/${slug}/snapshare`);
         if (!res.ok) throw new Error('Failed to fetch snapshare data');
         const data = await res.json();
-        setEvent(data.event || null);
-        setMedia(data.media || []);
+        if (isMounted) {
+          setEvent(data.event || null);
+          setMedia(data.media || []);
+        }
       } catch (err) {
         console.error('Error fetching snapshare:', err);
-        setError('Failed to load SnapShare photos.');
+        if (isMounted) setError('Failed to load SnapShare photos.');
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
-    if (slug) fetchSnapShare();
+
+    fetchSnapShare();
+    return () => { isMounted = false; };
   }, [slug]);
 
   if (loading) {

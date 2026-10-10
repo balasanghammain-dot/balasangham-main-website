@@ -28,6 +28,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MediaItem } from '@/types/event';
+import { getAllEventsAdmin } from '@/lib/eventsService';
+import { 
+  getAllMediaAdmin, 
+  createFirestoreMedia, 
+  updateFirestoreMedia, 
+  deleteFirestoreMedia, 
+  setFirestoreMediaPublish 
+} from '@/lib/mediaService';
+import { uploadFile } from '@/lib/uploadService';
 
 interface FileUploadQueueItem {
   id: string;
@@ -89,10 +98,15 @@ export default function AdminMediaPage() {
 
   const fetchEvents = async () => {
     try {
-      const data = await api.get<{ id: string; title: string }[]>('/api/admin/events');
-      setEvents(data || []);
-    } catch (err: any) {
-      console.error('Failed to load events:', err);
+      const eventsData = await getAllEventsAdmin();
+      setEvents(eventsData.map(e => ({ id: e.id, title: e.title })));
+    } catch {
+      try {
+        const data = await api.get<{ id: string; title: string }[]>('/api/admin/events');
+        setEvents(data || []);
+      } catch (err: any) {
+        console.error('Failed to load events:', err);
+      }
     }
   };
 
@@ -100,16 +114,28 @@ export default function AdminMediaPage() {
     try {
       setLoading(true);
       setError('');
-      const params = new URLSearchParams();
-      if (typeFilter !== 'all') params.append('type', typeFilter);
-      if (eventFilter !== 'all') params.append('eventId', eventFilter);
-      if (statusFilter !== 'all') params.append('status', statusFilter);
-      if (searchQuery.trim()) params.append('search', searchQuery.trim());
+      // 1. Fetch directly from Firebase Firestore (Serverless)
+      const data = await getAllMediaAdmin({
+        type: typeFilter,
+        eventId: eventFilter,
+        status: statusFilter,
+        search: searchQuery
+      });
+      setMedia(data);
+    } catch (fsErr: any) {
+      // 2. Fallback to API if running local server
+      try {
+        const params = new URLSearchParams();
+        if (typeFilter !== 'all') params.append('type', typeFilter);
+        if (eventFilter !== 'all') params.append('eventId', eventFilter);
+        if (statusFilter !== 'all') params.append('status', statusFilter);
+        if (searchQuery.trim()) params.append('search', searchQuery.trim());
 
-      const data = await api.get<MediaItem[]>(`/api/admin/media?${params.toString()}`);
-      setMedia(data || []);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load media');
+        const data = await api.get<MediaItem[]>(`/api/admin/media?${params.toString()}`);
+        setMedia(data || []);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load media');
+      }
     } finally {
       setLoading(false);
     }
@@ -169,28 +195,58 @@ export default function AdminMediaPage() {
     setIsProcessingQueue(true);
 
     for (const item of pendingItems) {
-      // Set to uploading
-      setUploadQueue(prev => prev.map(q => q.id === item.id ? { ...q, status: 'uploading', progress: 30 } : q));
+      setUploadQueue(prev => prev.map(q => q.id === item.id ? { ...q, status: 'uploading', progress: 40 } : q));
 
-      const formData = new FormData();
-      formData.append('file', item.file);
-      formData.append('title', uploadTitle || item.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
-      formData.append('description', uploadDescription);
-      formData.append('published', uploadPublished ? '1' : '0');
-      if (uploadEventId && uploadEventId !== 'none') {
-        formData.append('eventId', uploadEventId);
-      }
+      const titleToUse = uploadTitle || item.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      const eventIdToUse = (uploadEventId && uploadEventId !== 'none') ? uploadEventId : null;
 
       try {
-        setUploadQueue(prev => prev.map(q => q.id === item.id ? { ...q, progress: 75 } : q));
-        const res = await api.post<MediaItem>('/api/admin/media/upload', formData);
+        // 1. Upload file to Cloudinary
+        setUploadQueue(prev => prev.map(q => q.id === item.id ? { ...q, progress: 70 } : q));
+        const uploadResult = await uploadFile(item.file, {
+          eventId: eventIdToUse || undefined,
+          title: titleToUse
+        });
+
+        // 2. Save media record directly to Firebase Firestore
+        setUploadQueue(prev => prev.map(q => q.id === item.id ? { ...q, progress: 90 } : q));
+        const mediaRecord = await createFirestoreMedia({
+          title: titleToUse,
+          description: uploadDescription || null,
+          url: uploadResult.secure_url,
+          secureUrl: uploadResult.secure_url,
+          publicId: uploadResult.public_id,
+          cloudinary_public_id: uploadResult.public_id,
+          type: item.type,
+          resource_type: item.type,
+          format: uploadResult.format,
+          width: uploadResult.width,
+          height: uploadResult.height,
+          duration: uploadResult.duration,
+          thumbnail_url: uploadResult.thumbnail_url || uploadResult.secure_url,
+          thumbnailUrl: uploadResult.thumbnail_url || uploadResult.secure_url,
+          eventId: eventIdToUse,
+          event_id: eventIdToUse,
+          published: uploadPublished
+        });
+
+        // 3. Best-effort sync to server if running
+        try {
+          const formData = new FormData();
+          formData.append('file', item.file);
+          formData.append('title', titleToUse);
+          if (uploadDescription) formData.append('description', uploadDescription);
+          formData.append('published', uploadPublished ? '1' : '0');
+          if (eventIdToUse) formData.append('eventId', eventIdToUse);
+          await api.post('/api/admin/media/upload', formData);
+        } catch {
+          // Server sync optional
+        }
 
         setUploadQueue(prev => prev.map(q => q.id === item.id ? { ...q, status: 'success', progress: 100 } : q));
         
         // Add to main media grid
-        if (res && res.id) {
-          setMedia(prev => [res, ...prev]);
-        }
+        setMedia(prev => [mediaRecord, ...prev]);
       } catch (err: any) {
         setUploadQueue(prev => prev.map(q => q.id === item.id ? { 
           ...q, 
@@ -208,25 +264,43 @@ export default function AdminMediaPage() {
     const item = uploadQueue.find(i => i.id === id);
     if (!item) return;
 
-    setUploadQueue(prev => prev.map(q => q.id === id ? { ...q, status: 'uploading', progress: 30, error: undefined } : q));
+    setUploadQueue(prev => prev.map(q => q.id === id ? { ...q, status: 'uploading', progress: 40, error: undefined } : q));
 
-    const formData = new FormData();
-    formData.append('file', item.file);
-    formData.append('title', uploadTitle || item.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
-    formData.append('description', uploadDescription);
-    formData.append('published', uploadPublished ? '1' : '0');
-    if (uploadEventId && uploadEventId !== 'none') {
-      formData.append('eventId', uploadEventId);
-    }
+    const titleToUse = uploadTitle || item.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+    const eventIdToUse = (uploadEventId && uploadEventId !== 'none') ? uploadEventId : null;
 
     try {
-      setUploadQueue(prev => prev.map(q => q.id === id ? { ...q, progress: 75 } : q));
-      const res = await api.post<MediaItem>('/api/admin/media/upload', formData);
+      // 1. Upload file to Cloudinary
+      setUploadQueue(prev => prev.map(q => q.id === id ? { ...q, progress: 70 } : q));
+      const uploadResult = await uploadFile(item.file, {
+        eventId: eventIdToUse || undefined,
+        title: titleToUse
+      });
+
+      // 2. Save media record directly to Firebase Firestore
+      setUploadQueue(prev => prev.map(q => q.id === id ? { ...q, progress: 90 } : q));
+      const mediaRecord = await createFirestoreMedia({
+        title: titleToUse,
+        description: uploadDescription || null,
+        url: uploadResult.secure_url,
+        secureUrl: uploadResult.secure_url,
+        publicId: uploadResult.public_id,
+        cloudinary_public_id: uploadResult.public_id,
+        type: item.type,
+        resource_type: item.type,
+        format: uploadResult.format,
+        width: uploadResult.width,
+        height: uploadResult.height,
+        duration: uploadResult.duration,
+        thumbnail_url: uploadResult.thumbnail_url || uploadResult.secure_url,
+        thumbnailUrl: uploadResult.thumbnail_url || uploadResult.secure_url,
+        eventId: eventIdToUse,
+        event_id: eventIdToUse,
+        published: uploadPublished
+      });
 
       setUploadQueue(prev => prev.map(q => q.id === id ? { ...q, status: 'success', progress: 100 } : q));
-      if (res && res.id) {
-        setMedia(prev => [res, ...prev]);
-      }
+      setMedia(prev => [mediaRecord, ...prev]);
     } catch (err: any) {
       setUploadQueue(prev => prev.map(q => q.id === id ? { 
         ...q, 
@@ -250,14 +324,36 @@ export default function AdminMediaPage() {
     if (!editItem) return;
     try {
       setIsSavingEdit(true);
-      const updated = await api.put<MediaItem>(`/api/admin/media/${editItem.id}`, {
+      const targetEventId = editEventId === 'none' ? null : editEventId;
+
+      // 1. Update document in Firestore
+      await updateFirestoreMedia(editItem.id, {
         title: editTitle,
         description: editDescription,
         published: editPublished,
-        eventId: editEventId === 'none' ? null : editEventId
+        eventId: targetEventId
       });
 
-      setMedia(prev => prev.map(m => m.id === editItem.id ? { ...m, ...updated } : m));
+      // 2. Best-effort server sync
+      try {
+        await api.put(`/api/admin/media/${editItem.id}`, {
+          title: editTitle,
+          description: editDescription,
+          published: editPublished,
+          eventId: targetEventId
+        });
+      } catch {
+        // Server sync optional
+      }
+
+      setMedia(prev => prev.map(m => m.id === editItem.id ? { 
+        ...m, 
+        title: editTitle,
+        description: editDescription,
+        published: editPublished,
+        eventId: targetEventId,
+        event_id: targetEventId
+      } : m));
       setEditItem(null);
     } catch (err: any) {
       alert(err.message || 'Failed to update media item');
@@ -269,10 +365,20 @@ export default function AdminMediaPage() {
   // ------------------- TOGGLE PUBLISH -------------------
   const handleTogglePublish = async (item: MediaItem) => {
     const isCurrentlyPublished = item.published === true || item.published === 1;
-    const endpoint = isCurrentlyPublished ? 'unpublish' : 'publish';
+    const newStatus = !isCurrentlyPublished;
     try {
-      await api.post(`/api/admin/media/${item.id}/${endpoint}`);
-      setMedia(prev => prev.map(m => m.id === item.id ? { ...m, published: !isCurrentlyPublished } : m));
+      // 1. Update Firestore
+      await setFirestoreMediaPublish(item.id, newStatus);
+
+      // 2. Best-effort server sync
+      try {
+        const endpoint = isCurrentlyPublished ? 'unpublish' : 'publish';
+        await api.post(`/api/admin/media/${item.id}/${endpoint}`);
+      } catch {
+        // Server sync optional
+      }
+
+      setMedia(prev => prev.map(m => m.id === item.id ? { ...m, published: newStatus } : m));
     } catch (err: any) {
       alert(err.message || 'Failed to change publish status');
     }
@@ -283,7 +389,16 @@ export default function AdminMediaPage() {
     if (!deleteItem) return;
     try {
       setIsDeleting(true);
-      await api.delete(`/api/admin/media/${deleteItem.id}`);
+      // 1. Delete from Firestore
+      await deleteFirestoreMedia(deleteItem.id);
+
+      // 2. Best-effort server sync
+      try {
+        await api.delete(`/api/admin/media/${deleteItem.id}`);
+      } catch {
+        // Server sync optional
+      }
+
       setMedia(prev => prev.filter(m => m.id !== deleteItem.id));
       setDeleteItem(null);
     } catch (err: any) {
