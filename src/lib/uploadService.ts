@@ -1,6 +1,6 @@
 import { api } from './api';
 
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dj4apdzk';
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '';
 
 export interface UploadResult {
   url: string;

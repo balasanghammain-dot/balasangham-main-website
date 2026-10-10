@@ -3,8 +3,8 @@ const multer = require('multer');
 
 // Configure Cloudinary from server environment variables
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dj4apdzk',
-  api_key: process.env.CLOUDINARY_API_KEY || '747573116873637',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 

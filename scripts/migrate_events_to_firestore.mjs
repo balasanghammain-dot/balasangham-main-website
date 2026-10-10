@@ -9,13 +9,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyD6qeUB8dw7mK8nkDILX4otshzwzjT_2tg",
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
   authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "balasangam-8e562.firebaseapp.com",
   projectId: process.env.VITE_FIREBASE_PROJECT_ID || "balasangam-8e562",
   storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "balasangam-8e562.firebasestorage.app",
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "631062193147",
-  appId: process.env.VITE_FIREBASE_APP_ID || "1:631062193147:web:66fa6d049e797e77fc215e",
-  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID || "G-YPEMK25PD4"
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APP_ID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
