@@ -45,7 +45,7 @@ const SHAPES: PieceType[] = [
     shape: [
       [1, 1, 1, 1]
     ],
-    color: 'bg-cyan-500/80',
+    color: 'bg-cyan-500',
     borderColor: 'border-cyan-300'
   },
   {
@@ -54,7 +54,7 @@ const SHAPES: PieceType[] = [
       [1, 1],
       [1, 1]
     ],
-    color: 'bg-amber-400/85',
+    color: 'bg-amber-400',
     borderColor: 'border-amber-200'
   },
   {
@@ -63,7 +63,7 @@ const SHAPES: PieceType[] = [
       [0, 1, 0],
       [1, 1, 1]
     ],
-    color: 'bg-purple-500/80',
+    color: 'bg-purple-500',
     borderColor: 'border-purple-300'
   },
   {
@@ -72,7 +72,7 @@ const SHAPES: PieceType[] = [
       [0, 0, 1],
       [1, 1, 1]
     ],
-    color: 'bg-orange-500/80',
+    color: 'bg-orange-500',
     borderColor: 'border-orange-300'
   },
   {
@@ -81,7 +81,7 @@ const SHAPES: PieceType[] = [
       [1, 0, 0],
       [1, 1, 1]
     ],
-    color: 'bg-blue-500/80',
+    color: 'bg-blue-500',
     borderColor: 'border-blue-300'
   },
   {
@@ -90,7 +90,7 @@ const SHAPES: PieceType[] = [
       [0, 1, 1],
       [1, 1, 0]
     ],
-    color: 'bg-emerald-500/80',
+    color: 'bg-emerald-500',
     borderColor: 'border-emerald-300'
   },
   {
@@ -99,7 +99,7 @@ const SHAPES: PieceType[] = [
       [1, 1, 0],
       [0, 1, 1]
     ],
-    color: 'bg-rose-500/80',
+    color: 'bg-rose-500',
     borderColor: 'border-rose-300'
   },
   // Easy Helper Shapes for smooth filling
@@ -108,7 +108,7 @@ const SHAPES: PieceType[] = [
     shape: [
       [1, 1]
     ],
-    color: 'bg-pink-500/80',
+    color: 'bg-pink-500',
     borderColor: 'border-pink-300'
   },
   {
@@ -116,7 +116,7 @@ const SHAPES: PieceType[] = [
     shape: [
       [1]
     ],
-    color: 'bg-yellow-400/90',
+    color: 'bg-yellow-400',
     borderColor: 'border-yellow-200'
   }
 ];
@@ -466,6 +466,12 @@ export const PosterTetris: React.FC = () => {
         restartGame();
       } else if (e.key.toLowerCase() === 'z') {
         handleUndo();
+      } else if (e.key.toLowerCase() === 'v') {
+        // Test shortcut: instantly trigger completed poster victory
+        setGrid(Array.from({ length: ROWS }, () => Array(COLS).fill(true)));
+        setIsWon(true);
+        setIsPlaying(false);
+        soundFX.playVictory();
       }
     };
 
@@ -659,12 +665,7 @@ export const PosterTetris: React.FC = () => {
               
               {/* Board Container with 4:5 aspect ratio */}
               <div
-                className="relative w-[288px] h-[360px] sm:w-[336px] sm:h-[420px] rounded-xl overflow-hidden bg-slate-950 select-none"
-                style={{
-                  backgroundImage: `url('/images/tetris-poster.jpg')`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
+                className="relative w-[288px] h-[360px] sm:w-[336px] sm:h-[420px] rounded-xl overflow-hidden bg-slate-950 select-none shadow-2xl"
               >
                 {/* Grid Overlay */}
                 <div
@@ -682,6 +683,7 @@ export const PosterTetris: React.FC = () => {
                       const pieceR = r - currentY;
                       const pieceC = c - currentX;
                       const isCurrentPieceCell =
+                        !isCellFilled &&
                         pieceR >= 0 &&
                         pieceR < currentPiece.shape.length &&
                         pieceC >= 0 &&
@@ -691,6 +693,7 @@ export const PosterTetris: React.FC = () => {
                       // Is ghost piece occupying this cell?
                       const ghostPieceR = r - ghostY;
                       const isGhostCell =
+                        !isCellFilled &&
                         !isCurrentPieceCell &&
                         ghostPieceR >= 0 &&
                         ghostPieceR < currentPiece.shape.length &&
@@ -704,21 +707,46 @@ export const PosterTetris: React.FC = () => {
                       return (
                         <div
                           key={`cell-${r}-${c}`}
-                          className={`relative transition-all duration-200 border ${
+                          data-testid={`cell-${r}-${c}`}
+                          data-locked={isCellFilled ? 'true' : 'false'}
+                          data-falling={isCurrentPieceCell ? 'true' : 'false'}
+                          data-ghost={isGhostCell ? 'true' : 'false'}
+                          className={`relative overflow-hidden transition-colors duration-150 ${
                             isWon
-                              ? 'border-transparent bg-transparent' // Seamless full poster reveal!
+                              ? 'border border-transparent'
                               : isCellFilled
-                              ? `bg-transparent border-white/20 ${isCelebrating ? 'ring-2 ring-amber-300 ring-inset bg-amber-200/20' : ''}`
+                              ? `border border-white/20 ${isCelebrating ? 'ring-2 ring-amber-300 ring-inset' : ''}`
                               : isCurrentPieceCell
-                              ? `${currentPiece.color} ${currentPiece.borderColor} border-2 shadow-lg ring-1 ring-white/60 animate-pulse`
+                              ? `${currentPiece.color} ${currentPiece.borderColor} border-2 shadow-sm ring-1 ring-white/60`
                               : isGhostCell
-                              ? 'border-2 border-dashed border-amber-300/80 bg-amber-400/15'
-                              : 'bg-slate-950/92 border-slate-800/80 backdrop-blur-[1px] flex items-center justify-center'
+                              ? 'border-2 border-dashed border-amber-300/80 bg-slate-900'
+                              : 'bg-slate-950 border border-slate-900 flex items-center justify-center'
                           }`}
                         >
-                          {/* Unfilled subtle puzzle dots */}
+                          {/* Poster slice: RENDERED EXCLUSIVELY WHEN PERMANENTLY LOCKED */}
+                          {isCellFilled && (
+                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                              <img
+                                src="/images/tetris-poster.jpg"
+                                alt=""
+                                className="absolute max-w-none select-none pointer-events-none"
+                                style={{
+                                  width: `${COLS * 100}%`,
+                                  height: `${ROWS * 100}%`,
+                                  left: `${-c * 100}%`,
+                                  top: `${-r * 100}%`,
+                                  objectFit: 'fill',
+                                }}
+                                draggable={false}
+                              />
+                              {/* Grid border above image */}
+                              <div className={`absolute inset-0 pointer-events-none ${isWon ? 'border-transparent' : 'border border-white/20'}`} />
+                            </div>
+                          )}
+
+                          {/* Unfilled subtle puzzle dot for empty cells */}
                           {!isCellFilled && !isCurrentPieceCell && !isGhostCell && !isWon && (
-                            <div className="w-1 h-1 rounded-full bg-slate-700/50" />
+                            <div className="w-1 h-1 rounded-full bg-slate-800 pointer-events-none" />
                           )}
                         </div>
                       );

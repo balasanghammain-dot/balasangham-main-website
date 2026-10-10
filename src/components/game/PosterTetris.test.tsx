@@ -86,4 +86,64 @@ describe('PosterTetris Component', () => {
     expect(restartBtn).toBeInTheDocument();
     fireEvent.click(restartBtn);
   });
+
+  it('initially has 0 revealed poster slices on an empty board', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <PosterTetris />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    const gridOverlay = container.querySelector('.select-none .grid');
+    const posterImgs = gridOverlay?.querySelectorAll('img[src="/images/tetris-poster.jpg"]');
+    expect(posterImgs?.length).toBe(0);
+
+    // Empty cells must not have background images
+    const boardContainer = container.querySelector('.select-none');
+    expect(boardContainer).not.toHaveStyle('background-image: url("/images/tetris-poster.jpg")');
+  });
+
+  it('reveals poster slice ONLY after a piece is locked, and hides it on undo', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <PosterTetris />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    const gridOverlay = container.querySelector('.select-none .grid')!;
+    
+    // 0 poster images before drop
+    expect(gridOverlay.querySelectorAll('img[src="/images/tetris-poster.jpg"]').length).toBe(0);
+
+    // Moving left/right does not reveal any poster
+    const moveLeftBtn = screen.getByLabelText(/Move Left/i);
+    fireEvent.click(moveLeftBtn);
+    expect(gridOverlay.querySelectorAll('img[src="/images/tetris-poster.jpg"]').length).toBe(0);
+
+    // Hard drop the piece
+    const hardDropBtn = screen.getByLabelText(/Hard Drop/i);
+    fireEvent.click(hardDropBtn);
+
+    // Now some cells are locked and MUST have revealed poster images
+    const revealedAfterDrop = gridOverlay.querySelectorAll('img[src="/images/tetris-poster.jpg"]');
+    expect(revealedAfterDrop.length).toBeGreaterThan(0);
+    expect(revealedAfterDrop.length).toBeLessThanOrEqual(4);
+
+    // Every revealed image must be inside a locked cell
+    revealedAfterDrop.forEach((img) => {
+      const cell = img.closest('[data-locked]');
+      expect(cell).toHaveAttribute('data-locked', 'true');
+    });
+
+    // Undo the move
+    const undoBtn = screen.getByText(/Undo Drop|തിരികെ എടുക്കുക/i);
+    fireEvent.click(undoBtn);
+
+    // Reveal count goes back to 0
+    expect(gridOverlay.querySelectorAll('img[src="/images/tetris-poster.jpg"]').length).toBe(0);
+  });
 });
