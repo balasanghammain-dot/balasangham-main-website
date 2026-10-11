@@ -6,6 +6,7 @@ import { Calendar, MapPin, ArrowRight, Image as ImageIcon } from 'lucide-react';
 import { EventData } from '../types/event';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
+import { ShareButton } from '../components/event/ShareButton';
 
 import { VERIFIED_EVENTS } from '../data/verifiedEvents';
 import { subscribeToPublishedEvents, getPublishedEvents } from '../lib/eventsService';
@@ -160,13 +161,20 @@ export const EventsPage = () => {
               {desc}
             </p>
           )}
-          <div className="mt-auto pt-4 border-t border-slate-100">
-            <Button asChild variant="ghost" className="w-full justify-between hover:bg-red-50 hover:text-deep-red">
+          <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+            <Button asChild variant="ghost" className="hover:bg-red-50 hover:text-deep-red flex-1 justify-start">
               <Link to={`/events/${event.slug}`}>
                 <span className={ml ? 'font-malayalam text-sm' : ''}>{ml ? 'കൂടുതൽ വിവരങ്ങൾ' : 'View Details'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
+            <ShareButton
+              title={title}
+              url={`/events/${event.slug}`}
+              size="sm"
+              label={ml ? 'പങ്കുവെക്കൂ' : 'Share'}
+              className="border-slate-200 text-slate-700 hover:bg-slate-50 text-xs shrink-0"
+            />
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import { Calendar, MapPin, ArrowRight, Gamepad2 } from 'lucide-react';
 import { EventData } from '../../types/event';
 import { CalendarDropdown } from '../event/CalendarDropdown';
+import { ShareButton } from '../event/ShareButton';
 import { VERIFIED_EVENTS } from '../../data/verifiedEvents';
 import { subscribeToLatestEvent, getLatestEvent } from '../../lib/eventsService';
 
@@ -184,6 +185,13 @@ export const EventSection = () => {
               </Button>
               
               <CalendarDropdown event={calendarEvent} />
+
+              <ShareButton
+                title={title}
+                url={`/events/${event.slug}`}
+                label={ml ? 'പങ്കുവെക്കൂ' : 'SHARE EVENT'}
+                className="border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold shadow-xs"
+              />
             </div>
           </div>
 
