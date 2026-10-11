@@ -1,6 +1,6 @@
 import { api } from './api';
 
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '';
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dj4apdzk';
 
 export interface UploadResult {
   url: string;
@@ -30,7 +30,7 @@ export async function uploadFile(
   const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|mkv)$/i.test(file.name);
   const resourceType = isVideo ? 'video' : 'image';
 
-  // 1. Try uploading via server API endpoint (/api/admin/upload)
+  // 1. Try uploading via server API endpoint (/api/admin/upload or /api/upload)
   try {
     const formData = new FormData();
     formData.append('file', file);
@@ -41,7 +41,13 @@ export async function uploadFile(
       formData.append('title', options.title);
     }
 
-    const res = await api.post<any>('/api/admin/upload', formData);
+    let res: any = null;
+    try {
+      res = await api.post<any>('/api/admin/upload', formData);
+    } catch {
+      res = await api.post<any>('/api/upload', formData);
+    }
+
     if (res && (res.url || res.secure_url)) {
       const secureUrl = res.secure_url || res.url;
       const pubId = res.public_id || res.publicId || '';
@@ -62,8 +68,9 @@ export async function uploadFile(
   }
 
   // 2. Direct Cloudinary upload fallback
-  // Uses unsigned preset or direct upload endpoint
-  const directUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`;
+  // Uses unsigned preset (balasangham_uploads) directly against Cloudinary
+  const cloudName = CLOUD_NAME || 'dj4apdzk';
+  const directUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
   const directFormData = new FormData();
   directFormData.append('file', file);
   directFormData.append('upload_preset', 'balasangham_uploads');

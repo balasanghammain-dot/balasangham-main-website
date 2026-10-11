@@ -1,9 +1,9 @@
-const { v2: cloudinary } = require('cloudinary');
-const multer = require('multer');
+import { v2 as cloudinary } from 'cloudinary';
+import multer from 'multer';
 
 // Configure Cloudinary from server environment variables
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dj4apdzk',
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
@@ -25,7 +25,7 @@ function runMiddleware(req, res, fn) {
   });
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -90,7 +90,7 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports.config = {
+export const config = {
   api: {
     bodyParser: false,
   },

@@ -126,7 +126,20 @@ export const SnapSharePage = () => {
           
           {event.poster_url && (
             <div className="hidden md:block w-24 h-24 rounded-lg overflow-hidden shrink-0 border border-white/10">
-              <img src={event.poster_url} alt={title} className="w-full h-full object-cover" />
+              <img 
+                src={event.poster_url} 
+                alt={title} 
+                className="w-full h-full object-cover" 
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  const fallback = event.slug?.includes('conference-2026')
+                    ? '/images/kannur-conference-2026-poster.jpg'
+                    : '/images/balasangham-festival-theme.jpeg';
+                  if (!target.src.endsWith(fallback)) {
+                    target.src = fallback;
+                  }
+                }}
+              />
             </div>
           )}
         </div>

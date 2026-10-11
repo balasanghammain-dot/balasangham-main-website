@@ -103,7 +103,10 @@ export function normalizeFirestoreEvent(
   const endDateIso = toIsoString(data.endDate || data.end_date);
 
   const rawPoster = data.poster || null;
-  const posterUrl = rawPoster?.secureUrl || data.poster_url || (typeof data.poster === 'string' ? data.poster : null);
+  let posterUrl = rawPoster?.secureUrl || data.poster_url || (typeof data.poster === 'string' ? data.poster : null);
+  if (!posterUrl && (data.slug?.includes('conference-2026') || docId.includes('conference-2026'))) {
+    posterUrl = '/images/kannur-conference-2026-poster.jpg';
+  }
   const posterPublicId = rawPoster?.publicId || data.poster_public_id || null;
 
   const isPublished = Boolean(data.published === true || data.published === 1);

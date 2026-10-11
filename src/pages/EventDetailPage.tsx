@@ -161,6 +161,15 @@ export const EventDetailPage = () => {
                   src={event.poster_url} 
                   alt={title} 
                   className="w-full h-full object-cover object-center absolute inset-0"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const fallback = event.slug?.includes('conference-2026')
+                      ? '/images/kannur-conference-2026-poster.jpg'
+                      : '/images/balasangham-festival-theme.jpeg';
+                    if (!target.src.endsWith(fallback)) {
+                      target.src = fallback;
+                    }
+                  }}
                 />
               </div>
             )}

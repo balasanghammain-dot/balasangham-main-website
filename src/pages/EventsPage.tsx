@@ -118,7 +118,20 @@ export const EventsPage = () => {
       <div className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col h-full group">
         <div className="aspect-[4/3] bg-warm-cream relative overflow-hidden">
           {event.poster_url ? (
-            <img src={event.poster_url} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img 
+              src={event.poster_url} 
+              alt={title} 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+              onError={(e) => {
+                const target = e.currentTarget;
+                const fallback = event.slug?.includes('conference-2026')
+                  ? '/images/kannur-conference-2026-poster.jpg'
+                  : '/images/balasangham-festival-theme.jpeg';
+                if (!target.src.endsWith(fallback)) {
+                  target.src = fallback;
+                }
+              }}
+            />
           ) : (
             <div className="flex w-full h-full items-center justify-center text-warm-orange/30">
               <ImageIcon className="w-12 h-12" />

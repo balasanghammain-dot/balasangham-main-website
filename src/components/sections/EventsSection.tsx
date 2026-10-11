@@ -196,6 +196,15 @@ export const EventSection = () => {
                   alt={event.slug.includes('conference-2026') ? 'Balasangham Kannur District Conference 2026 poster' : `${title} poster`}
                   className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const fallback = event.slug?.includes('conference-2026')
+                      ? '/images/kannur-conference-2026-poster.jpg'
+                      : '/images/balasangham-festival-theme.jpeg';
+                    if (!target.src.endsWith(fallback)) {
+                      target.src = fallback;
+                    }
+                  }}
                 />
 
                 {/* Interactive Play Game Banner over poster */}
