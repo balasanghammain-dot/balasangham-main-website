@@ -61,7 +61,7 @@ export const HeroSection = ({ onOpenAnthem }: HeroSectionProps) => {
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-dark-brown/10 text-dark-brown text-xs sm:text-sm font-bold shadow-xs backdrop-blur-xs">
                 <BalasanghamLogo className="w-4 h-4 sm:w-5 sm:h-5 object-contain shrink-0" alt="" />
                 <span className={ml ? 'font-malayalam font-bold text-[12px] sm:text-xs' : 'font-sans text-[11px] sm:text-xs uppercase tracking-wider'}>
-                  {ml ? '1938 മുതൽ · ജനാധിപത്യ ബാല്യക്കൂട്ടായ്മ' : 'Since 1938 · Democratic Children’s Movement'}
+                  {ml ? '1938 മുതൽ' : 'Since 1938'}
                 </span>
                 {/* Supporting green accent dot */}
                 <span className="w-1.5 h-1.5 rounded-full bg-poster-green shrink-0" aria-hidden="true" />
