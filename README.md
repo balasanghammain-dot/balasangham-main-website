@@ -28,6 +28,12 @@ The platform uses Google Firebase and Cloudinary. Copy `.env.example` to `.env` 
 - `SESSION_SECRET`: Cryptographically strong 32+ character random secret for Express session cookies.
 - `ADMIN_PASSWORD_HASH`: Bcrypt hash of administrator password for secondary backend verification.
 
+#### Firestore Synchronization (`server/firestoreSync.js`)
+When running the Express server, writes to the local SQLite database automatically synchronize with Google Cloud Firestore via the Firebase Admin SDK.
+- The sync requires either `FIREBASE_SERVICE_ACCOUNT_JSON` or `GOOGLE_APPLICATION_CREDENTIALS` configured in the server environment.
+- If credentials are not configured, SQLite transactions still complete successfully, but the server will log a loud `CRITICAL` error explaining that Firestore synchronization is suspended due to missing service account credentials. Missing credentials never fail silently.
+- The legacy dependency on local developer machine tokens (`firebase-tools.json`) has been completely removed.
+
 ### Cloudinary CDN Configuration
 - `CLOUDINARY_CLOUD_NAME`: Cloudinary cloud name.
 - `CLOUDINARY_API_KEY`: Cloudinary API key.
