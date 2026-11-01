@@ -1,6 +1,5 @@
 import { api } from './api';
-
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dj4apdzk';
+import { auth } from './firebase';
 
 export interface UploadResult {
   url: string;
@@ -15,90 +14,78 @@ export interface UploadResult {
 }
 
 /**
- * Uploads a file (image or video) to Cloudinary.
- * First attempts server/serverless endpoint (/api/admin/upload or /api/upload).
- * If that fails or is unavailable, falls back to direct Cloudinary client upload.
+ * Uploads a file (image or video) via authenticated backend/serverless endpoint.
+ * Requires Firebase Admin authentication and passes the current user's ID token.
  */
 export async function uploadFile(
   file: File,
   options?: {
     eventId?: string;
     title?: string;
+    token?: string;
     onProgress?: (percent: number) => void;
   }
 ): Promise<UploadResult> {
   const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|mkv)$/i.test(file.name);
   const resourceType = isVideo ? 'video' : 'image';
 
-  // 1. Try uploading via server API endpoint (/api/admin/upload or /api/upload)
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    if (options?.eventId && options.eventId !== 'none') {
-      formData.append('eventId', options.eventId);
-    }
-    if (options?.title) {
-      formData.append('title', options.title);
-    }
-
-    let res: any = null;
+  // 1. Obtain Firebase Auth ID token
+  let idToken = options?.token;
+  if (!idToken && auth.currentUser) {
     try {
-      res = await api.post<any>('/api/admin/upload', formData);
-    } catch {
-      res = await api.post<any>('/api/upload', formData);
+      idToken = await auth.currentUser.getIdToken();
+    } catch (err: any) {
+      console.warn('Could not retrieve current user Firebase ID token:', err.message);
     }
-
-    if (res && (res.url || res.secure_url)) {
-      const secureUrl = res.secure_url || res.url;
-      const pubId = res.public_id || res.publicId || '';
-      return {
-        url: secureUrl,
-        secure_url: secureUrl,
-        public_id: pubId,
-        width: res.width,
-        height: res.height,
-        format: res.format || (isVideo ? 'mp4' : 'jpg'),
-        resource_type: resourceType,
-        duration: res.duration,
-        thumbnail_url: res.thumbnail_url || res.thumbnailUrl || secureUrl
-      };
-    }
-  } catch (serverErr: any) {
-    console.warn('Backend upload endpoint unavailable, attempting direct Cloudinary upload:', serverErr.message);
   }
 
-  // 2. Direct Cloudinary upload fallback
-  // Uses unsigned preset (balasangham_uploads) directly against Cloudinary
-  const cloudName = CLOUD_NAME || 'dj4apdzk';
-  const directUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
-  const directFormData = new FormData();
-  directFormData.append('file', file);
-  directFormData.append('upload_preset', 'balasangham_uploads');
+  const headers: Record<string, string> = {};
+  if (idToken) {
+    headers['Authorization'] = `Bearer ${idToken}`;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+  if (options?.eventId && options.eventId !== 'none') {
+    formData.append('eventId', options.eventId);
+  }
+  if (options?.title) {
+    formData.append('title', options.title);
+  }
+
+  // 2. Upload via authenticated API endpoint
+  let res: any = null;
+  let lastError: Error | null = null;
 
   try {
-    const res = await fetch(directUrl, {
-      method: 'POST',
-      body: directFormData
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      return {
-        url: data.secure_url || data.url,
-        secure_url: data.secure_url || data.url,
-        public_id: data.public_id,
-        width: data.width,
-        height: data.height,
-        format: data.format,
-        resource_type: data.resource_type || resourceType,
-        duration: data.duration,
-        thumbnail_url: data.thumbnail_url || data.secure_url
-      };
-    } else {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData?.error?.message || 'Direct upload failed');
+    res = await api.post<any>('/api/admin/upload', formData, { headers });
+  } catch (adminErr: any) {
+    lastError = adminErr;
+    try {
+      res = await api.post<any>('/api/upload', formData, { headers });
+      lastError = null;
+    } catch (uploadErr: any) {
+      lastError = uploadErr;
     }
-  } catch (directErr: any) {
-    throw new Error('Upload failed: ' + (directErr.message || 'Could not upload file to Cloudinary.'));
   }
+
+  if (res && (res.url || res.secure_url)) {
+    const secureUrl = res.secure_url || res.url;
+    const pubId = res.public_id || res.publicId || '';
+    return {
+      url: secureUrl,
+      secure_url: secureUrl,
+      public_id: pubId,
+      width: res.width,
+      height: res.height,
+      format: res.format || (isVideo ? 'mp4' : 'jpg'),
+      resource_type: resourceType,
+      duration: res.duration,
+      thumbnail_url: res.thumbnail_url || res.thumbnailUrl || secureUrl
+    };
+  }
+
+  throw new Error(
+    lastError?.message || 'Media upload failed. Please verify your administrative credentials and network connection.'
+  );
 }
