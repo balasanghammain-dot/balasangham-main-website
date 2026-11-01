@@ -1,7 +1,9 @@
 import '@testing-library/jest-dom';
 import { vi, beforeEach } from 'vitest';
 
-window.scrollTo = vi.fn();
+if (typeof window !== 'undefined') {
+  window.scrollTo = vi.fn();
+}
 
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root: Element | Document | null = null;
@@ -13,10 +15,14 @@ class MockIntersectionObserver implements IntersectionObserver {
   takeRecords = vi.fn(() => []);
 }
 
-window.IntersectionObserver = MockIntersectionObserver;
+if (typeof window !== 'undefined') {
+  window.IntersectionObserver = MockIntersectionObserver;
+}
 global.IntersectionObserver = MockIntersectionObserver;
 
 beforeEach(() => {
-  localStorage.clear();
+  if (typeof localStorage !== 'undefined') {
+    localStorage.clear();
+  }
 });
 

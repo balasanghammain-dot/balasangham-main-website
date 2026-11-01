@@ -31,23 +31,25 @@ export async function apiFetch<T>(url: string, options: RequestInit = {}): Promi
 }
 
 export const api = {
-  get: <T>(url: string) => apiFetch<T>(url, { method: 'GET' }),
-  
-  post: <T>(url: string, data?: any) => {
+  get: <T>(url: string, options: RequestInit = {}) => apiFetch<T>(url, { ...options, method: 'GET' }),
+
+  post: <T>(url: string, data?: any, options: RequestInit = {}) => {
     const isFormData = data instanceof FormData;
     return apiFetch<T>(url, {
+      ...options,
       method: 'POST',
       body: isFormData ? data : JSON.stringify(data),
     });
   },
-  
-  put: <T>(url: string, data?: any) => {
+
+  put: <T>(url: string, data?: any, options: RequestInit = {}) => {
     const isFormData = data instanceof FormData;
     return apiFetch<T>(url, {
+      ...options,
       method: 'PUT',
       body: isFormData ? data : JSON.stringify(data),
     });
   },
-  
-  delete: <T>(url: string) => apiFetch<T>(url, { method: 'DELETE' }),
+
+  delete: <T>(url: string, options: RequestInit = {}) => apiFetch<T>(url, { ...options, method: 'DELETE' }),
 };

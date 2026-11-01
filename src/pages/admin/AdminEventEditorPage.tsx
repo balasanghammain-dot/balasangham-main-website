@@ -160,7 +160,7 @@ export default function AdminEventEditorPage() {
         }));
       }
     } catch (err: any) {
-      alert('Poster upload failed: ' + (err.message || ''));
+      setError('Poster upload failed: ' + (err.message || 'Please check your connection and admin login status.'));
     } finally {
       setUploadingPoster(false);
     }

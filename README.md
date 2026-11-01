@@ -18,6 +18,26 @@ All specifications are organized in the [`docs/`](./docs/) directory to provide 
 
 ---
 
+## 🔐 Environment & Security Configuration
+
+The platform uses Google Firebase and Cloudinary. Copy `.env.example` to `.env` or configure the following in Vercel / Firebase Hosting:
+
+### Server & Admin Authentication
+- `FIREBASE_SERVICE_ACCOUNT_JSON`: Service account JSON string or base64 string for Firebase Admin SDK (used for server-side ID token verification on `/api/upload` and Firestore synchronization).
+- `GOOGLE_APPLICATION_CREDENTIALS`: Alternative path to service account JSON file.
+- `SESSION_SECRET`: Cryptographically strong 32+ character random secret for Express session cookies.
+- `ADMIN_PASSWORD_HASH`: Bcrypt hash of administrator password for secondary backend verification.
+
+### Cloudinary CDN Configuration
+- `CLOUDINARY_CLOUD_NAME`: Cloudinary cloud name.
+- `CLOUDINARY_API_KEY`: Cloudinary API key.
+- `CLOUDINARY_API_SECRET`: Private Cloudinary API secret (server-side only).
+
+### Public Firebase Client (Web SDK)
+- `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`.
+
+---
+
 ## 🚀 Quick Handoff to Builder Agent
 
 To generate the website, provide the prompt contained in [`docs/MAIN_AGENT_PROMPT.md`](./docs/MAIN_AGENT_PROMPT.md) to your coding agent.
