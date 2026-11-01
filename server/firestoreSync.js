@@ -1,92 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-
-const PROJECT_ID = process.env.VITE_FIREBASE_PROJECT_ID || 'balasangam-8e562';
-const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+const firebaseAdmin = require('./firebaseAdmin');
 
 /**
- * Retrieves valid Google Cloud OAuth access token from firebase-tools config
+ * Normalizes event object into Firestore document structure
  */
-function getAccessToken() {
-  try {
-    const tokenFile = path.join(process.env.HOME || '', '.config', 'configstore', 'firebase-tools.json');
-    if (fs.existsSync(tokenFile)) {
-      const config = JSON.parse(fs.readFileSync(tokenFile, 'utf8'));
-      if (config?.tokens?.access_token) {
-        return config.tokens.access_token;
-      }
-    }
-  } catch (err) {
-    console.warn('[firestoreSync] Could not read firebase-tools token:', err.message);
-  }
-  return null;
-}
-
-function toRestValue(val) {
-  if (val === null || val === undefined) {
-    return { nullValue: null };
-  }
-  if (typeof val === 'boolean') {
-    return { booleanValue: val };
-  }
-  if (typeof val === 'number') {
-    if (Number.isInteger(val)) {
-      return { integerValue: val.toString() };
-    }
-    return { doubleValue: val };
-  }
-  if (val instanceof Date) {
-    return { timestampValue: val.toISOString() };
-  }
-  if (typeof val === 'string') {
-    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(val)) {
-      return { timestampValue: new Date(val).toISOString() };
-    }
-    return { stringValue: val };
-  }
-  if (Array.isArray(val)) {
-    return {
-      arrayValue: {
-        values: val.map(toRestValue)
-      }
-    };
-  }
-  if (typeof val === 'object') {
-    const fields = {};
-    for (const [k, v] of Object.entries(val)) {
-      fields[k] = toRestValue(v);
-    }
-    return { mapValue: { fields } };
-  }
-  return { stringValue: String(val) };
-}
-
-function objectToRestFields(obj) {
-  const fields = {};
-  for (const [k, v] of Object.entries(obj)) {
-    if (v === undefined) continue;
-    fields[k] = toRestValue(v);
-  }
-  return fields;
-}
-
-/**
- * Upserts an event document into Firestore
- */
-async function syncEventToFirestore(event) {
-  const token = getAccessToken();
-  if (!token) return;
-
-  const docId = event.slug || event.id;
-  const url = `${FIRESTORE_BASE}/events/${docId}`;
-
+function toFirestoreEventPayload(event) {
   const startIso = event.start_date ? new Date(event.start_date).toISOString() : new Date().toISOString();
   const endIso = event.end_date ? new Date(event.end_date).toISOString() : null;
 
   const isPublished = Boolean(event.published === 1 || event.published === true);
   const isSnapShare = Boolean(event.snapshare_enabled === 1 || event.snapshare_enabled === true);
 
-  const payload = {
+  return {
     title: event.title,
     malayalamTitle: event.title_ml || null,
     title_ml: event.title_ml || null,
@@ -124,64 +48,17 @@ async function syncEventToFirestore(event) {
     schedule_info_ml: event.schedule_info_ml || null,
     updatedAt: new Date()
   };
-
-  try {
-    const fields = objectToRestFields(payload);
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ fields })
-    });
-    if (!res.ok) {
-      console.warn(`[firestoreSync] Failed to sync event ${docId}:`, res.status, await res.text());
-    } else {
-      console.log(`[firestoreSync] Synced event ${docId} to Firestore.`);
-    }
-  } catch (err) {
-    console.warn(`[firestoreSync] Error syncing event ${docId}:`, err.message);
-  }
 }
 
 /**
- * Deletes an event document from Firestore
+ * Normalizes media object into Firestore document structure
  */
-async function deleteEventFromFirestore(eventId, slug) {
-  const token = getAccessToken();
-  if (!token) return;
-
-  const docIds = [eventId, slug].filter(Boolean);
-  for (const docId of docIds) {
-    try {
-      const url = `${FIRESTORE_BASE}/events/${docId}`;
-      await fetch(url, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      console.log(`[firestoreSync] Deleted event ${docId} from Firestore.`);
-    } catch (err) {
-      console.warn(`[firestoreSync] Error deleting event ${docId}:`, err.message);
-    }
-  }
-}
-
-/**
- * Upserts a media asset into Firestore
- */
-async function syncMediaToFirestore(media) {
-  const token = getAccessToken();
-  if (!token) return;
-
-  const docId = media.id;
-  const url = `${FIRESTORE_BASE}/media/${docId}`;
-
+function toFirestoreMediaPayload(media) {
   const isImage = (media.resource_type === 'image' || media.type === 'image' || media.media_type === 'photo');
   const mediaType = isImage ? 'image' : 'video';
 
-  const payload = {
-    title: media.title || media.caption || `Asset ${docId}`,
+  return {
+    title: media.title || media.caption || `Asset ${media.id}`,
     caption: media.caption || null,
     caption_ml: media.caption_ml || null,
     url: media.url,
@@ -202,43 +79,125 @@ async function syncMediaToFirestore(media) {
     sort_order: typeof media.sort_order === 'number' ? media.sort_order : 0,
     updatedAt: new Date()
   };
+}
+
+/**
+ * Upserts an event document into Firestore using Firebase Admin SDK.
+ * Never fails silently.
+ */
+async function syncEventToFirestore(event) {
+  let db;
+  try {
+    db = firebaseAdmin.getAdminFirestore();
+    if (!db) throw new Error('Firestore instance not available');
+  } catch (credErr) {
+    console.error(
+      '[firestoreSync] CRITICAL: Firebase Admin credentials missing or invalid. Ensure FIREBASE_SERVICE_ACCOUNT_JSON or GOOGLE_APPLICATION_CREDENTIALS is set in environment.',
+      credErr.message
+    );
+    return false;
+  }
+
+  const docId = event.slug || event.id;
+  const payload = toFirestoreEventPayload(event);
 
   try {
-    const fields = objectToRestFields(payload);
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ fields })
-    });
-    if (!res.ok) {
-      console.warn(`[firestoreSync] Failed to sync media ${docId}:`, res.status, await res.text());
-    } else {
-      console.log(`[firestoreSync] Synced media ${docId} to Firestore.`);
-    }
+    await db.collection('events').doc(docId).set(payload, { merge: true });
+    console.log(`[firestoreSync] Synced event ${docId} to Firestore.`);
+    return true;
   } catch (err) {
-    console.warn(`[firestoreSync] Error syncing media ${docId}:`, err.message);
+    console.error(`[firestoreSync] ERROR: Failed to sync event ${docId} to Firestore:`, err.message);
+    return false;
   }
 }
 
 /**
- * Deletes a media asset from Firestore
+ * Deletes an event document from Firestore.
+ * Never fails silently.
  */
-async function deleteMediaFromFirestore(mediaId) {
-  const token = getAccessToken();
-  if (!token) return;
+async function deleteEventFromFirestore(eventId, slug) {
+  let db;
+  try {
+    db = firebaseAdmin.getAdminFirestore();
+    if (!db) throw new Error('Firestore instance not available');
+  } catch (credErr) {
+    console.error(
+      '[firestoreSync] CRITICAL: Firebase Admin credentials missing for event deletion.',
+      credErr.message
+    );
+    return false;
+  }
+
+  const docIds = [eventId, slug].filter(Boolean);
+  let allSuccess = true;
+
+  for (const docId of docIds) {
+    try {
+      await db.collection('events').doc(docId).delete();
+      console.log(`[firestoreSync] Deleted event ${docId} from Firestore.`);
+    } catch (err) {
+      console.error(`[firestoreSync] ERROR: Failed to delete event ${docId} from Firestore:`, err.message);
+      allSuccess = false;
+    }
+  }
+
+  return allSuccess;
+}
+
+/**
+ * Upserts a media asset into Firestore using Firebase Admin SDK.
+ * Never fails silently.
+ */
+async function syncMediaToFirestore(media) {
+  let db;
+  try {
+    db = firebaseAdmin.getAdminFirestore();
+    if (!db) throw new Error('Firestore instance not available');
+  } catch (credErr) {
+    console.error(
+      '[firestoreSync] CRITICAL: Firebase Admin credentials missing for media sync.',
+      credErr.message
+    );
+    return false;
+  }
+
+  const docId = media.id;
+  const payload = toFirestoreMediaPayload(media);
 
   try {
-    const url = `${FIRESTORE_BASE}/media/${mediaId}`;
-    await fetch(url, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    console.log(`[firestoreSync] Deleted media ${mediaId} from Firestore.`);
+    await db.collection('media').doc(docId).set(payload, { merge: true });
+    console.log(`[firestoreSync] Synced media ${docId} to Firestore.`);
+    return true;
   } catch (err) {
-    console.warn(`[firestoreSync] Error deleting media ${mediaId}:`, err.message);
+    console.error(`[firestoreSync] ERROR: Failed to sync media ${docId} to Firestore:`, err.message);
+    return false;
+  }
+}
+
+/**
+ * Deletes a media asset from Firestore.
+ * Never fails silently.
+ */
+async function deleteMediaFromFirestore(mediaId) {
+  let db;
+  try {
+    db = firebaseAdmin.getAdminFirestore();
+    if (!db) throw new Error('Firestore instance not available');
+  } catch (credErr) {
+    console.error(
+      '[firestoreSync] CRITICAL: Firebase Admin credentials missing for media deletion.',
+      credErr.message
+    );
+    return false;
+  }
+
+  try {
+    await db.collection('media').doc(mediaId).delete();
+    console.log(`[firestoreSync] Deleted media ${mediaId} from Firestore.`);
+    return true;
+  } catch (err) {
+    console.error(`[firestoreSync] ERROR: Failed to delete media ${mediaId} from Firestore:`, err.message);
+    return false;
   }
 }
 
