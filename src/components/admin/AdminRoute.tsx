@@ -16,16 +16,27 @@ export default function AdminRoute() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      const email = user?.email?.toLowerCase();
-      const isAllowedAdmin = Boolean(email && ALLOWED_ADMIN_EMAILS.includes(email));
+      if (user) {
+        let isAllowedAdmin = false;
+        try {
+          const tokenResult = await user.getIdTokenResult();
+          const hasAdminClaim = Boolean(tokenResult.claims.admin === true || tokenResult.claims.role === 'admin');
+          const email = user.email?.toLowerCase();
+          const isAllowedEmail = Boolean(email && ALLOWED_ADMIN_EMAILS.includes(email));
+          isAllowedAdmin = hasAdminClaim || isAllowedEmail;
+        } catch {
+          const email = user.email?.toLowerCase();
+          isAllowedAdmin = Boolean(email && ALLOWED_ADMIN_EMAILS.includes(email));
+        }
 
-      if (user && isAllowedAdmin) {
-        setIsAuthenticated(true);
-        // Ensure backend session is synced
-        api.get<{ authenticated?: boolean }>('/api/admin/session').catch(() => {});
-      } else if (user && !isAllowedAdmin) {
-        // Authenticated non-admin user: strictly denied
-        setIsAuthenticated(false);
+        if (isAllowedAdmin) {
+          setIsAuthenticated(true);
+          // Ensure backend session is synced
+          api.get<{ authenticated?: boolean }>('/api/admin/session').catch(() => {});
+        } else {
+          // Authenticated non-admin user: strictly denied
+          setIsAuthenticated(false);
+        }
       } else {
         try {
           const data = await api.get<{ authenticated?: boolean }>('/api/admin/session');

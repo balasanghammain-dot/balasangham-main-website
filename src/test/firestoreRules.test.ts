@@ -174,13 +174,14 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
   describe('Administrator Authorization & Privilege Escalation Prevention (isAdmin)', () => {
     it('grants admin privileges to custom claim admin: true', () => {
       expect(isAdmin({ token: { admin: true } })).toBe(true);
+      expect(isAdmin({ token: { admin: true, email: 'convener.thalassery@gmail.com' } })).toBe(true);
     });
 
     it('grants admin privileges to custom claim role: admin', () => {
       expect(isAdmin({ token: { role: 'admin' } })).toBe(true);
     });
 
-    it('grants admin privileges to authorized admin emails', () => {
+    it('grants admin privileges to authorized admin emails during transition (legacy path)', () => {
       expect(isAdmin({ token: { email: 'balasangham.main@gmail.com' } })).toBe(true);
       expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org' } })).toBe(true);
     });
@@ -190,6 +191,7 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       expect(isAdmin({ token: { email: 'attacker@evil.com' } })).toBe(false);
       expect(isAdmin({ token: { email: 'admin@balasangham.org' } })).toBe(false);
       expect(isAdmin({ token: { email: 'user@gmail.com' } })).toBe(false);
+      expect(isAdmin({ token: { email: 'member@balasanghamkannur.org', admin: false } })).toBe(false);
     });
 
     it('denies unauthenticated requests or tokens without admin claims/emails', () => {
@@ -316,7 +318,16 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
     });
 
     it('allows creation by authenticated admin with valid payload', () => {
+      // Claim-based admin (dynamic email)
       expect(canCreate(adminAuth, validEventPayload)).toBe(true);
+      expect(canCreate({ token: { admin: true, email: 'new.admin@balasanghamkannur.org' } }, validEventPayload)).toBe(true);
+
+      // Legacy email admin (transition path)
+      expect(canCreate({ token: { email: 'balasangham.main@gmail.com' } }, validEventPayload)).toBe(true);
+      expect(canCreate({ token: { email: 'admin@balasanghamkannur.org' } }, validEventPayload)).toBe(true);
+
+      // Non-admin explicitly denied
+      expect(canCreate({ token: { email: 'regular.member@gmail.com' } }, validEventPayload)).toBe(false);
     });
 
     it('strictly denies updates from non-admin authenticated users with arbitrary email', () => {
