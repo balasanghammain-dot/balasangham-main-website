@@ -71,16 +71,22 @@ function getAdminFirestore() {
 
 /**
  * Validates if decoded Firebase ID token has admin privileges.
- * Matches firestore.rules: custom claim `admin: true`, `role: 'admin'`,
- * or email in ALLOWED_ADMIN_EMAILS.
+ * Matches firestore.rules:
+ * Primary: custom claim `admin: true` (or `role: 'admin'`)
+ * Fallback: email in ALLOWED_ADMIN_EMAILS AND email_verified === true
+ *
+ * TODO: Remove email fallback once custom claims are confirmed assigned in production
  */
 function isUserAdmin(decodedToken) {
   if (!decodedToken) return false;
   if (decodedToken.admin === true || decodedToken.role === 'admin') {
     return true;
   }
-  const email = (decodedToken.email || '').toLowerCase();
-  return ALLOWED_ADMIN_EMAILS.includes(email);
+  if (decodedToken.email_verified === true && typeof decodedToken.email === 'string') {
+    const email = decodedToken.email.toLowerCase();
+    return ALLOWED_ADMIN_EMAILS.includes(email);
+  }
+  return false;
 }
 
 module.exports = {

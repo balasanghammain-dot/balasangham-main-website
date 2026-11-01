@@ -1,11 +1,29 @@
 const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
+const { getAdminAuth, isUserAdmin } = require('./firebaseAdmin');
 
-// Authentication middleware
-const requireAuth = (req, res, next) => {
+// Authentication middleware: checks Express session, or Bearer ID token with isUserAdmin
+const requireAuth = async (req, res, next) => {
   if (req.session && req.session.authenticated) {
     return next();
   }
+
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const idToken = authHeader.substring(7).trim();
+    if (idToken) {
+      try {
+        const auth = getAdminAuth();
+        const decoded = await auth.verifyIdToken(idToken);
+        if (isUserAdmin(decoded)) {
+          return next();
+        }
+      } catch (err) {
+        // Token verification failed
+      }
+    }
+  }
+
   return res.status(401).json({ error: 'Unauthorized' });
 };
 
@@ -69,5 +87,6 @@ module.exports = {
   loginLimiter,
   loginHandler,
   logoutHandler,
-  checkSessionHandler
+  checkSessionHandler,
+  isUserAdmin
 };
