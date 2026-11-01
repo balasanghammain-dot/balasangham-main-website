@@ -31,7 +31,8 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
     return (
       token.admin === true ||
       token.role === 'admin' ||
-      (typeof token.email === 'string' &&
+      (token.email_verified === true &&
+        typeof token.email === 'string' &&
         (token.email === 'balasangham.main@gmail.com' ||
          token.email === 'admin@balasanghamkannur.org'))
     );
@@ -181,17 +182,24 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       expect(isAdmin({ token: { role: 'admin' } })).toBe(true);
     });
 
-    it('grants admin privileges to authorized admin emails during transition (legacy path)', () => {
-      expect(isAdmin({ token: { email: 'balasangham.main@gmail.com' } })).toBe(true);
-      expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org' } })).toBe(true);
+    it('grants admin privileges to authorized admin emails with email_verified: true', () => {
+      expect(isAdmin({ token: { email: 'balasangham.main@gmail.com', email_verified: true } })).toBe(true);
+      expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org', email_verified: true } })).toBe(true);
+    });
+
+    it('strictly denies unverified allowlisted emails (F1/F3 vulnerability remediation)', () => {
+      expect(isAdmin({ token: { email: 'balasangham.main@gmail.com', email_verified: false } })).toBe(false);
+      expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org', email_verified: false } })).toBe(false);
+      expect(isAdmin({ token: { email: 'balasangham.main@gmail.com' } })).toBe(false);
+      expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org' } })).toBe(false);
     });
 
     it('strictly denies arbitrary authenticated emails and prevents privilege escalation', () => {
-      expect(isAdmin({ token: { email: 'random@example.com' } })).toBe(false);
-      expect(isAdmin({ token: { email: 'attacker@evil.com' } })).toBe(false);
-      expect(isAdmin({ token: { email: 'admin@balasangham.org' } })).toBe(false);
-      expect(isAdmin({ token: { email: 'user@gmail.com' } })).toBe(false);
-      expect(isAdmin({ token: { email: 'member@balasanghamkannur.org', admin: false } })).toBe(false);
+      expect(isAdmin({ token: { email: 'random@example.com', email_verified: true } })).toBe(false);
+      expect(isAdmin({ token: { email: 'attacker@evil.com', email_verified: true } })).toBe(false);
+      expect(isAdmin({ token: { email: 'admin@balasangham.org', email_verified: true } })).toBe(false);
+      expect(isAdmin({ token: { email: 'user@gmail.com', email_verified: true } })).toBe(false);
+      expect(isAdmin({ token: { email: 'member@balasanghamkannur.org', admin: false, email_verified: true } })).toBe(false);
     });
 
     it('denies unauthenticated requests or tokens without admin claims/emails', () => {
@@ -293,11 +301,14 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       const adminAuth = { token: { admin: true } };
       expect(canRead(adminAuth, { published: false })).toBe(true);
 
-      const adminEmailAuth1 = { token: { email: 'balasangham.main@gmail.com' } };
+      const adminEmailAuth1 = { token: { email: 'balasangham.main@gmail.com', email_verified: true } };
       expect(canRead(adminEmailAuth1, { published: false })).toBe(true);
 
-      const adminEmailAuth2 = { token: { email: 'admin@balasanghamkannur.org' } };
+      const adminEmailAuth2 = { token: { email: 'admin@balasanghamkannur.org', email_verified: true } };
       expect(canRead(adminEmailAuth2, { published: false })).toBe(true);
+
+      const unverifiedAdminEmail = { token: { email: 'balasangham.main@gmail.com', email_verified: false } };
+      expect(canRead(unverifiedAdminEmail, { published: false })).toBe(false);
     });
 
     it('strictly denies authenticated non-admin users (e.g. random@example.com) from accessing draft events', () => {
@@ -322,12 +333,16 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       expect(canCreate(adminAuth, validEventPayload)).toBe(true);
       expect(canCreate({ token: { admin: true, email: 'new.admin@balasanghamkannur.org' } }, validEventPayload)).toBe(true);
 
-      // Legacy email admin (transition path)
-      expect(canCreate({ token: { email: 'balasangham.main@gmail.com' } }, validEventPayload)).toBe(true);
-      expect(canCreate({ token: { email: 'admin@balasanghamkannur.org' } }, validEventPayload)).toBe(true);
+      // Legacy verified email admin (transition path)
+      expect(canCreate({ token: { email: 'balasangham.main@gmail.com', email_verified: true } }, validEventPayload)).toBe(true);
+      expect(canCreate({ token: { email: 'admin@balasanghamkannur.org', email_verified: true } }, validEventPayload)).toBe(true);
+
+      // Unverified allowlisted email denied
+      expect(canCreate({ token: { email: 'balasangham.main@gmail.com', email_verified: false } }, validEventPayload)).toBe(false);
+      expect(canCreate({ token: { email: 'balasangham.main@gmail.com' } }, validEventPayload)).toBe(false);
 
       // Non-admin explicitly denied
-      expect(canCreate({ token: { email: 'regular.member@gmail.com' } }, validEventPayload)).toBe(false);
+      expect(canCreate({ token: { email: 'regular.member@gmail.com', email_verified: true } }, validEventPayload)).toBe(false);
     });
 
     it('strictly denies updates from non-admin authenticated users with arbitrary email', () => {
@@ -637,11 +652,14 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
         expect(canReadMedia(adminAuth, { published: false })).toBe(true);
         expect(canReadMedia(adminAuth, { published: 0 })).toBe(true);
 
-        const adminEmailAuth1 = { token: { email: 'balasangham.main@gmail.com' } };
+        const adminEmailAuth1 = { token: { email: 'balasangham.main@gmail.com', email_verified: true } };
         expect(canReadMedia(adminEmailAuth1, { published: false })).toBe(true);
 
-        const adminEmailAuth2 = { token: { email: 'admin@balasanghamkannur.org' } };
+        const adminEmailAuth2 = { token: { email: 'admin@balasanghamkannur.org', email_verified: true } };
         expect(canReadMedia(adminEmailAuth2, { published: false })).toBe(true);
+
+        const unverifiedAuth = { token: { email: 'balasangham.main@gmail.com', email_verified: false } };
+        expect(canReadMedia(unverifiedAuth, { published: false })).toBe(false);
       });
 
       it('strictly denies authenticated non-admin users (e.g. random@example.com) from accessing draft media', () => {

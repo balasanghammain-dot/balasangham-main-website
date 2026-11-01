@@ -3,23 +3,23 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from 'vites
 import http from 'http';
 import { Writable } from 'stream';
 
-// Mock server/firebaseAdmin.js
+// Mock server/firebaseAdmin.js but retain real isUserAdmin and ALLOWED_ADMIN_EMAILS
 const mockVerifyIdToken = vi.fn();
-vi.mock('../../server/firebaseAdmin.js', () => {
+vi.mock('../../server/firebaseAdmin.js', async (importOriginal) => {
+  const actual = await importOriginal<any>();
   return {
+    ...actual,
     default: {
+      ...actual,
       getFirebaseAdmin: vi.fn(),
       getAdminAuth: () => ({
         verifyIdToken: mockVerifyIdToken,
       }),
-      isUserAdmin: (token: any) => {
-        if (!token) return false;
-        if (token.admin === true || token.role === 'admin') return true;
-        const email = (token.email || '').toLowerCase();
-        return email === 'balasangham.main@gmail.com' || email === 'admin@balasanghamkannur.org';
-      },
-      ALLOWED_ADMIN_EMAILS: ['balasangham.main@gmail.com', 'admin@balasanghamkannur.org'],
     },
+    getFirebaseAdmin: vi.fn(),
+    getAdminAuth: () => ({
+      verifyIdToken: mockVerifyIdToken,
+    }),
   };
 });
 
@@ -143,6 +143,7 @@ describe('api/upload.js endpoint security and validation', () => {
     mockVerifyIdToken.mockResolvedValueOnce({
       uid: 'regular-user',
       email: 'regular.member@gmail.com',
+      email_verified: true,
     });
 
     const formData = new FormData();
@@ -159,6 +160,78 @@ describe('api/upload.js endpoint security and validation', () => {
     expect(res.status).toBe(403);
     const data = await res.json();
     expect(data.error).toMatch(/forbidden|admin access required/i);
+  });
+
+  it('rejects unverified allowlisted admin email with 403 Forbidden (F1/F3 remediation)', async () => {
+    mockVerifyIdToken.mockResolvedValueOnce({
+      uid: 'unverified-attacker',
+      email: 'admin@balasanghamkannur.org',
+      email_verified: false,
+    });
+
+    const formData = new FormData();
+    formData.append('file', new Blob(['test content'], { type: 'image/jpeg' }), 'photo.jpg');
+
+    const res = await fetch(serverUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer unverified-token',
+      },
+      body: formData,
+    });
+
+    expect(res.status).toBe(403);
+    const data = await res.json();
+    expect(data.error).toMatch(/forbidden|admin access required/i);
+  });
+
+  it('accepts verified allowlisted admin email during transition fallback', async () => {
+    mockVerifyIdToken.mockResolvedValueOnce({
+      uid: 'verified-admin',
+      email: 'balasangham.main@gmail.com',
+      email_verified: true,
+    });
+
+    const formData = new FormData();
+    formData.append('file', new Blob(['fake-jpg-content'], { type: 'image/jpeg' }), 'event-poster.jpg');
+
+    const res = await fetch(serverUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer verified-email-token',
+        Origin: 'https://balasanghamkannur.org',
+      },
+      body: formData,
+    });
+
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.secure_url).toContain('https://res.cloudinary.com/');
+    expect(data.public_id).toBe('balasangham/sample');
+  });
+
+  it('accepts custom claim admin: true regardless of email', async () => {
+    mockVerifyIdToken.mockResolvedValueOnce({
+      uid: 'claim-admin',
+      email: 'custom.organizer@gmail.com',
+      admin: true,
+    });
+
+    const formData = new FormData();
+    formData.append('file', new Blob(['fake-jpg-content'], { type: 'image/jpeg' }), 'event-poster.jpg');
+
+    const res = await fetch(serverUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer claim-admin-token',
+        Origin: 'https://balasanghamkannur.org',
+      },
+      body: formData,
+    });
+
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.secure_url).toContain('https://res.cloudinary.com/');
   });
 
   it('rejects unsupported media MIME type with 415', async () => {
@@ -207,32 +280,6 @@ describe('api/upload.js endpoint security and validation', () => {
     expect(res.status).toBe(413);
     const data = await res.json();
     expect(data.error).toMatch(/exceeds maximum limit/i);
-  });
-
-  it('accepts valid admin upload and uploads to Cloudinary', async () => {
-    mockVerifyIdToken.mockResolvedValueOnce({
-      uid: 'admin-user',
-      email: 'balasangham.main@gmail.com',
-      admin: true,
-    });
-
-    const formData = new FormData();
-    formData.append('file', new Blob(['fake-jpg-content'], { type: 'image/jpeg' }), 'event-poster.jpg');
-
-    const res = await fetch(serverUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer valid-admin-token',
-        Origin: 'https://balasanghamkannur.org',
-      },
-      body: formData,
-    });
-
-    expect(res.status).toBe(200);
-    const data = await res.json();
-    expect(data.secure_url).toContain('https://res.cloudinary.com/');
-    expect(data.public_id).toBe('balasangham/sample');
-    expect(res.headers.get('Access-Control-Allow-Origin')).toBe('https://balasanghamkannur.org');
   });
 
   it('restricts CORS origin to allowed domains only', async () => {

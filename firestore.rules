@@ -96,17 +96,19 @@ service cloud.firestore {
     }
 
     // Check if the authenticated user has administrative privileges
-    // Primary: custom token claim 'admin: true' (request.auth.token.admin == true)
-    // Transition fallback: legacy administrator emails or role claim
+    // Primary: custom token claim 'admin: true'
+    // Fallback: verified administrator email
+    // TODO: Remove email fallback once custom claims are confirmed assigned in production
     function isAdmin() {
       return isAuthenticated() && (
-        ('admin' in request.auth.token && request.auth.token.admin == true) ||
         request.auth.token.get('admin', false) == true ||
         request.auth.token.get('role', '') == 'admin' ||
-        ('email' in request.auth.token && (
-          request.auth.token.email == 'balasangham.main@gmail.com' ||
-          request.auth.token.email == 'admin@balasanghamkannur.org'
-        ))
+        ('email' in request.auth.token &&
+          request.auth.token.get('email_verified', false) == true &&
+          request.auth.token.email in [
+            'balasangham.main@gmail.com',
+            'admin@balasanghamkannur.org'
+          ])
       );
     }
 
