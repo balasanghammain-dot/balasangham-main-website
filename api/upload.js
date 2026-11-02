@@ -117,7 +117,7 @@ export default async function handler(req, res) {
   let decodedToken;
   try {
     const auth = getAdminAuth();
-    decodedToken = await auth.verifyIdToken(idToken);
+    decodedToken = await auth.verifyIdToken(idToken, true);
   } catch (tokenErr) {
     return res.status(401).json({ error: 'Unauthorized: Invalid token' });
   }

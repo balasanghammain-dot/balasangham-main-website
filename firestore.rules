@@ -97,7 +97,7 @@ service cloud.firestore {
 
     // Check if the authenticated user has administrative privileges
     // Primary: custom token claim 'admin: true'
-    // Fallback: verified administrator email
+    // Fallback: verified administrator email (lowercased)
     // TODO: Remove email fallback once custom claims are confirmed assigned in production
     function isAdmin() {
       return isAuthenticated() && (
@@ -105,7 +105,7 @@ service cloud.firestore {
         request.auth.token.get('role', '') == 'admin' ||
         ('email' in request.auth.token &&
           request.auth.token.get('email_verified', false) == true &&
-          request.auth.token.email in [
+          request.auth.token.email.lower() in [
             'balasangham.main@gmail.com',
             'admin@balasanghamkannur.org'
           ])
@@ -215,9 +215,13 @@ service cloud.firestore {
 
         // 7. Event Date Validation (Timestamp or bounded string; optional for unpublished drafts)
         (
-          (data.published == false && !(('startDate' in data) || ('start_date' in data))) ||
-          ('startDate' in data && (data.startDate == null || data.startDate is timestamp || (data.startDate is string && data.startDate.size() <= 100))) ||
-          ('start_date' in data && (data.start_date == null || data.start_date is timestamp || (data.start_date is string && data.start_date.size() <= 100)))
+          (data.published == false && (
+            !(('startDate' in data) || ('start_date' in data)) ||
+            ('startDate' in data && data.startDate == null) ||
+            ('start_date' in data && data.start_date == null)
+          )) ||
+          ('startDate' in data && data.startDate != null && (data.startDate is timestamp || (data.startDate is string && data.startDate.size() <= 100))) ||
+          ('start_date' in data && data.start_date != null && (data.start_date is timestamp || (data.start_date is string && data.start_date.size() <= 100)))
         ) &&
         isValidOptionalDate(data, 'endDate') &&
         isValidOptionalDate(data, 'end_date') &&

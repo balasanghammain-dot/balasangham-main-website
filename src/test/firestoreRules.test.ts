@@ -33,8 +33,7 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       token.role === 'admin' ||
       (token.email_verified === true &&
         typeof token.email === 'string' &&
-        (token.email === 'balasangham.main@gmail.com' ||
-         token.email === 'admin@balasanghamkannur.org'))
+        ['balasangham.main@gmail.com', 'admin@balasanghamkannur.org'].includes(token.email.toLowerCase()))
     );
   }
 
@@ -96,9 +95,13 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
 
     // 7. Date validation (optional for unpublished drafts)
     const hasValidStartDate =
-      (data.published === false && !('startDate' in data) && !('start_date' in data)) ||
-      ('startDate' in data && (data.startDate === null || typeof data.startDate?.toDate === 'function' || (typeof data.startDate === 'string' && data.startDate.length <= 100))) ||
-      ('start_date' in data && (data.start_date === null || typeof data.start_date?.toDate === 'function' || (typeof data.start_date === 'string' && data.start_date.length <= 100)));
+      (data.published === false && (
+        (!('startDate' in data) && !('start_date' in data)) ||
+        ('startDate' in data && data.startDate === null) ||
+        ('start_date' in data && data.start_date === null)
+      )) ||
+      ('startDate' in data && data.startDate !== null && (typeof data.startDate?.toDate === 'function' || (typeof data.startDate === 'string' && data.startDate.length <= 100))) ||
+      ('start_date' in data && data.start_date !== null && (typeof data.start_date?.toDate === 'function' || (typeof data.start_date === 'string' && data.start_date.length <= 100)));
     if (!hasValidStartDate) return false;
 
     if (!isValidOptionalDate(data, 'endDate')) return false;
@@ -183,9 +186,11 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
       expect(isAdmin({ token: { role: 'admin' } })).toBe(true);
     });
 
-    it('grants admin privileges to authorized admin emails with email_verified: true', () => {
+    it('grants admin privileges to authorized admin emails with email_verified: true (case-insensitive)', () => {
       expect(isAdmin({ token: { email: 'balasangham.main@gmail.com', email_verified: true } })).toBe(true);
+      expect(isAdmin({ token: { email: 'Balasangham.Main@Gmail.com', email_verified: true } })).toBe(true);
       expect(isAdmin({ token: { email: 'admin@balasanghamkannur.org', email_verified: true } })).toBe(true);
+      expect(isAdmin({ token: { email: 'Admin@BalasanghamKannur.org', email_verified: true } })).toBe(true);
     });
 
     it('strictly denies unverified allowlisted emails (F1/F3 vulnerability remediation)', () => {
@@ -462,6 +467,33 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
         expect(canCreate(userAuth, editorPublishPayload)).toBe(false);
         expect(canCreate(randomEmailUserAuth, editorPublishPayload)).toBe(false);
         expect(canCreate({ token: { email: 'balasangham.main@gmail.com', email_verified: false } }, editorPublishPayload)).toBe(false);
+      });
+
+      it('allows date-less draft for admin only, and denies it for non-admin and unauthenticated', () => {
+        const datelessDraft = {
+          ...editorSaveDraftPayload,
+          startDate: null,
+          start_date: null,
+          endDate: null,
+          end_date: null,
+          published: false,
+        };
+
+        // Allowed for admin
+        expect(canCreate(adminAuth, datelessDraft)).toBe(true);
+
+        // Strictly denied for non-admin, unverified email, or unauthenticated users
+        expect(canCreate(null, datelessDraft)).toBe(false);
+        expect(canCreate(userAuth, datelessDraft)).toBe(false);
+        expect(canCreate(randomEmailUserAuth, datelessDraft)).toBe(false);
+        expect(canCreate({ token: { email: 'balasangham.main@gmail.com', email_verified: false } }, datelessDraft)).toBe(false);
+
+        // Date-less published event is always denied, even for admin
+        const datelessPublished = {
+          ...datelessDraft,
+          published: true,
+        };
+        expect(canCreate(adminAuth, datelessPublished)).toBe(false);
       });
     });
   });
