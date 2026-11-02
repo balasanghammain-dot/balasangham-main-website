@@ -17,7 +17,8 @@ import {
   createFirestoreEvent,
   updateFirestoreEvent,
   normalizeFirestoreEvent,
-  isValidGoogleMapsUrl
+  isValidGoogleMapsUrl,
+  isValidEventDate
 } from '@/lib/eventsService';
 import { uploadFile } from '@/lib/uploadService';
 import { getMiniMapEmbedUrl } from '@/lib/mapUtils';
@@ -240,6 +241,13 @@ export default function AdminEventEditorPage() {
       return;
     }
 
+    // Requirement 3: Publish to Website must be blocked when start date is empty
+    if (isPublishing && (!formData.start_date || !formData.start_date.trim() || !isValidEventDate(formData.start_date))) {
+      setError('Start date is required to publish the event to the website.');
+      setSaving(false);
+      return;
+    }
+
     // Requirement 3: Validate Google Maps URL before saving
     if (formData.mapUrl && formData.mapUrl.trim()) {
       if (!isValidGoogleMapsUrl(formData.mapUrl.trim())) {
@@ -250,13 +258,19 @@ export default function AdminEventEditorPage() {
     }
 
     // Build combined ISO timestamps
-    let combinedStart = formData.start_date || '';
-    if (combinedStart && formData.start_time) {
-      combinedStart = `${combinedStart}T${formData.start_time}:00`;
+    let combinedStart: string | null = null;
+    if (formData.start_date && formData.start_date.trim() && isValidEventDate(formData.start_date)) {
+      combinedStart = formData.start_date.trim();
+      if (formData.start_time) {
+        combinedStart = `${combinedStart}T${formData.start_time}:00`;
+      }
     }
-    let combinedEnd = formData.end_date || '';
-    if (combinedEnd && formData.end_time) {
-      combinedEnd = `${combinedEnd}T${formData.end_time}:00`;
+    let combinedEnd: string | null = null;
+    if (formData.end_date && formData.end_date.trim() && isValidEventDate(formData.end_date)) {
+      combinedEnd = formData.end_date.trim();
+      if (formData.end_time) {
+        combinedEnd = `${combinedEnd}T${formData.end_time}:00`;
+      }
     }
 
     const payload: Partial<EventData> = {
@@ -267,8 +281,10 @@ export default function AdminEventEditorPage() {
       short_description_ml: formData.short_description_ml?.trim() || null,
       full_description: formData.full_description?.trim() || null,
       full_description_ml: formData.full_description_ml?.trim() || null,
-      start_date: combinedStart || null,
-      end_date: combinedEnd || null,
+      start_date: combinedStart,
+      startDate: combinedStart,
+      end_date: combinedEnd,
+      endDate: combinedEnd,
       venue: formData.venue?.trim() || null,
       venue_ml: formData.venue_ml?.trim() || null,
       location: formData.location?.trim() || null,
@@ -421,8 +437,8 @@ export default function AdminEventEditorPage() {
         
         <InputSection title="Basic Information">
           <div className="col-span-1 md:col-span-2">
-            <label className="block text-sm font-bold text-dark-brown mb-2">Title (English) *</label>
-            <input name="title" value={formData.title} onChange={handleChange} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-deep-red outline-none" />
+            <label htmlFor="event-title" className="block text-sm font-bold text-dark-brown mb-2">Title (English) *</label>
+            <input id="event-title" name="title" value={formData.title} onChange={handleChange} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-deep-red outline-none" />
           </div>
           <div className="col-span-1 md:col-span-2">
             <label className="block text-sm font-bold text-dark-brown mb-2">Title (Malayalam)</label>
@@ -450,8 +466,8 @@ export default function AdminEventEditorPage() {
 
         <InputSection title="Date & Time">
           <div>
-            <label className="block text-sm font-bold text-dark-brown mb-2">Start Date *</label>
-            <input type="date" name="start_date" value={formData.start_date} onChange={handleChange} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-deep-red outline-none" />
+            <label htmlFor="event-start-date" className="block text-sm font-bold text-dark-brown mb-2">Start Date (Required to publish)</label>
+            <input id="event-start-date" type="date" name="start_date" value={formData.start_date} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-deep-red outline-none" />
           </div>
           <div>
             <label className="block text-sm font-bold text-dark-brown mb-2">Start Time</label>

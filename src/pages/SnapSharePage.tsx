@@ -5,7 +5,7 @@ import { EventData, MediaItem } from '../types/event';
 import { EventMediaGallery } from '../components/event/EventMediaGallery';
 import { Camera, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { getEventBySlug } from '../lib/eventsService';
+import { getEventBySlug, formatEventDate } from '../lib/eventsService';
 import { db } from '../lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
@@ -96,9 +96,9 @@ export const SnapSharePage = () => {
   }
 
   const title = (ml && event.title_ml) ? event.title_ml : event.title;
-  const dateStr = event.start_date ? new Date(event.start_date).toLocaleDateString(ml ? 'ml-IN' : 'en-US', {
+  const dateStr = formatEventDate(event.start_date, ml ? 'ml' : 'en', {
     month: 'long', day: 'numeric', year: 'numeric'
-  }) : '';
+  });
 
   return (
     <div className="min-h-screen bg-black text-white pt-20 pb-20">

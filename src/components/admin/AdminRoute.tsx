@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { api } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { isUserAdmin } from '@/lib/firebaseAuth';
@@ -27,8 +26,6 @@ export default function AdminRoute() {
         const isAdmin = await isUserAdmin(user, true);
         if (isAdmin) {
           setIsAuthenticated(true);
-          // Sync backend Express session
-          api.get<{ authenticated?: boolean }>('/api/admin/session').catch(() => {});
         } else {
           // Authenticated non-admin or unverified user: strictly denied
           setIsAuthenticated(false);

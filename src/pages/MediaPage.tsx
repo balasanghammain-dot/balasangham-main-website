@@ -19,8 +19,7 @@ import {
 } from 'lucide-react';
 import { YoutubeIcon } from '../components/common/SocialIcons';
 import mediaCloudinaryData from '../data/mediaCloudinary.json';
-import { db } from '../lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { getPublishedMedia } from '../lib/mediaService';
 import { photosList, postersList, archiveList, videosList } from '../data/mediaArchive';
 
 export const MediaPage = () => {
@@ -39,46 +38,13 @@ export const MediaPage = () => {
     let isMounted = true;
 
     const fetchMedia = async () => {
-      // 1. Try querying published media directly from Firestore
       try {
-        const mediaCol = collection(db, 'media');
-        const q = query(mediaCol, where('published', '==', true));
-        const snap = await getDocs(q);
-        if (!snap.empty && isMounted) {
-          const list: MediaItem[] = [];
-          snap.forEach(d => {
-            list.push({ id: d.id, ...d.data() } as MediaItem);
-          });
-          if (list.length > 0) {
-            setDynamicMedia(list);
-            return;
-          }
-        }
-      } catch (fsErr) {
-        // Fallback to Express backend or static pre-seeded data
-      }
-
-      // 2. Try fetching from server API endpoint
-      try {
-        const res = await fetch('/api/public/media');
-        if (res.ok && isMounted) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            const flatList: MediaItem[] = [];
-            for (const item of data) {
-              if (item.items && Array.isArray(item.items)) {
-                flatList.push(...item.items);
-              } else {
-                flatList.push(item);
-              }
-            }
-            if (flatList.length > 0) {
-              setDynamicMedia(flatList);
-            }
-          }
+        const items = await getPublishedMedia();
+        if (items && items.length > 0 && isMounted) {
+          setDynamicMedia(items);
         }
       } catch (err) {
-        // Fallback already pre-seeded from mediaCloudinaryData
+        console.warn('[MediaPage] error reading published media from Firestore:', err);
       }
     };
 

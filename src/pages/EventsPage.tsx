@@ -9,7 +9,13 @@ import { Button } from '../components/ui/button';
 import { ShareButton } from '../components/event/ShareButton';
 
 import { VERIFIED_EVENTS } from '../data/verifiedEvents';
-import { subscribeToPublishedEvents, getPublishedEvents } from '../lib/eventsService';
+import {
+  subscribeToPublishedEvents,
+  getPublishedEvents,
+  formatEventDate,
+  isValidEventDate,
+  compareEventsByDate
+} from '../lib/eventsService';
 
 export const EventsPage = () => {
   const { language } = useLanguage();
@@ -53,19 +59,23 @@ export const EventsPage = () => {
   const now = new Date().getTime();
   const upcomingEvents = events
     .filter(e => {
-      const start = e.start_date ? new Date(e.start_date).getTime() : 0;
-      const end = e.end_date ? new Date(e.end_date).getTime() : start;
+      if (!isValidEventDate(e.start_date)) return false;
+      const start = new Date(e.start_date!).getTime();
+      const end = isValidEventDate(e.end_date) ? new Date(e.end_date!).getTime() : start;
       return start >= now || end >= now;
     })
-    .sort((a, b) => new Date(a.start_date || 0).getTime() - new Date(b.start_date || 0).getTime());
+    .sort((a, b) => compareEventsByDate(a, b, 'asc'));
 
   const pastEvents = events
     .filter(e => {
-      const start = e.start_date ? new Date(e.start_date).getTime() : 0;
-      const end = e.end_date ? new Date(e.end_date).getTime() : start;
+      if (!isValidEventDate(e.start_date)) return false;
+      const start = new Date(e.start_date!).getTime();
+      const end = isValidEventDate(e.end_date) ? new Date(e.end_date!).getTime() : start;
       return start < now && end < now;
     })
-    .sort((a, b) => new Date(b.start_date || 0).getTime() - new Date(a.start_date || 0).getTime());
+    .sort((a, b) => compareEventsByDate(a, b, 'desc'));
+
+  const allSortedEvents = [...events].sort((a, b) => compareEventsByDate(a, b, 'desc'));
 
   const annualObservances = [
     {
@@ -111,18 +121,16 @@ export const EventsPage = () => {
     const title = ml && event.title_ml ? event.title_ml : event.title;
     const desc = ml && event.short_description_ml ? event.short_description_ml : event.short_description;
     const location = ml && event.location_ml ? event.location_ml : event.location;
-    const dateStr = event.start_date ? new Date(event.start_date).toLocaleDateString(ml ? 'ml-IN' : 'en-US', {
-      month: 'short', day: 'numeric', year: 'numeric'
-    }) : '';
+    const dateStr = formatEventDate(event.start_date, ml ? 'ml' : 'en');
 
     return (
       <div className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col h-full group">
         <div className="aspect-[4/3] bg-warm-cream relative overflow-hidden">
           {event.poster_url ? (
-            <img 
-              src={event.poster_url} 
-              alt={title} 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            <img
+              src={event.poster_url}
+              alt={title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               onError={(e) => {
                 const target = e.currentTarget;
                 const fallback = event.slug?.includes('conference-2026')
@@ -149,9 +157,7 @@ export const EventsPage = () => {
             {title}
           </h3>
           <div className="space-y-1.5 mb-4 text-sm text-slate-600">
-            {dateStr && (
-              <p className="flex items-center gap-2"><Calendar className="w-4 h-4 text-deep-red" /> {dateStr}</p>
-            )}
+            <p className="flex items-center gap-2"><Calendar className="w-4 h-4 text-deep-red" /> <span>{dateStr}</span></p>
             {location && (
               <p className="flex items-center gap-2"><MapPin className="w-4 h-4 text-deep-red" /> {location}</p>
             )}
@@ -245,8 +251,8 @@ export const EventsPage = () => {
                (ml ? 'എല്ലാ പരിപാടികളും' : 'All Featured Events')}
             </h2>
             {renderEventGrid(
-              activeTab === 'upcoming' ? upcomingEvents : 
-              activeTab === 'past' ? pastEvents : events
+              activeTab === 'upcoming' ? upcomingEvents :
+              activeTab === 'past' ? pastEvents : allSortedEvents
             )}
           </div>
         )}

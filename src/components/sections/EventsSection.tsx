@@ -9,30 +9,41 @@ import { EventData } from '../../types/event';
 import { CalendarDropdown } from '../event/CalendarDropdown';
 import { ShareButton } from '../event/ShareButton';
 import { VERIFIED_EVENTS } from '../../data/verifiedEvents';
-import { subscribeToLatestEvent, getLatestEvent } from '../../lib/eventsService';
+import {
+  subscribeToLatestEvent,
+  getLatestEvent,
+  isValidEventDate,
+  formatEventDate,
+  compareEventsByDate
+} from '../../lib/eventsService';
 
 /**
  * Selects the best event to feature on the homepage from static data:
  * 1. Nearest upcoming event
  * 2. If none upcoming, most recently completed event
+ * Dateless events are sorted last.
  */
 function selectFeaturedEvent(): EventData | null {
   const now = Date.now();
-  const upcoming = VERIFIED_EVENTS
+  const published = VERIFIED_EVENTS.filter(e => e.published === 1 || e.published === true);
+  const upcoming = published
     .filter(e => {
-      const start = e.start_date ? new Date(e.start_date).getTime() : 0;
-      const end = e.end_date ? new Date(e.end_date).getTime() : start;
-      return (e.published === 1 || e.published === true) && (start >= now || end >= now);
+      if (!isValidEventDate(e.start_date)) return false;
+      const start = new Date(e.start_date!).getTime();
+      const end = isValidEventDate(e.end_date) ? new Date(e.end_date!).getTime() : start;
+      return start >= now || end >= now;
     })
-    .sort((a, b) => new Date(a.start_date!).getTime() - new Date(b.start_date!).getTime());
+    .sort((a, b) => compareEventsByDate(a, b, 'asc'));
 
   if (upcoming.length > 0) return upcoming[0];
 
-  const past = VERIFIED_EVENTS
-    .filter(e => e.published === 1 || e.published === true)
-    .sort((a, b) => new Date(b.start_date!).getTime() - new Date(a.start_date!).getTime());
+  const past = published
+    .filter(e => isValidEventDate(e.start_date))
+    .sort((a, b) => compareEventsByDate(a, b, 'desc'));
 
-  return past.length > 0 ? past[0] : null;
+  if (past.length > 0) return past[0];
+
+  return published.length > 0 ? published[0] : null;
 }
 
 export const EventSection = () => {
@@ -88,11 +99,8 @@ export const EventSection = () => {
   const description = (ml && event.short_description_ml) ? event.short_description_ml : (event.short_description || '');
   const locationText = (ml && event.location_ml) ? event.location_ml : (event.location || '');
   
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return '';
-    return new Date(dateStr).toLocaleDateString(ml ? 'ml-IN' : 'en-US', {
-      month: 'short', day: 'numeric', year: 'numeric'
-    });
+  const formatDate = (dateStr: string | null | undefined) => {
+    return formatEventDate(dateStr, ml ? 'ml' : 'en');
   };
 
   const calendarEvent = {
@@ -118,9 +126,9 @@ export const EventSection = () => {
             </Badge>
 
             <div className="space-y-1">
-              {event.start_date && (
+              {isValidEventDate(event.start_date) && (
                 <span className="text-5xl sm:text-7xl font-black text-dark-brown/10 font-mono block leading-none">
-                  {new Date(event.start_date).getFullYear()}
+                  {new Date(event.start_date!).getFullYear()}
                 </span>
               )}
               <h2 className={`text-heading font-black text-dark-brown ${ml ? 'font-malayalam' : ''}`}>
@@ -129,13 +137,17 @@ export const EventSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 text-sm text-dark-brown/70 font-medium my-4">
-              {event.start_date && (
-                <span className="inline-flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-deep-red" />
-                  {formatDate(event.start_date)}
-                  {event.end_date && event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
-                </span>
-              )}
+              <span className="inline-flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-deep-red" />
+                {isValidEventDate(event.start_date) ? (
+                  <>
+                    {formatDate(event.start_date)}
+                    {isValidEventDate(event.end_date) && event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
+                  </>
+                ) : (
+                  <span>{ml ? 'തീയതി ലഭ്യമല്ല' : 'No date'}</span>
+                )}
+              </span>
               {locationText && (
                 <span className="inline-flex items-center gap-2 flex-wrap">
                   <MapPin className="w-4 h-4 text-deep-red shrink-0" />
@@ -183,8 +195,8 @@ export const EventSection = () => {
                   </span>
                 </Link>
               </Button>
-              
-              <CalendarDropdown event={calendarEvent} />
+
+              {isValidEventDate(event.start_date) && <CalendarDropdown event={calendarEvent} />}
 
               <ShareButton
                 title={title}

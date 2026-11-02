@@ -58,10 +58,81 @@ export function isValidGoogleMapsUrl(url: string): boolean {
 }
 
 /**
- * Helper to convert various date representations to a Firestore Timestamp
+ * Checks if a date representation is valid, non-empty, and after epoch 1970.
+ * Prevents epoch 0 (1/1/1970) or invalid date strings from propagating.
+ */
+export function isValidEventDate(dateInput: any): boolean {
+  if (!dateInput) return false;
+  if (dateInput === 0 || dateInput === '0') return false;
+  if (typeof dateInput === 'string' && !dateInput.trim()) return false;
+
+  let date: Date;
+  if (dateInput instanceof Timestamp) {
+    date = dateInput.toDate();
+  } else if (typeof dateInput.toDate === 'function') {
+    date = dateInput.toDate();
+  } else if (dateInput instanceof Date) {
+    date = dateInput;
+  } else {
+    date = new Date(dateInput);
+  }
+
+  const time = date.getTime();
+  if (isNaN(time) || time <= 0) return false;
+  if (date.getFullYear() <= 1970) return false;
+
+  return true;
+}
+
+/**
+ * Formats an event date string or object for display.
+ * Returns bilingual fallback ("No date" / "തീയതി ലഭ്യമല്ല") when missing or invalid.
+ */
+export function formatEventDate(
+  dateInput: any,
+  language: 'en' | 'ml' = 'en',
+  options?: Intl.DateTimeFormatOptions
+): string {
+  if (!isValidEventDate(dateInput)) {
+    return language === 'ml' ? 'തീയതി ലഭ്യമല്ല' : 'No date';
+  }
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  const defaultOptions: Intl.DateTimeFormatOptions = options || {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  };
+  return date.toLocaleDateString(language === 'ml' ? 'ml-IN' : 'en-US', defaultOptions);
+}
+
+/**
+ * Deterministic event comparator that always sorts dateless events to the end (last),
+ * regardless of ascending or descending sort order.
+ */
+export function compareEventsByDate(
+  a: EventData,
+  b: EventData,
+  direction: 'asc' | 'desc' = 'desc'
+): number {
+  const validA = isValidEventDate(a.start_date);
+  const validB = isValidEventDate(b.start_date);
+
+  if (!validA && !validB) return 0;
+  if (!validA) return 1; // dateless always last
+  if (!validB) return -1; // dateless always last
+
+  const timeA = new Date(a.start_date!).getTime();
+  const timeB = new Date(b.start_date!).getTime();
+
+  return direction === 'asc' ? timeA - timeB : timeB - timeA;
+}
+
+/**
+ * Helper to convert various date representations to a Firestore Timestamp.
+ * Empty, invalid, or epoch 0 inputs return null (never new Date(0)).
  */
 export function toTimestamp(dateInput: any): Timestamp | null {
-  if (!dateInput) return null;
+  if (!isValidEventDate(dateInput)) return null;
   if (dateInput instanceof Timestamp) return dateInput;
   if (typeof dateInput.toDate === 'function') return dateInput;
   if (dateInput instanceof Date) return Timestamp.fromDate(dateInput);
@@ -73,10 +144,11 @@ export function toTimestamp(dateInput: any): Timestamp | null {
 }
 
 /**
- * Helper to convert Timestamp or string to ISO string for client components
+ * Helper to convert Timestamp or string to ISO string for client components.
+ * Empty, invalid, or epoch 0 inputs return null.
  */
-function toIsoString(dateInput: any): string | null {
-  if (!dateInput) return null;
+export function toIsoString(dateInput: any): string | null {
+  if (!isValidEventDate(dateInput)) return null;
   if (dateInput instanceof Timestamp || (dateInput && typeof dateInput.toDate === 'function')) {
     return dateInput.toDate().toISOString();
   }
@@ -84,9 +156,8 @@ function toIsoString(dateInput: any): string | null {
     return dateInput.toISOString();
   }
   if (typeof dateInput === 'string') {
-    // If it's already an ISO string or date
     const d = new Date(dateInput);
-    return isNaN(d.getTime()) ? dateInput : d.toISOString();
+    return isNaN(d.getTime()) ? null : d.toISOString();
   }
   return null;
 }
@@ -144,9 +215,9 @@ export function normalizeFirestoreEvent(
     full_description_ml: fullDescMl,
     description: fullDesc,
     start_date: startDateIso,
-    startDate: data.startDate || null,
+    startDate: startDateIso,
     end_date: endDateIso,
-    endDate: data.endDate || null,
+    endDate: endDateIso,
     venue,
     venue_ml: venueMl,
     location,
@@ -214,12 +285,18 @@ export function toFirestoreEvent(
   if (startDateTs) {
     result.startDate = startDateTs;
     result.start_date = startDateTs.toDate().toISOString();
+  } else if (data.startDate !== undefined || data.start_date !== undefined || !isUpdate) {
+    result.startDate = null;
+    result.start_date = null;
   }
 
   const endDateTs = toTimestamp(data.endDate || data.end_date);
-  if (endDateTs !== undefined) {
+  if (endDateTs) {
     result.endDate = endDateTs;
-    result.end_date = endDateTs ? endDateTs.toDate().toISOString() : null;
+    result.end_date = endDateTs.toDate().toISOString();
+  } else if (data.endDate !== undefined || data.end_date !== undefined || !isUpdate) {
+    result.endDate = null;
+    result.end_date = null;
   }
 
   if (data.venue !== undefined) result.venue = data.venue || null;
@@ -258,7 +335,16 @@ export function toFirestoreEvent(
   }
 
   if (data.published !== undefined) {
-    result.published = Boolean(data.published === true || data.published === 1);
+    const isPub = Boolean(data.published === true || data.published === 1);
+    if (isPub) {
+      const dateSpecified = data.startDate !== undefined || data.start_date !== undefined;
+      if (!isUpdate && !startDateTs) {
+        throw new Error('Start date is required to publish an event');
+      } else if (isUpdate && dateSpecified && !startDateTs) {
+        throw new Error('Start date is required to publish an event');
+      }
+    }
+    result.published = isPub;
   }
 
   if (data.snapShareEnabled !== undefined || data.snapshare_enabled !== undefined) {
@@ -300,12 +386,8 @@ export async function getPublishedEvents(): Promise<EventData[]> {
       events.push(normalizeFirestoreEvent(docSnap.id, docSnap.data()));
     });
 
-    // Client-side sort by start_date descending for deterministic order
-    return events.sort((a, b) => {
-      const timeA = a.start_date ? new Date(a.start_date).getTime() : 0;
-      const timeB = b.start_date ? new Date(b.start_date).getTime() : 0;
-      return timeB - timeA;
-    });
+    // Client-side sort by start_date descending (dateless events last)
+    return events.sort((a, b) => compareEventsByDate(a, b, 'desc'));
   } catch (err: any) {
     console.error('Error in getPublishedEvents:', err);
     throw err;
@@ -357,11 +439,12 @@ export async function getLatestEvent(): Promise<EventData | null> {
     // Nearest upcoming
     const upcoming = events
       .filter(e => {
-        const start = e.start_date ? new Date(e.start_date).getTime() : 0;
-        const end = e.end_date ? new Date(e.end_date).getTime() : start;
+        if (!isValidEventDate(e.start_date)) return false;
+        const start = new Date(e.start_date!).getTime();
+        const end = isValidEventDate(e.end_date) ? new Date(e.end_date!).getTime() : start;
         return start >= nowTime || end >= nowTime;
       })
-      .sort((a, b) => new Date(a.start_date!).getTime() - new Date(b.start_date!).getTime());
+      .sort((a, b) => compareEventsByDate(a, b, 'asc'));
 
     if (upcoming.length > 0) {
       return upcoming[0];
@@ -369,9 +452,14 @@ export async function getLatestEvent(): Promise<EventData | null> {
 
     // Most recently completed
     const past = events
-      .sort((a, b) => new Date(b.start_date!).getTime() - new Date(a.start_date!).getTime());
+      .filter(e => isValidEventDate(e.start_date))
+      .sort((a, b) => compareEventsByDate(a, b, 'desc'));
 
-    return past.length > 0 ? past[0] : null;
+    if (past.length > 0) {
+      return past[0];
+    }
+
+    return events.length > 0 ? events[0] : null;
   } catch (err) {
     console.error('Error fetching latest event from Firestore:', err);
     return null;
@@ -396,11 +484,7 @@ export function subscribeToPublishedEvents(
         snapshot.forEach(docSnap => {
           events.push(normalizeFirestoreEvent(docSnap.id, docSnap.data()));
         });
-        const sorted = events.sort((a, b) => {
-          const timeA = a.start_date ? new Date(a.start_date).getTime() : 0;
-          const timeB = b.start_date ? new Date(b.start_date).getTime() : 0;
-          return timeB - timeA;
-        });
+        const sorted = events.sort((a, b) => compareEventsByDate(a, b, 'desc'));
         onUpdate(sorted);
       },
       (err) => {
@@ -439,22 +523,23 @@ export function subscribeToLatestEvent(
 
       const upcoming = events
         .filter(e => {
-          const start = e.start_date ? new Date(e.start_date).getTime() : 0;
-          const end = e.end_date ? new Date(e.end_date).getTime() : start;
+          if (!isValidEventDate(e.start_date)) return false;
+          const start = new Date(e.start_date!).getTime();
+          const end = isValidEventDate(e.end_date) ? new Date(e.end_date!).getTime() : start;
           return start >= nowTime || end >= nowTime;
         })
-        .sort((a, b) => new Date(a.start_date!).getTime() - new Date(b.start_date!).getTime());
+        .sort((a, b) => compareEventsByDate(a, b, 'asc'));
 
       if (upcoming.length > 0) {
         onUpdate(upcoming[0]);
         return;
       }
 
-      const past = events.sort(
-        (a, b) => new Date(b.start_date!).getTime() - new Date(a.start_date!).getTime()
-      );
+      const past = events
+        .filter(e => isValidEventDate(e.start_date))
+        .sort((a, b) => compareEventsByDate(a, b, 'desc'));
 
-      onUpdate(past.length > 0 ? past[0] : null);
+      onUpdate(past.length > 0 ? past[0] : (events.length > 0 ? events[0] : null));
     },
     (err) => {
       console.warn('Real-time listener notice:', err.message);
@@ -629,6 +714,15 @@ export async function setFirestoreEventPublish(
   published: boolean
 ): Promise<void> {
   const docRef = doc(db, COLLECTION_NAME, id);
+  if (published) {
+    const existing = await getDoc(docRef);
+    if (existing.exists()) {
+      const data = existing.data();
+      if (!isValidEventDate(data.startDate || data.start_date)) {
+        throw new Error('Start date is required to publish an event');
+      }
+    }
+  }
   await updateDoc(docRef, {
     published,
     updatedAt: serverTimestamp(),
