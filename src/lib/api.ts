@@ -1,7 +1,24 @@
+import { auth } from './firebase';
+
 export async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers);
   if (!headers.has('Content-Type') && !(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
+  }
+
+  // Automatically attach fresh Bearer ID token for requests when user is signed in
+  if (!headers.has('Authorization')) {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const idToken = await user.getIdToken();
+        if (idToken) {
+          headers.set('Authorization', `Bearer ${idToken}`);
+        }
+      }
+    } catch {
+      // Ignored if auth is unavailable
+    }
   }
 
   const response = await fetch(url, {
@@ -26,7 +43,7 @@ export async function apiFetch<T>(url: string, options: RequestInit = {}): Promi
   if (contentType && contentType.includes('application/json')) {
     return response.json();
   }
-  
+
   return null as any;
 }
 

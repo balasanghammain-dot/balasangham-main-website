@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { auth } from '@/lib/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { isUserAdmin } from '@/lib/firebaseAuth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { checkAdminPrivileges } from '@/lib/firebaseAuth';
 import { Star, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -29,9 +29,14 @@ export default function AdminLoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, emailToUse, cleanPassword);
 
       // Force token refresh immediately on login so newly assigned custom claims are picked up
-      const isAdmin = await isUserAdmin(userCredential.user, true);
-      if (!isAdmin) {
-        setError('Access denied: You do not have administrator permissions. Please contact an administrator.');
+      const privilege = await checkAdminPrivileges(userCredential.user, true);
+      if (!privilege.isAdmin) {
+        if (privilege.reason === 'unverified_email') {
+          setError('Access denied: Email address is not verified. Please verify your email before accessing the admin portal.');
+        } else {
+          setError('Access denied: You do not have administrator permissions. Please contact an administrator.');
+        }
+        await signOut(auth);
         setLoading(false);
         return;
       }

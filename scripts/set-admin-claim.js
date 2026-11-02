@@ -1,95 +1,54 @@
-#!/usr/bin/env node
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import fs from 'node:fs';
 
-/**
- * Script to assign or revoke admin custom claims on a Firebase Auth user.
- *
- * Usage:
- *   node scripts/set-admin-claim.js <email-or-uid> [--revoke]
- *   node scripts/set-admin-claim.js balasangham.main@gmail.com
- */
-
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-require('dotenv').config();
-const { getAdminAuth } = require('../server/firebaseAdmin.js');
-
-async function main() {
-  const args = process.argv.slice(2);
-  const targetUser = args.find((a) => !a.startsWith('--')) || process.env.ADMIN_EMAIL || 'balasangham.main@gmail.com';
-  const isRevoke = args.includes('--revoke') || args.includes('--remove');
-
-  if (!targetUser) {
-    console.error('\n======================================================');
-    console.error('Usage: node scripts/set-admin-claim.js <email-or-uid> [--revoke]');
-    console.error('Example: node scripts/set-admin-claim.js balasangham.main@gmail.com');
-    console.error('======================================================\n');
-    process.exit(1);
-  }
-
-  if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON && !process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    console.error('\n======================================================');
-    console.error('ERROR: Missing Firebase Admin Service Account Credentials');
-    console.error('======================================================');
-    console.error('Firebase Admin SDK requires service account credentials to manage custom claims.');
-    console.error('Please configure one of the following environment variables in your .env or shell:');
-    console.error('  1. FIREBASE_SERVICE_ACCOUNT_JSON (JSON string or base64 encoded)');
-    console.error('  2. GOOGLE_APPLICATION_CREDENTIALS (path to serviceAccountKey.json)');
-    console.error('======================================================\n');
-    process.exit(1);
-  }
-
-  let auth;
-  try {
-    auth = getAdminAuth();
-  } catch (err) {
-    console.error('\n======================================================');
-    console.error('ERROR: Failed to initialize Firebase Admin SDK');
-    console.error('======================================================');
-    console.error(err.message);
-    console.error('======================================================\n');
-    process.exit(1);
-  }
-
-  try {
-    let userRecord;
-    if (targetUser.includes('@')) {
-      userRecord = await auth.getUserByEmail(targetUser);
-    } else {
-      userRecord = await auth.getUser(targetUser);
-    }
-
-    const existingClaims = userRecord.customClaims || {};
-    const newClaims = isRevoke
-      ? { ...existingClaims, admin: false, role: 'member' }
-      : { ...existingClaims, admin: true, role: 'admin' };
-
-    await auth.setCustomUserClaims(userRecord.uid, newClaims);
-
-    // Fetch updated user record to verify claims took effect
-    const updatedUser = await auth.getUser(userRecord.uid);
-
-    console.log('\n======================================================');
-    console.log(`SUCCESS: Admin custom claims successfully ${isRevoke ? 'REVOKED' : 'ASSIGNED'}!`);
-    console.log('======================================================');
-    console.log(`User UID:               ${updatedUser.uid}`);
-    console.log(`Email:                  ${updatedUser.email}`);
-    console.log(`Email Verified:         ${Boolean(updatedUser.emailVerified)}`);
-    console.log('Resulting Custom Claims:', JSON.stringify(updatedUser.customClaims, null, 2));
-    console.log('======================================================');
-    console.log('\nCRITICAL NEXT STEP:');
-    console.log('The user MUST SIGN OUT and SIGN BACK IN to the website (or trigger a token refresh).');
-    console.log('Existing client session tokens do NOT update automatically until re-authentication.');
-    console.log('======================================================\n');
-    process.exit(0);
-  } catch (err) {
-    console.error('\n======================================================');
-    console.error('ERROR: Failed to update custom claims');
-    console.error('======================================================');
-    console.error(err.message);
-    console.error('======================================================\n');
-    process.exit(1);
-  }
+const email = process.argv[2]?.trim().toLowerCase();
+const revoke = process.argv.includes('--revoke');
+if (!email || email.startsWith('--')) {
+  console.error('Usage: node scripts/set-admin-claim.js <email> [--revoke]');
+  process.exit(1);
 }
 
-main();
+const rawJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+let serviceAccount;
+try {
+  if (rawJson) {
+    const text = rawJson.trim().startsWith('{')
+      ? rawJson
+      : Buffer.from(rawJson, 'base64').toString('utf8');
+    serviceAccount = JSON.parse(text);
+  } else if (keyPath && fs.existsSync(keyPath)) {
+    serviceAccount = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
+  }
+} catch {
+  console.error('Credentials could not be parsed. Check the key file or JSON variable.');
+  process.exit(1);
+}
+if (!serviceAccount) {
+  console.error('No credentials. Set GOOGLE_APPLICATION_CREDENTIALS to your key file path.');
+  process.exit(1);
+}
+
+initializeApp({ credential: cert(serviceAccount) });
+
+try {
+  const user = await getAuth().getUserByEmail(email);
+  const claims = { ...(user.customClaims || {}) };
+  if (revoke) delete claims.admin;
+  else claims.admin = true;
+  await getAuth().setCustomUserClaims(user.uid, claims);
+  const updated = await getAuth().getUser(user.uid);
+  console.log(`${revoke ? 'Revoked' : 'Granted'} admin for ${email}`);
+  console.log('UID:', user.uid);
+  console.log('emailVerified:', updated.emailVerified);
+  console.log('claims:', JSON.stringify(updated.customClaims || {}));
+  console.log('The user must sign out and back in to get the new claim.');
+  process.exit(0);
+} catch (err) {
+  console.error('Failed:', err.code || err.message);
+  if (err.code === 'auth/user-not-found') {
+    console.error('That email has no Firebase Auth account yet. Create it in the Firebase Console under Authentication, or sign in once with it.');
+  }
+  process.exit(1);
+}

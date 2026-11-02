@@ -14,7 +14,7 @@ const requireAuth = async (req, res, next) => {
     if (idToken) {
       try {
         const auth = getAdminAuth();
-        const decoded = await auth.verifyIdToken(idToken);
+        const decoded = await auth.verifyIdToken(idToken, true);
         if (isUserAdmin(decoded)) {
           return next();
         }
