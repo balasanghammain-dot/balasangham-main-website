@@ -8,8 +8,11 @@
  *   node scripts/set-admin-claim.js balasangham.main@gmail.com
  */
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 require('dotenv').config();
-const { getAdminAuth } = require('../server/firebaseAdmin');
+const { getAdminAuth } = require('../server/firebaseAdmin.js');
 
 async function main() {
   const args = process.argv.slice(2);
@@ -24,17 +27,26 @@ async function main() {
     process.exit(1);
   }
 
+  if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON && !process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    console.error('\n======================================================');
+    console.error('ERROR: Missing Firebase Admin Service Account Credentials');
+    console.error('======================================================');
+    console.error('Firebase Admin SDK requires service account credentials to manage custom claims.');
+    console.error('Please configure one of the following environment variables in your .env or shell:');
+    console.error('  1. FIREBASE_SERVICE_ACCOUNT_JSON (JSON string or base64 encoded)');
+    console.error('  2. GOOGLE_APPLICATION_CREDENTIALS (path to serviceAccountKey.json)');
+    console.error('======================================================\n');
+    process.exit(1);
+  }
+
   let auth;
   try {
     auth = getAdminAuth();
   } catch (err) {
     console.error('\n======================================================');
-    console.error('ERROR: Missing Firebase Admin Service Account Credentials');
+    console.error('ERROR: Failed to initialize Firebase Admin SDK');
     console.error('======================================================');
-    console.error('Firebase Admin SDK requires service account credentials to manage custom claims.');
-    console.error('Please configure one of the following environment variables:');
-    console.error('  1. FIREBASE_SERVICE_ACCOUNT_JSON (JSON string or base64 encoded)');
-    console.error('  2. GOOGLE_APPLICATION_CREDENTIALS (path to serviceAccountKey.json)');
+    console.error(err.message);
     console.error('======================================================\n');
     process.exit(1);
   }
