@@ -40,6 +40,13 @@ describe('AdminEventsPage - Dateless event handling and publish guard', () => {
       snapshare_enabled: true,
     },
     {
+      id: 'event-dated-draft',
+      title: 'Dated Draft Event',
+      start_date: '2026-11-20T10:00:00.000Z',
+      published: false,
+      snapshare_enabled: false,
+    },
+    {
       id: 'event-dateless',
       title: 'Draft Event Without Date',
       start_date: null,
@@ -82,7 +89,7 @@ describe('AdminEventsPage - Dateless event handling and publish guard', () => {
     expect(screen.queryByText(/1970/)).not.toBeInTheDocument();
 
     // Valid date event must render its real formatted date
-    expect(screen.getByText(/2026/)).toBeInTheDocument();
+    expect(screen.getByText(/Oct 10, 2026/)).toBeInTheDocument();
   });
 
   it('renders "തീയതി ലഭ്യമല്ല" in Malayalam for dateless events', async () => {
@@ -130,12 +137,15 @@ describe('AdminEventsPage - Dateless event handling and publish guard', () => {
       expect(screen.getByText('Draft Event Without Date')).toBeInTheDocument();
     });
 
-    // Find the publish toggle (Eye icon) button for the dateless event
-    const publishButtons = screen.getAllByTitle('Publish');
-    expect(publishButtons.length).toBeGreaterThan(0);
+    // Find the publish toggle (Eye icon) button specifically for the dateless event row
+    const datelessRow = screen.getByText('Draft Event Without Date').closest('tr');
+    expect(datelessRow).toBeInTheDocument();
+
+    const publishBtn = datelessRow?.querySelector('button[title="Publish"]') as HTMLButtonElement;
+    expect(publishBtn).toBeInTheDocument();
 
     // Click publish on the dateless event
-    await user.click(publishButtons[0]);
+    await user.click(publishBtn);
 
     // setFirestoreEventPublish must NOT be called for dateless event
     expect(setFirestoreEventPublish).not.toHaveBeenCalled();
@@ -143,6 +153,113 @@ describe('AdminEventsPage - Dateless event handling and publish guard', () => {
     // Clear inline error must be visible
     expect(
       screen.getByText(/Cannot publish event without a start date/i)
+    ).toBeInTheDocument();
+  });
+
+  it('publishes a dated draft event directly via setFirestoreEventPublish without calling Express', async () => {
+    localStorage.setItem('balasangham_lang', 'en');
+    const user = userEvent.setup();
+    vi.mocked(subscribeToEventsAdmin).mockImplementation((onUpdate) => {
+      onUpdate(mockEvents as any);
+      return () => {};
+    });
+    vi.mocked(setFirestoreEventPublish).mockResolvedValueOnce(undefined);
+
+    render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <AdminEventsPage />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Dated Draft Event')).toBeInTheDocument();
+    });
+
+    // Row containing Dated Draft Event
+    const datedDraftRow = screen.getByText('Dated Draft Event').closest('tr');
+    expect(datedDraftRow).toBeInTheDocument();
+
+    const publishBtn = datedDraftRow?.querySelector('button[title="Publish"]') as HTMLButtonElement;
+    expect(publishBtn).toBeInTheDocument();
+
+    await user.click(publishBtn);
+
+    // setFirestoreEventPublish must be called with id and true
+    expect(setFirestoreEventPublish).toHaveBeenCalledWith('event-dated-draft', true);
+  });
+
+  it('unpublishes an event directly via setFirestoreEventPublish without calling Express', async () => {
+    localStorage.setItem('balasangham_lang', 'en');
+    const user = userEvent.setup();
+    vi.mocked(subscribeToEventsAdmin).mockImplementation((onUpdate) => {
+      onUpdate(mockEvents as any);
+      return () => {};
+    });
+    vi.mocked(setFirestoreEventPublish).mockResolvedValueOnce(undefined);
+
+    render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <AdminEventsPage />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Valid Conference Event')).toBeInTheDocument();
+    });
+
+    const publishedRow = screen.getByText('Valid Conference Event').closest('tr');
+    expect(publishedRow).toBeInTheDocument();
+
+    const unpublishBtn = publishedRow?.querySelector('button[title="Unpublish"]') as HTMLButtonElement;
+    expect(unpublishBtn).toBeInTheDocument();
+
+    await user.click(unpublishBtn);
+
+    // setFirestoreEventPublish must be called with id and false
+    expect(setFirestoreEventPublish).toHaveBeenCalledWith('event-dated', false);
+  });
+
+  it('displays user-friendly permission-denied error inline when Firestore update fails without window.alert', async () => {
+    localStorage.setItem('balasangham_lang', 'en');
+    const user = userEvent.setup();
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vi.mocked(subscribeToEventsAdmin).mockImplementation((onUpdate) => {
+      onUpdate(mockEvents as any);
+      return () => {};
+    });
+    vi.mocked(setFirestoreEventPublish).mockRejectedValueOnce({
+      code: 'permission-denied',
+      message: 'Missing or insufficient permissions.'
+    });
+
+    render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <AdminEventsPage />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Dated Draft Event')).toBeInTheDocument();
+    });
+
+    const datedDraftRow = screen.getByText('Dated Draft Event').closest('tr');
+    const publishBtn = datedDraftRow?.querySelector('button[title="Publish"]') as HTMLButtonElement;
+
+    await user.click(publishBtn);
+
+    // Alert must NOT be called
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    // Friendly inline error must be rendered
+    expect(
+      await screen.findByText(/Permission denied\. Sign out and back in, or ask an admin to assign your admin claim\./i)
     ).toBeInTheDocument();
   });
 });
