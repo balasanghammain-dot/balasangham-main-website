@@ -213,10 +213,11 @@ service cloud.firestore {
           ('snapshare_enabled' in data && (data.snapshare_enabled is bool || (data.snapshare_enabled is int && (data.snapshare_enabled == 0 || data.snapshare_enabled == 1))))
         ) &&
 
-        // 7. Event Date Validation (Timestamp or bounded string)
+        // 7. Event Date Validation (Timestamp or bounded string; optional for unpublished drafts)
         (
-          ('startDate' in data && (data.startDate is timestamp || (data.startDate is string && data.startDate.size() <= 100))) ||
-          ('start_date' in data && (data.start_date is timestamp || (data.start_date is string && data.start_date.size() <= 100)))
+          (data.published == false && !(('startDate' in data) || ('start_date' in data))) ||
+          ('startDate' in data && (data.startDate == null || data.startDate is timestamp || (data.startDate is string && data.startDate.size() <= 100))) ||
+          ('start_date' in data && (data.start_date == null || data.start_date is timestamp || (data.start_date is string && data.start_date.size() <= 100)))
         ) &&
         isValidOptionalDate(data, 'endDate') &&
         isValidOptionalDate(data, 'end_date') &&
