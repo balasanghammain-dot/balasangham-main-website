@@ -495,6 +495,56 @@ describe('Firestore Security Rules Specification & Validator Function Pattern', 
         };
         expect(canCreate(adminAuth, datelessPublished)).toBe(false);
       });
+
+      it('allows admin update to published == true when event has a valid date, and rejects without one', () => {
+        const draftWithDate = {
+          ...editorSaveDraftPayload,
+          startDate: '2026-12-10T09:30:00.000Z',
+          start_date: '2026-12-10T09:30:00.000Z',
+          published: false,
+        };
+
+        const publishWithDate = {
+          ...draftWithDate,
+          published: true,
+          updatedAt: '2026-11-02T10:00:00.000Z',
+        };
+
+        // 1. Publish with a date works for admin
+        expect(canUpdate(adminAuth, draftWithDate, publishWithDate)).toBe(true);
+
+        const draftWithoutDate = {
+          ...editorSaveDraftPayload,
+          startDate: null,
+          start_date: null,
+          published: false,
+        };
+
+        const publishWithoutDate = {
+          ...draftWithoutDate,
+          published: true,
+          updatedAt: '2026-11-02T10:00:00.000Z',
+        };
+
+        // 2. Publish without a date is blocked for admin
+        expect(canUpdate(adminAuth, draftWithoutDate, publishWithoutDate)).toBe(false);
+
+        // 3. Unpublish works for admin (sets published to false)
+        const publishedEvent = {
+          ...publishWithDate,
+        };
+        const unpublishEvent = {
+          ...publishedEvent,
+          published: false,
+          updatedAt: '2026-11-02T10:30:00.000Z',
+        };
+        expect(canUpdate(adminAuth, publishedEvent, unpublishEvent)).toBe(true);
+
+        // 4. Non-admin attempting publish/unpublish is strictly denied
+        expect(canUpdate(userAuth, draftWithDate, publishWithDate)).toBe(false);
+        expect(canUpdate(userAuth, publishedEvent, unpublishEvent)).toBe(false);
+        expect(canUpdate(null, publishedEvent, unpublishEvent)).toBe(false);
+      });
     });
   });
 
