@@ -31,6 +31,7 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
   const [published, setPublished] = useState(true);
   const [eventId, setEventId] = useState('none');
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (item) {
@@ -38,12 +39,14 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
       setDescription(item.description || item.caption_ml || '');
       setPublished(item.published === true || item.published === 1);
       setEventId(item.eventId || item.event_id || 'none');
+      setError('');
     }
   }, [item]);
 
   if (!item) return null;
 
   const handleSave = async () => {
+    setError('');
     try {
       setIsSaving(true);
       const targetEventId = eventId === 'none' ? null : eventId;
@@ -76,7 +79,18 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
       });
       onClose();
     } catch (err: any) {
-      alert(err.message || 'Failed to update media item');
+      const code = err?.code || '';
+      const msg = err?.message || '';
+      if (
+        code === 'permission-denied' ||
+        msg.includes('permission-denied') ||
+        msg.toLowerCase().includes('insufficient permissions') ||
+        msg.toLowerCase().includes('missing or insufficient permissions')
+      ) {
+        setError('Permission denied. Sign out and back in, or ask an admin to assign your admin claim.');
+      } else {
+        setError(msg || 'Failed to update media item');
+      }
     } finally {
       setIsSaving(false);
     }
@@ -91,6 +105,12 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
             Update titles, descriptions, status, and event association.
           </DialogDescription>
         </DialogHeader>
+
+        {error && (
+          <div className="bg-red-50 text-red-700 p-3 rounded-xl text-xs font-bold border border-red-200">
+            {error}
+          </div>
+        )}
 
         <div className="space-y-4 py-3">
           <div>
