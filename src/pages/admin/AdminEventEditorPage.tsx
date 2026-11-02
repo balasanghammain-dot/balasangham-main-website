@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { db, auth } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import {
   createFirestoreEvent,
   updateFirestoreEvent,
@@ -20,6 +20,7 @@ import {
   isValidGoogleMapsUrl,
   isValidEventDate
 } from '@/lib/eventsService';
+import { createFirestoreMedia } from '@/lib/mediaService';
 import { uploadFile } from '@/lib/uploadService';
 import { getMiniMapEmbedUrl } from '@/lib/mapUtils';
 import { EventData } from '@/types/event';
@@ -137,6 +138,20 @@ export default function AdminEventEditorPage() {
           if (parts[1]) endTime = parts[1].substring(0, 5);
         }
 
+        let galleryUrls: string[] = eventData.gallery_urls || [];
+        if (id) {
+          try {
+            const mediaQ = query(collection(db, 'media'), where('eventId', '==', id));
+            const mediaSnap = await getDocs(mediaQ);
+            const mediaUrls = mediaSnap.docs.map(d => d.data().url || d.data().secureUrl).filter(Boolean);
+            if (mediaUrls.length > 0) {
+              galleryUrls = Array.from(new Set([...galleryUrls, ...mediaUrls]));
+            }
+          } catch {
+            // Optional Firestore media lookup
+          }
+        }
+
         setFormData(prev => ({
           ...prev,
           ...eventData,
@@ -153,7 +168,7 @@ export default function AdminEventEditorPage() {
             eventData.snapshare_enabled === true ||
             eventData.snapShareEnabled === true
           ),
-          gallery_urls: eventData.gallery_urls || [],
+          gallery_urls: galleryUrls,
         }));
       }
     } catch (err: any) {
@@ -200,15 +215,35 @@ export default function AdminEventEditorPage() {
     for (let i = 0; i < files.length; i++) {
       try {
         const res = await uploadFile(files[i], { eventId: id });
-        if (res && res.url) newUrls.push(res.url);
+        if (res && res.url) {
+          newUrls.push(res.url);
+          if (id) {
+            try {
+              await createFirestoreMedia({
+                url: res.url,
+                secureUrl: res.url,
+                publicId: res.public_id,
+                cloudinary_public_id: res.public_id,
+                eventId: id,
+                event_id: id,
+                type: 'image',
+                resource_type: 'image',
+                published: true,
+                title: formData.title || 'Event Gallery Image',
+              });
+            } catch (mediaErr) {
+              console.warn('Failed to save gallery media item:', mediaErr);
+            }
+          }
+        }
       } catch (err) {
         console.error('Gallery upload failed for a file');
       }
     }
 
-    setFormData(prev => ({ 
-      ...prev, 
-      gallery_urls: [...prev.gallery_urls, ...newUrls] 
+    setFormData(prev => ({
+      ...prev,
+      gallery_urls: [...prev.gallery_urls, ...newUrls]
     }));
     setUploadingGallery(false);
     e.target.value = '';
@@ -327,7 +362,25 @@ export default function AdminEventEditorPage() {
         setSuccessMsg(isPublishing ? 'Event successfully published!' : 'Draft saved successfully!');
       } else {
         // Create new document in Firestore
-        await createFirestoreEvent(payload);
+        const created = await createFirestoreEvent(payload);
+        if (formData.gallery_urls && formData.gallery_urls.length > 0) {
+          for (const gUrl of formData.gallery_urls) {
+            try {
+              await createFirestoreMedia({
+                url: gUrl,
+                secureUrl: gUrl,
+                eventId: created.id,
+                event_id: created.id,
+                type: 'image',
+                resource_type: 'image',
+                published: true,
+                title: formData.title || 'Event Gallery Image',
+              });
+            } catch {
+              // Best-effort gallery persistence
+            }
+          }
+        }
         // Sync server SQLite if present
         try {
           await api.post('/api/admin/events', {

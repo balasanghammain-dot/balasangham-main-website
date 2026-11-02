@@ -118,7 +118,18 @@ export default function AdminMediaPage() {
       }
       setMedia((prev) => prev.map((m) => (m.id === item.id ? { ...m, published: newStatus } : m)));
     } catch (err: any) {
-      alert(err.message || 'Failed to change publish status');
+      const code = err?.code || '';
+      const msg = err?.message || '';
+      if (
+        code === 'permission-denied' ||
+        msg.includes('permission-denied') ||
+        msg.toLowerCase().includes('insufficient permissions') ||
+        msg.toLowerCase().includes('missing or insufficient permissions')
+      ) {
+        setError('Permission denied. Sign out and back in, or ask an admin to assign your admin claim.');
+      } else {
+        setError(msg || 'Failed to change publish status');
+      }
     }
   };
 
@@ -135,7 +146,18 @@ export default function AdminMediaPage() {
       setMedia((prev) => prev.filter((m) => m.id !== deleteItem.id));
       setDeleteItem(null);
     } catch (err: any) {
-      alert(err.message || 'Failed to delete media item');
+      const code = err?.code || '';
+      const msg = err?.message || '';
+      if (
+        code === 'permission-denied' ||
+        msg.includes('permission-denied') ||
+        msg.toLowerCase().includes('insufficient permissions') ||
+        msg.toLowerCase().includes('missing or insufficient permissions')
+      ) {
+        setError('Permission denied. Sign out and back in, or ask an admin to assign your admin claim.');
+      } else {
+        setError(msg || 'Failed to delete media item');
+      }
     } finally {
       setIsDeleting(false);
     }
@@ -149,11 +171,11 @@ export default function AdminMediaPage() {
       const res = await api.post<{ success: boolean; message: string; importedCount: number }>(
         '/api/admin/media/import-local'
       );
-      setImportNotification(res.message || 'Import complete!');
+      setImportNotification(res?.message || 'Import complete!');
       fetchMedia();
       setTimeout(() => setImportNotification(null), 5000);
     } catch (err: any) {
-      alert('Local media import failed: ' + (err.message || ''));
+      setError('Local media import failed: ' + (err?.message || ''));
       setImportNotification(null);
     } finally {
       setIsImportingLocal(false);

@@ -85,20 +85,35 @@ export function toFirestoreMedia(
     item.type === 'image' ||
     item.media_type === 'photo'
   );
-  const resourceType = isImage ? 'image' : 'video';
-  const url = (item.url || item.secureUrl || '').trim();
-  const publicId = (item.publicId || item.cloudinary_public_id || '').trim();
 
   const payload: Record<string, any> = {
-    url: url,
-    secureUrl: url,
-    publicId: publicId,
-    cloudinary_public_id: publicId,
-    type: resourceType,
-    resource_type: resourceType,
-    published: Boolean(item.published === true || item.published === 1),
     updatedAt: serverTimestamp()
   };
+
+  const hasType = item.resource_type !== undefined || item.type !== undefined || item.media_type !== undefined;
+  if (isCreate || hasType) {
+    const resourceType = isImage ? 'image' : 'video';
+    payload.type = resourceType;
+    payload.resource_type = resourceType;
+  }
+
+  const rawUrl = item.url ?? item.secureUrl;
+  if (isCreate || rawUrl !== undefined) {
+    const url = (rawUrl || '').trim();
+    payload.url = url;
+    payload.secureUrl = url;
+  }
+
+  const rawPublicId = item.publicId ?? item.cloudinary_public_id;
+  if (isCreate || rawPublicId !== undefined) {
+    const publicId = (rawPublicId || '').trim();
+    payload.publicId = publicId;
+    payload.cloudinary_public_id = publicId;
+  }
+
+  if (isCreate || item.published !== undefined) {
+    payload.published = Boolean(item.published === true || item.published === 1);
+  }
 
   if (item.title !== undefined) {
     payload.title = item.title ? item.title.substring(0, 300) : null;

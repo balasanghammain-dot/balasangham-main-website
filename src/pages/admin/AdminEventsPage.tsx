@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import {
   Plus,
@@ -63,17 +62,12 @@ export default function AdminEventsPage() {
         }
       },
       async (_err) => {
-        // Fallback to one-time fetch or server API
+        // Fallback to direct Firestore fetch
         try {
           const data = await getAllEventsAdmin();
           if (isMounted) setEvents(data as any);
-        } catch {
-          try {
-            const apiData = await api.get<Event[]>('/api/admin/events');
-            if (isMounted) setEvents(apiData || []);
-          } catch (apiErr: any) {
-            if (isMounted) setError(apiErr.message || 'Failed to load events');
-          }
+        } catch (fetchErr: any) {
+          if (isMounted) setError(fetchErr.message || 'Failed to load events');
         } finally {
           if (isMounted) setLoading(false);
         }
@@ -95,22 +89,23 @@ export default function AdminEventsPage() {
     }
     setError('');
     try {
-      // 1. Update Firestore document
+      // Update Firestore directly
       await setFirestoreEventPublish(id, newStatus);
-      // 2. Also notify server endpoint if running
-      try {
-        if (!newStatus) {
-          await api.post(`/api/admin/events/${id}/unpublish`, {});
-        } else {
-          await api.post(`/api/admin/events/${id}/publish`, {});
-        }
-      } catch {
-        // Server endpoint optional
-      }
       setEvents(events.map(e => e.id === id ? { ...e, published: newStatus } : e));
     } catch (err: any) {
       console.error('Failed to toggle status', err);
-      setError(err.message || 'Failed to update event status');
+      const code = err?.code || '';
+      const msg = err?.message || '';
+      if (
+        code === 'permission-denied' ||
+        msg.includes('permission-denied') ||
+        msg.toLowerCase().includes('insufficient permissions') ||
+        msg.toLowerCase().includes('missing or insufficient permissions')
+      ) {
+        setError('Permission denied. Sign out and back in, or ask an admin to assign your admin claim.');
+      } else {
+        setError(msg || 'Failed to update event status');
+      }
     }
   };
 
@@ -118,19 +113,24 @@ export default function AdminEventsPage() {
     if (!deleteId) return;
     try {
       setIsDeleting(true);
-      // 1. Delete from Firestore
+      // Delete from Firestore directly
       await deleteFirestoreEvent(deleteId);
-      // 2. Also call server endpoint to clean associated media relations if any
-      try {
-        await api.delete(`/api/admin/events/${deleteId}`);
-      } catch {
-        // Server endpoint optional
-      }
       setEvents(events.filter(e => e.id !== deleteId));
       setDeleteId(null);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to delete event:', err);
-      alert('Failed to delete event');
+      const code = err?.code || '';
+      const msg = err?.message || '';
+      if (
+        code === 'permission-denied' ||
+        msg.includes('permission-denied') ||
+        msg.toLowerCase().includes('insufficient permissions') ||
+        msg.toLowerCase().includes('missing or insufficient permissions')
+      ) {
+        setError('Permission denied. Sign out and back in, or ask an admin to assign your admin claim.');
+      } else {
+        setError(msg || 'Failed to delete event');
+      }
     } finally {
       setIsDeleting(false);
     }
