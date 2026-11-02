@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '@/lib/api';
-import { 
-  Plus, 
-  Pencil, 
-  Trash2, 
-  Eye, 
+import { useLanguage } from '@/context/LanguageContext';
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Eye,
   EyeOff,
   Loader2,
   Calendar,
@@ -22,26 +23,30 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { 
-  getAllEventsAdmin, 
-  subscribeToEventsAdmin, 
-  setFirestoreEventPublish, 
-  deleteFirestoreEvent 
+import {
+  getAllEventsAdmin,
+  subscribeToEventsAdmin,
+  setFirestoreEventPublish,
+  deleteFirestoreEvent,
+  formatEventDate,
+  isValidEventDate
 } from '@/lib/eventsService';
 
 interface Event {
   id: string;
   title: string;
-  start_date: string;
+  start_date: string | null;
   published: boolean | number;
   snapshare_enabled: boolean | number;
 }
 
 export default function AdminEventsPage() {
+  const { language } = useLanguage();
+  const ml = language === 'ml';
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   // Delete dialog state
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -83,6 +88,12 @@ export default function AdminEventsPage() {
 
   const handleTogglePublish = async (id: string, currentStatus: boolean | number) => {
     const newStatus = !Boolean(currentStatus === true || currentStatus === 1);
+    const eventToToggle = events.find(e => e.id === id);
+    if (newStatus && (!eventToToggle || !isValidEventDate(eventToToggle.start_date))) {
+      setError(ml ? 'തീയതിയില്ലാത്ത പരിപാടി പ്രസിദ്ധീകരിക്കാൻ കഴിയില്ല. ദയവായി ആദ്യം ആരംഭ തീയതി നൽകുക.' : 'Cannot publish event without a start date. Please set a start date first.');
+      return;
+    }
+    setError('');
     try {
       // 1. Update Firestore document
       await setFirestoreEventPublish(id, newStatus);
@@ -97,9 +108,9 @@ export default function AdminEventsPage() {
         // Server endpoint optional
       }
       setEvents(events.map(e => e.id === id ? { ...e, published: newStatus } : e));
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to toggle status', err);
-      alert('Failed to update event status');
+      setError(err.message || 'Failed to update event status');
     }
   };
 
@@ -179,7 +190,7 @@ export default function AdminEventsPage() {
                       </td>
                       <td className="p-4 text-dark-brown/70 flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        {new Date(event.start_date).toLocaleDateString()}
+                        <span>{formatEventDate(event.start_date, ml ? 'ml' : 'en')}</span>
                       </td>
                       <td className="p-4">
                         <Badge variant={event.published ? 'default' : 'secondary'}>

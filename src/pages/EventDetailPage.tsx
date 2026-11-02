@@ -12,7 +12,7 @@ import { EventMediaGallery } from '../components/event/EventMediaGallery';
 import { EventLocationSection } from '../components/event/EventLocationSection';
 
 import { VERIFIED_EVENTS } from '../data/verifiedEvents';
-import { getEventBySlug } from '../lib/eventsService';
+import { getEventBySlug, isValidEventDate, formatEventDate } from '../lib/eventsService';
 import { db } from '../lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
@@ -121,9 +121,8 @@ export const EventDetailPage = () => {
   const scheduleInfo = (ml && event.schedule_info_ml) ? event.schedule_info_ml : event.schedule_info;
   const locationText = (ml && event.location_ml) ? event.location_ml : event.location;
   
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return '';
-    return new Date(dateStr).toLocaleDateString(ml ? 'ml-IN' : 'en-US', {
+  const formatDate = (dateStr: string | null | undefined) => {
+    return formatEventDate(dateStr, ml ? 'ml' : 'en', {
       month: 'long', day: 'numeric', year: 'numeric'
     });
   };
@@ -182,15 +181,19 @@ export const EventDetailPage = () => {
               </h1>
               
               <div className="space-y-3 mb-6 text-slate-700">
-                {event.start_date && (
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-deep-red" />
-                    <span className="font-medium text-lg">
-                      {formatDate(event.start_date)}
-                      {event.end_date && event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
-                    </span>
-                  </div>
-                )}
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-5 h-5 text-deep-red" />
+                  <span className="font-medium text-lg">
+                    {isValidEventDate(event.start_date) ? (
+                      <>
+                        {formatDate(event.start_date)}
+                        {isValidEventDate(event.end_date) && event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
+                      </>
+                    ) : (
+                      ml ? 'തീയതി ലഭ്യമല്ല' : 'No date'
+                    )}
+                  </span>
+                </div>
                 {locationText && (
                   <div className="flex items-center gap-3">
                     <MapPin className="w-5 h-5 text-deep-red" />
@@ -213,7 +216,7 @@ export const EventDetailPage = () => {
                     <span>{ml ? 'പോസ്റ്റർ ഗെയിം കളിക്കൂ' : 'Play Poster Game 🎮'}</span>
                   </Link>
                 </Button>
-                <CalendarDropdown event={calendarEvent} />
+                {isValidEventDate(event.start_date) && <CalendarDropdown event={calendarEvent} />}
                 <ShareButton title={title} url={currentUrl} />
                 {event.registration_url && (
                   <Button asChild className="bg-deep-red hover:bg-rose-900 text-white">

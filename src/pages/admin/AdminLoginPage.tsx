@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { api } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { checkAdminPrivileges } from '@/lib/firebaseAuth';
@@ -39,13 +38,6 @@ export default function AdminLoginPage() {
         await signOut(auth);
         setLoading(false);
         return;
-      }
-
-      // 2. Synchronize Express session for Cloudinary and SQLite storage
-      try {
-        await api.post('/api/admin/login', { username: emailToUse, password: cleanPassword });
-      } catch (backendErr: any) {
-        console.warn('Backend Express session sync note:', backendErr.message);
       }
 
       const from = location.state?.from?.pathname || '/admin';

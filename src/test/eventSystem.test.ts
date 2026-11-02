@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { generateICSContent, generateGoogleCalendarUrl } from '../lib/calendar';
 import { EventData, MediaItem } from '../types/event';
+import {
+  isValidEventDate,
+  formatEventDate,
+  compareEventsByDate,
+  toFirestoreEvent,
+  normalizeFirestoreEvent
+} from '../lib/eventsService';
 
 describe('Balasangham Event System & Security Architecture', () => {
   describe('Calendar Utilities', () => {
@@ -295,6 +302,112 @@ describe('Balasangham Event System & Security Architecture', () => {
       expect((clientEventData as any).password).toBeUndefined();
       expect((clientEventData as any).password_hash).toBeUndefined();
       expect((clientEventData as any).admin_secret).toBeUndefined();
+    });
+  });
+
+  describe('Date Handling & Empty Date Remediation', () => {
+    it('identifies invalid, empty, or epoch 0 dates as not valid event dates', () => {
+      expect(isValidEventDate(null)).toBe(false);
+      expect(isValidEventDate(undefined)).toBe(false);
+      expect(isValidEventDate('')).toBe(false);
+      expect(isValidEventDate('   ')).toBe(false);
+      expect(isValidEventDate(0)).toBe(false);
+      expect(isValidEventDate('0')).toBe(false);
+      expect(isValidEventDate(new Date(0))).toBe(false);
+      expect(isValidEventDate('1970-01-01T00:00:00.000Z')).toBe(false);
+      expect(isValidEventDate('invalid-date')).toBe(false);
+
+      expect(isValidEventDate('2026-10-10T09:00:00.000Z')).toBe(true);
+      expect(isValidEventDate(new Date('2026-10-10'))).toBe(true);
+    });
+
+    it('formats empty, null, or epoch 0 dates as "No date" in English and "തീയതി ലഭ്യമല്ല" in Malayalam', () => {
+      expect(formatEventDate(null, 'en')).toBe('No date');
+      expect(formatEventDate(null, 'ml')).toBe('തീയതി ലഭ്യമല്ല');
+      expect(formatEventDate('', 'en')).toBe('No date');
+      expect(formatEventDate('', 'ml')).toBe('തീയതി ലഭ്യമല്ല');
+      expect(formatEventDate('1970-01-01', 'en')).toBe('No date');
+      expect(formatEventDate('1970-01-01', 'ml')).toBe('തീയതി ലഭ്യമല്ല');
+      expect(formatEventDate(0, 'en')).toBe('No date');
+      expect(formatEventDate(0, 'ml')).toBe('തീയതി ലഭ്യമല്ല');
+
+      // Real date formats correctly
+      const formattedEn = formatEventDate('2026-10-10T09:00:00.000Z', 'en');
+      expect(formattedEn).toContain('2026');
+      expect(formattedEn).not.toContain('1970');
+      expect(formattedEn).not.toBe('No date');
+    });
+
+    it('saves draft without date as null in toFirestoreEvent', () => {
+      const payload = toFirestoreEvent({
+        title: 'Draft Without Date',
+        published: false,
+        start_date: null,
+      }, false);
+
+      expect(payload.title).toBe('Draft Without Date');
+      expect(payload.published).toBe(false);
+      expect(payload.startDate).toBeNull();
+      expect(payload.start_date).toBeNull();
+    });
+
+    it('blocks publish without start date in toFirestoreEvent', () => {
+      expect(() => {
+        toFirestoreEvent({
+          title: 'Published Without Date',
+          published: true,
+          start_date: null,
+        }, false);
+      }).toThrow('Start date is required to publish an event');
+
+      expect(() => {
+        toFirestoreEvent({
+          title: 'Published With Empty Date',
+          published: 1,
+          start_date: '',
+        }, false);
+      }).toThrow('Start date is required to publish an event');
+    });
+
+    it('converts real date properly in toFirestoreEvent', () => {
+      const payload = toFirestoreEvent({
+        title: 'Valid Conference',
+        published: true,
+        start_date: '2026-10-10T09:00:00.000Z',
+      }, false);
+
+      expect(payload.published).toBe(true);
+      expect(payload.startDate).toBeDefined();
+      expect(payload.start_date).toContain('2026-10-10');
+    });
+
+    it('normalizes Firestore document with empty, missing, or epoch 0 date to null', () => {
+      const eventWithNoDate = normalizeFirestoreEvent('doc-1', {
+        title: 'Dateless Event',
+        published: false,
+      });
+      expect(eventWithNoDate.start_date).toBeNull();
+      expect(eventWithNoDate.startDate).toBeNull();
+
+      const eventWithEpoch0 = normalizeFirestoreEvent('doc-2', {
+        title: 'Epoch 0 Event',
+        startDate: '1970-01-01T00:00:00.000Z',
+        published: false,
+      });
+      expect(eventWithEpoch0.start_date).toBeNull();
+      expect(eventWithEpoch0.startDate).toBeNull();
+    });
+
+    it('sorts dateless events last in both ascending and descending sorts', () => {
+      const evt1: EventData = { id: '1', title: 'Early', start_date: '2026-05-01', published: 1 } as any;
+      const evt2: EventData = { id: '2', title: 'Late', start_date: '2026-11-01', published: 1 } as any;
+      const evtNoDate: EventData = { id: '3', title: 'Dateless', start_date: null, published: 0 } as any;
+
+      const asc = [evtNoDate, evt2, evt1].sort((a, b) => compareEventsByDate(a, b, 'asc'));
+      expect(asc.map(e => e.id)).toEqual(['1', '2', '3']);
+
+      const desc = [evt1, evtNoDate, evt2].sort((a, b) => compareEventsByDate(a, b, 'desc'));
+      expect(desc.map(e => e.id)).toEqual(['2', '1', '3']);
     });
   });
 });
