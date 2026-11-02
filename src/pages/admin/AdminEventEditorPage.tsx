@@ -11,17 +11,29 @@ import {
   Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { 
-  createFirestoreEvent, 
-  updateFirestoreEvent, 
-  normalizeFirestoreEvent, 
-  isValidGoogleMapsUrl 
+import {
+  createFirestoreEvent,
+  updateFirestoreEvent,
+  normalizeFirestoreEvent,
+  isValidGoogleMapsUrl
 } from '@/lib/eventsService';
 import { uploadFile } from '@/lib/uploadService';
 import { getMiniMapEmbedUrl } from '@/lib/mapUtils';
 import { EventData } from '@/types/event';
+import { getAdminDiagnosticInfo, AdminDiagnosticInfo } from '@/lib/firebaseAuth';
+
+function InputSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 mb-8">
+      <h2 className="text-xl font-black text-dark-brown mb-6 pb-4 border-b border-gray-100">{title}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function AdminEventEditorPage() {
   const { id } = useParams();
@@ -32,10 +44,21 @@ export default function AdminEventEditorPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  
+
   const [uploadingPoster, setUploadingPoster] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
   const [showMapPreview, setShowMapPreview] = useState(false);
+
+  const [devAuthInfo, setDevAuthInfo] = useState<AdminDiagnosticInfo | null>(null);
+
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      const user = auth.currentUser;
+      if (user) {
+        getAdminDiagnosticInfo(user).then((info) => setDevAuthInfo(info)).catch(() => {});
+      }
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -304,7 +327,18 @@ export default function AdminEventEditorPage() {
       }
     } catch (err: any) {
       console.error('Save error:', err);
-      setError(err.message || 'Failed to save event to Firestore');
+      const code = err?.code || '';
+      const msg = err?.message || '';
+      if (
+        code === 'permission-denied' ||
+        msg.includes('permission-denied') ||
+        msg.toLowerCase().includes('insufficient permissions') ||
+        msg.toLowerCase().includes('missing or insufficient permissions')
+      ) {
+        setError('Permission denied. Sign out and back in, or ask an admin to assign your admin claim.');
+      } else {
+        setError(msg || 'Failed to save event to Firestore');
+      }
     } finally {
       setSaving(false);
     }
@@ -323,15 +357,6 @@ export default function AdminEventEditorPage() {
     );
   }
 
-  const InputSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
-    <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 mb-8">
-      <h2 className="text-xl font-black text-dark-brown mb-6 pb-4 border-b border-gray-100">{title}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {children}
-      </div>
-    </div>
-  );
-
   return (
     <div className="max-w-5xl mx-auto pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -346,23 +371,23 @@ export default function AdminEventEditorPage() {
             <p className="text-sm text-dark-brown/60">Persistent Firestore Database</p>
           </div>
         </div>
-        
+
         {/* Requirement 4: Save Draft / Publish buttons */}
         <div className="flex items-center gap-3">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => handleSave(false)} 
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => handleSave(false)}
             disabled={saving}
             className="border-gray-300 text-dark-brown hover:bg-gray-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
             Save Draft
           </Button>
-          
-          <Button 
-            type="button" 
-            onClick={() => handleSave(true)} 
+
+          <Button
+            type="button"
+            onClick={() => handleSave(true)}
             disabled={saving}
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
@@ -370,6 +395,15 @@ export default function AdminEventEditorPage() {
           </Button>
         </div>
       </div>
+
+      {import.meta.env.DEV && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-900 px-4 py-2.5 rounded-xl mb-6 text-xs font-mono flex flex-wrap items-center gap-x-6 gap-y-1">
+          <span className="font-bold uppercase tracking-wider text-amber-700">[DEV Auth Diagnostic]</span>
+          <span>Email: <strong className="font-semibold">{devAuthInfo?.email || 'Not signed in'}</strong></span>
+          <span>emailVerified: <strong className="font-semibold">{String(devAuthInfo?.emailVerified ?? false)}</strong></span>
+          <span>Admin Claim: <strong className="font-semibold">{String(devAuthInfo?.adminClaim ?? false)}</strong></span>
+        </div>
+      )}
 
       {error && (
         <div className="bg-red-50 text-red-700 p-4 rounded-xl mb-8 font-bold border border-red-200">

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { isUserAdmin } from '@/lib/firebaseAuth';
 import { Star, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -11,7 +12,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,8 +26,16 @@ export default function AdminLoginPage() {
       const cleanPassword = password.trim();
 
       // 1. Authenticate with Google Firebase Auth (Primary Authority)
-      await signInWithEmailAndPassword(auth, emailToUse, cleanPassword);
-      
+      const userCredential = await signInWithEmailAndPassword(auth, emailToUse, cleanPassword);
+
+      // Force token refresh immediately on login so newly assigned custom claims are picked up
+      const isAdmin = await isUserAdmin(userCredential.user, true);
+      if (!isAdmin) {
+        setError('Access denied: You do not have administrator permissions. Please contact an administrator.');
+        setLoading(false);
+        return;
+      }
+
       // 2. Synchronize Express session for Cloudinary and SQLite storage
       try {
         await api.post('/api/admin/login', { username: emailToUse, password: cleanPassword });

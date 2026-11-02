@@ -3,20 +3,18 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { isUserAdmin } from '@/lib/firebaseAuth';
 import { Loader2 } from 'lucide-react';
-
-/**
- * Transition allowlist of administrator emails.
- * TODO: Remove email fallback once custom claims are confirmed assigned in production.
- */
-const ALLOWED_ADMIN_EMAILS = [
-  'balasangham.main@gmail.com',
-  'admin@balasanghamkannur.org'
-];
 
 /**
  * AdminRoute provides client-side route protection (UX gating only).
  * Note: Firestore security rules and server APIs are the real enforcement boundaries.
+ *
+ * Strict policy:
+ * - Requires Firebase Auth user with admin custom claim (primary) or verified allowlisted email (fallback).
+ * - Forces token refresh on mount so newly assigned claims are detected.
+ * - Does NOT accept Express session cookie alone when Firebase Auth is null,
+ *   preventing unauthenticated users from seeing admin UI where Firestore writes will fail.
  */
 export default function AdminRoute() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -25,36 +23,20 @@ export default function AdminRoute() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        let isAllowedAdmin = false;
-        try {
-          const tokenResult = await user.getIdTokenResult();
-          const hasAdminClaim = Boolean(tokenResult.claims.admin === true || tokenResult.claims.role === 'admin');
-          const email = user.email?.toLowerCase();
-          const isEmailVerified = Boolean(user.emailVerified || tokenResult.claims.email_verified === true);
-          // Fallback requires email to be in allowlist AND email_verified == true
-          const isAllowedEmail = Boolean(isEmailVerified && email && ALLOWED_ADMIN_EMAILS.includes(email));
-
-          isAllowedAdmin = hasAdminClaim || isAllowedEmail;
-        } catch {
-          const email = user.email?.toLowerCase();
-          isAllowedAdmin = Boolean(user.emailVerified && email && ALLOWED_ADMIN_EMAILS.includes(email));
-        }
-
-        if (isAllowedAdmin) {
+        // Force token refresh so newly assigned custom claims are picked up
+        const isAdmin = await isUserAdmin(user, true);
+        if (isAdmin) {
           setIsAuthenticated(true);
-          // Ensure backend session is synced
+          // Sync backend Express session
           api.get<{ authenticated?: boolean }>('/api/admin/session').catch(() => {});
         } else {
           // Authenticated non-admin or unverified user: strictly denied
           setIsAuthenticated(false);
         }
       } else {
-        try {
-          const data = await api.get<{ authenticated?: boolean }>('/api/admin/session');
-          setIsAuthenticated(data?.authenticated === true);
-        } catch {
-          setIsAuthenticated(false);
-        }
+        // Unauthenticated in Firebase Auth cannot perform Firestore admin writes.
+        // Express cookie alone is NOT accepted.
+        setIsAuthenticated(false);
       }
     });
 
