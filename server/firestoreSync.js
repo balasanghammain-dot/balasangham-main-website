@@ -4,8 +4,15 @@ const firebaseAdmin = require('./firebaseAdmin');
  * Normalizes event object into Firestore document structure
  */
 function toFirestoreEventPayload(event) {
-  const startIso = event.start_date ? new Date(event.start_date).toISOString() : new Date().toISOString();
-  const endIso = event.end_date ? new Date(event.end_date).toISOString() : null;
+  const hasValidStart = Boolean(
+    event.start_date &&
+    event.start_date !== '0' &&
+    event.start_date !== 0 &&
+    !isNaN(new Date(event.start_date).getTime()) &&
+    new Date(event.start_date).getFullYear() > 1970
+  );
+  const startIso = hasValidStart ? new Date(event.start_date).toISOString() : null;
+  const endIso = event.end_date && !isNaN(new Date(event.end_date).getTime()) ? new Date(event.end_date).toISOString() : null;
 
   const isPublished = Boolean(event.published === 1 || event.published === true);
   const isSnapShare = Boolean(event.snapshare_enabled === 1 || event.snapshare_enabled === true);
@@ -21,7 +28,7 @@ function toFirestoreEventPayload(event) {
     description: event.full_description || null,
     full_description: event.full_description || null,
     full_description_ml: event.full_description_ml || null,
-    startDate: new Date(startIso),
+    startDate: startIso ? new Date(startIso) : null,
     start_date: startIso,
     endDate: endIso ? new Date(endIso) : null,
     end_date: endIso,

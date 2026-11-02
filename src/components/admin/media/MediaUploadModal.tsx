@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Upload,
   Video as VideoIcon,
@@ -19,7 +19,6 @@ import {
 import { MediaItem } from '@/types/event';
 import { createFirestoreMedia } from '@/lib/mediaService';
 import { uploadFile } from '@/lib/uploadService';
-import { api } from '@/lib/api';
 
 export interface FileUploadQueueItem {
   id: string;
@@ -53,6 +52,20 @@ export const MediaUploadModal: React.FC<MediaUploadModalProps> = ({
   const [uploadPublished, setUploadPublished] = useState(true);
   const [isProcessingQueue, setIsProcessingQueue] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const createdUrlsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    return () => {
+      createdUrlsRef.current.forEach((url) => {
+        try {
+          URL.revokeObjectURL(url);
+        } catch {
+          // ignore
+        }
+      });
+      createdUrlsRef.current.clear();
+    };
+  }, []);
 
   const handleFilesSelected = (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -62,6 +75,11 @@ export const MediaUploadModal: React.FC<MediaUploadModalProps> = ({
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|mkv)$/i.test(file.name);
+      let previewUrl = '';
+      if (!isVideo) {
+        previewUrl = URL.createObjectURL(file);
+        createdUrlsRef.current.add(previewUrl);
+      }
 
       newQueueItems.push({
         id: `upload-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 7)}`,
@@ -69,7 +87,7 @@ export const MediaUploadModal: React.FC<MediaUploadModalProps> = ({
         name: file.name,
         size: file.size,
         type: isVideo ? 'video' : 'image',
-        previewUrl: isVideo ? '' : URL.createObjectURL(file),
+        previewUrl,
         progress: 0,
         status: 'pending',
       });
@@ -80,7 +98,18 @@ export const MediaUploadModal: React.FC<MediaUploadModalProps> = ({
   };
 
   const removeFromQueue = (id: string) => {
-    setUploadQueue((prev) => prev.filter((item) => item.id !== id));
+    setUploadQueue((prev) => {
+      const target = prev.find((item) => item.id === id);
+      if (target?.previewUrl) {
+        try {
+          URL.revokeObjectURL(target.previewUrl);
+        } catch {
+          // ignore
+        }
+        createdUrlsRef.current.delete(target.previewUrl);
+      }
+      return prev.filter((item) => item.id !== id);
+    });
   };
 
   const startUploadQueue = async () => {
@@ -124,18 +153,6 @@ export const MediaUploadModal: React.FC<MediaUploadModalProps> = ({
           event_id: eventIdToUse,
           published: uploadPublished,
         });
-
-        try {
-          const formData = new FormData();
-          formData.append('file', item.file);
-          formData.append('title', titleToUse);
-          if (uploadDescription) formData.append('description', uploadDescription);
-          formData.append('published', uploadPublished ? '1' : '0');
-          if (eventIdToUse) formData.append('eventId', eventIdToUse);
-          await api.post('/api/admin/media/upload', formData);
-        } catch {
-          // Server sync optional
-        }
 
         setUploadQueue((prev) =>
           prev.map((q) => (q.id === item.id ? { ...q, status: 'success', progress: 100 } : q))

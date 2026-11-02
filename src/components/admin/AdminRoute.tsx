@@ -38,7 +38,7 @@ export default function AdminRoute() {
     });
 
     return () => unsubscribe();
-  }, [location.pathname]); // Re-check if navigation happens, or just on mount
+  }, []); // Authenticate on mount; onAuthStateChanged listens continuously without blocking link clicks
 
   if (isAuthenticated === null) {
     return (

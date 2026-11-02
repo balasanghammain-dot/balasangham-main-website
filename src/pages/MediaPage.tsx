@@ -67,7 +67,7 @@ export const MediaPage = () => {
   // Dynamic Photos from Cloudinary
   const dynamicPhotos = useMemo(() => {
     return safeDynamicMedia.filter(
-      (item) => (item.type === 'image' || item.resource_type === 'image' || item.media_type === 'photo' || item.media_type !== 'video')
+      (item) => (item.type === 'image' || item.resource_type === 'image' || item.media_type === 'photo')
     );
   }, [safeDynamicMedia]);
 

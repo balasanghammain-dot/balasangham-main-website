@@ -77,6 +77,29 @@ describe('server/firestoreSync with Firebase Admin SDK', () => {
     );
   });
 
+  it('syncs dateless draft event preserving null for start_date and startDate', async () => {
+    const testDraft = {
+      id: 'evt-draft',
+      slug: 'draft-no-date',
+      title: 'Dateless Draft',
+      start_date: null,
+      published: 0,
+      snapshare_enabled: 0,
+    };
+
+    const result = await syncEventToFirestore(testDraft);
+    expect(result).toBe(true);
+    expect(mockDocSet).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Dateless Draft',
+        published: false,
+        startDate: null,
+        start_date: null,
+      }),
+      { merge: true }
+    );
+  });
+
   it('deletes event document from Firestore', async () => {
     const result = await deleteEventFromFirestore('evt-123', 'kannur-conference-2026');
     expect(result).toBe(true);

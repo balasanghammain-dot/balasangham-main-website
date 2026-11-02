@@ -198,73 +198,69 @@ export function useTetrisEngine(canvasRef: React.RefObject<HTMLCanvasElement | n
   // Settle / Gravity shake: drops blocks down into empty holes
   const settleGravity = useCallback(() => {
     soundFX.playHelper();
-    setGrid((prevGrid) => {
-      setHistory((prevHist) => [...prevHist.slice(-5), prevGrid.map(row => [...row])]);
-      const newGrid = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+    setHistory((prevHist) => [...prevHist.slice(-5), grid.map(row => [...row])]);
+    const newGrid = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
 
-      for (let c = 0; c < COLS; c++) {
-        let count = 0;
-        for (let r = 0; r < ROWS; r++) {
-          if (prevGrid[r][c]) count++;
-        }
-        for (let r = ROWS - 1; r >= ROWS - count; r--) {
-          newGrid[r][c] = true;
-        }
+    for (let c = 0; c < COLS; c++) {
+      let count = 0;
+      for (let r = 0; r < ROWS; r++) {
+        if (grid[r][c]) count++;
       }
+      for (let r = ROWS - 1; r >= ROWS - count; r--) {
+        newGrid[r][c] = true;
+      }
+    }
 
-      const total = newGrid.reduce((t, row) => t + row.filter(Boolean).length, 0);
-      if (total >= TOTAL_CELLS) {
-        setIsWon(true);
-        setIsPlaying(false);
-        soundFX.playVictory();
-        if (canvasRef.current) {
-          launchConfetti(canvasRef.current, 5000);
-        }
+    const total = newGrid.reduce((t, row) => t + row.filter(Boolean).length, 0);
+    if (total >= TOTAL_CELLS) {
+      setIsWon(true);
+      setIsPlaying(false);
+      soundFX.playVictory();
+      if (canvasRef.current) {
+        launchConfetti(canvasRef.current, 5000);
       }
-      return newGrid;
-    });
-  }, [canvasRef]);
+    }
+    setGrid(newGrid);
+  }, [grid, canvasRef]);
 
   // Lock current piece into grid
   const lockPiece = useCallback((lockedPiece: PieceType, posX: number, posY: number) => {
     soundFX.playLock();
 
-    setGrid((prevGrid) => {
-      setHistory((prevHist) => [...prevHist.slice(-5), prevGrid.map(row => [...row])]);
+    setHistory((prevHist) => [...prevHist.slice(-5), grid.map(row => [...row])]);
 
-      const newGrid = prevGrid.map((row) => [...row]);
-      for (let r = 0; r < lockedPiece.shape.length; r++) {
-        for (let c = 0; c < lockedPiece.shape[r].length; c++) {
-          if (lockedPiece.shape[r][c] !== 0) {
-            const x = posX + c;
-            const y = posY + r;
-            if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
-              newGrid[y][x] = true;
-            }
+    const newGrid = grid.map((row) => [...row]);
+    for (let r = 0; r < lockedPiece.shape.length; r++) {
+      for (let c = 0; c < lockedPiece.shape[r].length; c++) {
+        if (lockedPiece.shape[r][c] !== 0) {
+          const x = posX + c;
+          const y = posY + r;
+          if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
+            newGrid[y][x] = true;
           }
         }
       }
+    }
 
-      for (let r = 0; r < ROWS; r++) {
-        if (newGrid[r].every(Boolean) && !prevGrid[r].every(Boolean)) {
-          setCelebrationRow(r);
-          soundFX.playRowFull();
-          setTimeout(() => setCelebrationRow(null), 800);
-        }
+    for (let r = 0; r < ROWS; r++) {
+      if (newGrid[r].every(Boolean) && !grid[r].every(Boolean)) {
+        setCelebrationRow(r);
+        soundFX.playRowFull();
+        setTimeout(() => setCelebrationRow(null), 800);
       }
+    }
 
-      const newFilled = newGrid.reduce((t, row) => t + row.filter(Boolean).length, 0);
-      if (newFilled >= TOTAL_CELLS) {
-        setIsWon(true);
-        setIsPlaying(false);
-        soundFX.playVictory();
-        if (canvasRef.current) {
-          launchConfetti(canvasRef.current, 5000);
-        }
+    const newFilled = newGrid.reduce((t, row) => t + row.filter(Boolean).length, 0);
+    if (newFilled >= TOTAL_CELLS) {
+      setIsWon(true);
+      setIsPlaying(false);
+      soundFX.playVictory();
+      if (canvasRef.current) {
+        launchConfetti(canvasRef.current, 5000);
       }
+    }
 
-      return newGrid;
-    });
+    setGrid(newGrid);
 
     setScore((s) => s + 40);
     setPiecesPlaced((p) => p + 1);
@@ -277,7 +273,7 @@ export function useTetrisEngine(canvasRef: React.RefObject<HTMLCanvasElement | n
     setCurrentX(Math.floor((COLS - next.shape[0].length) / 2));
     setCurrentY(0);
 
-    if (checkCollision(grid, next.shape, Math.floor((COLS - next.shape[0].length) / 2), 0)) {
+    if (checkCollision(newGrid, next.shape, Math.floor((COLS - next.shape[0].length) / 2), 0)) {
       settleGravity();
     }
   }, [nextPiece, grid, getRandomPiece, canvasRef, settleGravity]);
@@ -427,11 +423,6 @@ export function useTetrisEngine(canvasRef: React.RefObject<HTMLCanvasElement | n
         restartGame();
       } else if (e.key.toLowerCase() === 'z') {
         handleUndo();
-      } else if (e.key.toLowerCase() === 'v') {
-        setGrid(Array.from({ length: ROWS }, () => Array(COLS).fill(true)));
-        setIsWon(true);
-        setIsPlaying(false);
-        soundFX.playVictory();
       }
     };
 

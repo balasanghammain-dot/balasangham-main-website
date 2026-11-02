@@ -8,6 +8,7 @@ import {
   toFirestoreEvent,
   normalizeFirestoreEvent
 } from '../lib/eventsService';
+import { toFirestoreMedia } from '../lib/mediaService';
 
 describe('Balasangham Event System & Security Architecture', () => {
   describe('Calendar Utilities', () => {
@@ -408,6 +409,40 @@ describe('Balasangham Event System & Security Architecture', () => {
 
       const desc = [evt1, evtNoDate, evt2].sort((a, b) => compareEventsByDate(a, b, 'desc'));
       expect(desc.map(e => e.id)).toEqual(['2', '1', '3']);
+    });
+  });
+
+  describe('Media Service & Partial Update Safety', () => {
+    it('does not erase url, publicId or coerce type on partial updates', () => {
+      const partialUpdate = toFirestoreMedia({
+        title: 'Updated Title Only',
+      }, false);
+
+      expect(partialUpdate.title).toBe('Updated Title Only');
+      expect(partialUpdate.url).toBeUndefined();
+      expect(partialUpdate.publicId).toBeUndefined();
+      expect(partialUpdate.type).toBeUndefined();
+      expect(partialUpdate.resource_type).toBeUndefined();
+      expect(partialUpdate.published).toBeUndefined();
+      expect(partialUpdate.updatedAt).toBeDefined();
+    });
+
+    it('populates url, publicId and type when creating media', () => {
+      const createPayload = toFirestoreMedia({
+        title: 'New Media Item',
+        url: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
+        publicId: 'sample',
+        resource_type: 'image',
+        published: true,
+      }, true);
+
+      expect(createPayload.title).toBe('New Media Item');
+      expect(createPayload.url).toBe('https://res.cloudinary.com/demo/image/upload/sample.jpg');
+      expect(createPayload.publicId).toBe('sample');
+      expect(createPayload.type).toBe('image');
+      expect(createPayload.resource_type).toBe('image');
+      expect(createPayload.published).toBe(true);
+      expect(createPayload.createdAt).toBeDefined();
     });
   });
 });
